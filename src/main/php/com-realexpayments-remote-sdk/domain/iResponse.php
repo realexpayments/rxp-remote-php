@@ -42,4 +42,5 @@ interface iResponse {
 
 	public function isSuccess();
 
+
 }

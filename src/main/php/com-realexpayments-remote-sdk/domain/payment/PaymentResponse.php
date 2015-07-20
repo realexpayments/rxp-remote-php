@@ -3,10 +3,9 @@
 
 namespace com\realexpayments\remote\sdk\domain\payment;
 
-
 use com\realexpayments\remote\sdk\domain\iResponse;
 
-class PaymentResponse implements iResponse{
+class PaymentHttpResponse implements iResponse{
 
 	/**
 	 * @param $resource

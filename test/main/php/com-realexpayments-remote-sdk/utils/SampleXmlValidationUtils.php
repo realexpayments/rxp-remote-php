@@ -3,7 +3,8 @@
 
 namespace com\realexpayments\remote\sdk\utils;
 
-//use com\realexpayments\remote\sdk\domain\payment\AddressType;
+use com\realexpayments\remote\sdk\domain\iResponse;
+use PHPUnit_Framework_TestCase;
 
 class SampleXmlValidationUtils {
 
@@ -123,5 +124,15 @@ class SampleXmlValidationUtils {
 	const THREE_D_SECURE_NOT_ENROLLED_RESPONSE_HASH = "e553ff2510dec9bfee79bb0303af337d871c02ad";
 	const THREE_D_SECURE_ENROLLED_RESPONSE_HASH = "728cdbef90ff535ed818748f329ed8b1df6b8f5a";
 	const THREE_D_SECURE_SIG_RESPONSE_HASH = "e5a7745da5dc32d234c3f52860132c482107e9ac";
+
+	/**
+	 *  Check all fields match expected values.
+	 *
+	 * @param iResponse $fromXmlResponse
+	 * @param PHPUnit_Framework_TestCase $testCase
+	 */
+	public static function checkUnmarshalledPaymentResponse(iResponse $fromXmlResponse, PHPUnit_Framework_TestCase $testCase ) {
+		$testCase->assertEquals(self::ACCOUNT,$fromXmlResponse->getAccount());
+	}
 
 }
