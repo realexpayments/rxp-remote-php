@@ -11,13 +11,15 @@ namespace com\realexpayments\remote\sdk\domain;
 interface iHttpResponse {
 
 	/**
-	 * @return string
+	 * @return string entity
 	 */
 	public function getEntity();
 
-
 	/**
-	 * @return string Account
+	 * @param string $entity
 	 */
-	public function getAccount();
+	public function setEntity($entity);
+
+
+
 }
