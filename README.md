@@ -1,3 +1,2 @@
-# Realex Remote PHP SDK
-You can sign up for a Realex account at https://www.realexpayments.com.
-## Requirements
+# rxp-remote-php
+The official PHP Remote SDK of Realex Payments
