@@ -37,7 +37,7 @@ class HttpResponse implements iHttpResponse {
 	 * @param $statusCode string
 	 * @param $statusReason string
 	 */
-	public function  __constructor( $statusCode, $statusReason ) {
+	public function  __construct( $statusCode, $statusReason ) {
 		$this->statusCode   = $statusCode;
 		$this->statusReason = $statusReason;
 	}

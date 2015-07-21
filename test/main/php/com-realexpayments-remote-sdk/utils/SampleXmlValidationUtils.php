@@ -4,6 +4,7 @@
 namespace com\realexpayments\remote\sdk\utils;
 
 use com\realexpayments\remote\sdk\domain\iResponse;
+use com\realexpayments\remote\sdk\domain\PresenceIndicator;
 use PHPUnit_Framework_TestCase;
 
 class SampleXmlValidationUtils {
@@ -29,7 +30,7 @@ class SampleXmlValidationUtils {
 	//const CardType CARD_TYPE = CardType . VISA;
 	const CARD_HOLDER_NAME = "Joe Smith";
 	const  CARD_CVN_NUMBER = 123;
-	//const PresenceIndicator CARD_CVN_PRESENCE = PresenceIndicator . CVN_PRESENT;
+	public static $CARD_CVN_PRESENCE;
 	const CARD_EXPIRY_DATE = "0119";
 	const CARD_ISSUE_NUMBER = 1;
 
@@ -125,14 +126,20 @@ class SampleXmlValidationUtils {
 	const THREE_D_SECURE_ENROLLED_RESPONSE_HASH = "728cdbef90ff535ed818748f329ed8b1df6b8f5a";
 	const THREE_D_SECURE_SIG_RESPONSE_HASH = "e5a7745da5dc32d234c3f52860132c482107e9ac";
 
+	static function Init() {
+		self::$CARD_CVN_PRESENCE = new PresenceIndicator( PresenceIndicator::CVN_PRESENT );
+	}
+
 	/**
 	 *  Check all fields match expected values.
 	 *
 	 * @param iResponse $fromXmlResponse
 	 * @param PHPUnit_Framework_TestCase $testCase
 	 */
-	public static function checkUnmarshalledPaymentResponse(iResponse $fromXmlResponse, PHPUnit_Framework_TestCase $testCase ) {
-		$testCase->assertEquals(self::ACCOUNT,$fromXmlResponse->getAccount());
+	public static function checkUnmarshalledPaymentResponse( iResponse $fromXmlResponse, PHPUnit_Framework_TestCase $testCase ) {
+		$testCase->assertEquals( self::ACCOUNT, $fromXmlResponse->getAccount() );
 	}
-
 }
+
+SampleXmlValidationUtils::Init();
+
