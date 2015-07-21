@@ -7,6 +7,9 @@ namespace com\realexpayments\remote\sdk\utils;
 use com\realexpayments\remote\sdk\domain\Card;
 use com\realexpayments\remote\sdk\domain\CardType;
 use com\realexpayments\remote\sdk\domain\CVN;
+use com\realexpayments\remote\sdk\domain\payment\Address;
+use com\realexpayments\remote\sdk\domain\payment\AddressType;
+use com\realexpayments\remote\sdk\domain\payment\PaymentRequest;
 use com\realexpayments\remote\sdk\domain\payment\TssInfo;
 
 /**
@@ -35,6 +38,21 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$card->setCvn($cvn);
 
 		$tssInfo = (new TssInfo())
+			->addCustomerNumber(SampleXmlValidationUtils::CUSTOMER_NUMBER)
+			->addProductId(SampleXmlValidationUtils::PRODUCT_ID)
+			->addVariableReference(SampleXmlValidationUtils::VARIABLE_REFERENCE)
+			->addCustomerIpAddress(SampleXmlValidationUtils::CUSTOMER_IP)
+			->addAddress((new Address())
+							->addType(SampleXmlValidationUtils::$ADDRESS_TYPE_BUSINESS)
+							->addCode(SampleXmlValidationUtils::ADDRESS_CODE_BUSINESS)
+							->addCountry(SampleXmlValidationUtils::ADDRESS_COUNTRY_BUSINESS))
+			->addAddress((new Address())
+				->addType(SampleXmlValidationUtils::$ADDRESS_TYPE_SHIPPING)
+				->addCode(SampleXmlValidationUtils::ADDRESS_CODE_SHIPPING)
+				->addCountry(SampleXmlValidationUtils::ADDRESS_COUNTRY_SHIPPING));
+
+		$request = new PaymentRequest()
+
 
 
 	}

@@ -4,6 +4,7 @@
 namespace com\realexpayments\remote\sdk\utils;
 
 use com\realexpayments\remote\sdk\domain\iResponse;
+use com\realexpayments\remote\sdk\domain\payment\AddressType;
 use com\realexpayments\remote\sdk\domain\PresenceIndicator;
 use PHPUnit_Framework_TestCase;
 
@@ -59,11 +60,11 @@ class SampleXmlValidationUtils {
 //public static final RecurringSequence RECURRING_SEQUENCE = RecurringSequence.FIRST;
 
 	//Address
-//public static final AddressType ADDRESS_TYPE_BUSINESS = AddressType.BILLING;
+	public static $ADDRESS_TYPE_BUSINESS;
 	const ADDRESS_CODE_BUSINESS = "21|578";
 	const ADDRESS_COUNTRY_BUSINESS = "IE";
 
-	//static $ADDRESS_TYPE_SHIPPING = AddressType::getShippingAddressType();
+	public static $ADDRESS_TYPE_SHIPPING;
 	const ADDRESS_CODE_SHIPPING = "77|9876";
 	const ADDRESS_COUNTRY_SHIPPING = "GB";
 
@@ -128,6 +129,8 @@ class SampleXmlValidationUtils {
 
 	static function Init() {
 		self::$CARD_CVN_PRESENCE = new PresenceIndicator( PresenceIndicator::CVN_PRESENT );
+		self::$ADDRESS_TYPE_BUSINESS = new AddressType(AddressType::BILLING);
+		self::$ADDRESS_TYPE_SHIPPING = new AddressType(AddressType::SHIPPING);
 	}
 
 	/**
