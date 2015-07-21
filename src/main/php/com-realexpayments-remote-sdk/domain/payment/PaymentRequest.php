@@ -219,5 +219,31 @@ class PaymentRequest {
 		return $this;
 	}
 
+	/**
+	 * Helper method for adding a type
+	 *
+	 * @param string $type
+	 *
+	 * @return PaymentRequest
+	 */
+	public function addType( $type ) {
+		$this->type = $type;
+
+		return $this;
+	}
+
+	/**
+	 * Helper method for adding a type
+	 *
+	 * @param string $type
+	 *
+	 * @return PaymentRequest
+	 */
+	public function addType( $type ) {
+		$this->type = $type;
+
+		return $this;
+	}
+
 
 }
