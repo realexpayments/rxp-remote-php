@@ -5,6 +5,8 @@ namespace com\realexpayments\remote\sdk\utils;
 
 use com\realexpayments\remote\sdk\domain\iResponse;
 use com\realexpayments\remote\sdk\domain\payment\AddressType;
+use com\realexpayments\remote\sdk\domain\payment\AutoSettle;
+use com\realexpayments\remote\sdk\domain\payment\AutoSettleFlag;
 use com\realexpayments\remote\sdk\domain\PresenceIndicator;
 use PHPUnit_Framework_TestCase;
 
@@ -40,7 +42,7 @@ class SampleXmlValidationUtils {
 	const MERCHANT_ID = "thestore";
 	const AMOUNT = 29900;
 	const CURRENCY = "EUR";
-	//public static final AutoSettleFlag AUTO_SETTLE_FLAG = AutoSettleFlag.MULTI;
+	static $AUTO_SETTLE_FLAG;
 	const TIMESTAMP = "20120926112654";
 	const CHANNEL = "yourChannel";
 	const ORDER_ID = "ORD453-11";
@@ -131,6 +133,7 @@ class SampleXmlValidationUtils {
 		self::$CARD_CVN_PRESENCE = new PresenceIndicator( PresenceIndicator::CVN_PRESENT );
 		self::$ADDRESS_TYPE_BUSINESS = new AddressType(AddressType::BILLING);
 		self::$ADDRESS_TYPE_SHIPPING = new AddressType(AddressType::SHIPPING);
+		self::$AUTO_SETTLE_FLAG= new AutoSettleFlag(AutoSettleFlag::MULTI);
 	}
 
 	/**
@@ -141,6 +144,9 @@ class SampleXmlValidationUtils {
 	 */
 	public static function checkUnmarshalledPaymentResponse( iResponse $fromXmlResponse, PHPUnit_Framework_TestCase $testCase ) {
 		$testCase->assertEquals( self::ACCOUNT, $fromXmlResponse->getAccount() );
+	}
+
+	public static function checkUnmarshalledPaymentRequest( $fromXmlRequest, $this ) {
 	}
 }
 

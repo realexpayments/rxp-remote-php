@@ -4,6 +4,7 @@
 namespace com\realexpayments\remote\sdk;
 
 
+use Exception;
 use RuntimeException;
 
 /**
@@ -17,10 +18,11 @@ class RealexException extends RuntimeException {
 
 	/**
 	 * Constructor for RealexException
+	 *
 	 * @param string $message
+	 * @param Exception $previous
 	 */
-	function __construct($message){
-		parent::__construct($message);
+	function __construct($message, Exception $previous = null){
+		parent::__construct($message,$previous);
 	}
-
 }

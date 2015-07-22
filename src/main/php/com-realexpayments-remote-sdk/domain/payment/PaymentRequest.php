@@ -5,6 +5,9 @@ namespace com\realexpayments\remote\sdk\domain\payment;
 
 use com\realexpayments\remote\sdk\domain\Amount;
 use com\realexpayments\remote\sdk\domain\Card;
+use com\realexpayments\remote\sdk\domain\iRequest;
+use com\realexpayments\remote\sdk\utils\MessageType;
+use com\realexpayments\remote\sdk\utils\XmlUtils;
 
 /**
  * Class PaymentRequest
@@ -63,7 +66,7 @@ use com\realexpayments\remote\sdk\domain\Card;
  * @author vicpada
  * @package com\realexpayments\remote\sdk\domain\payment
  */
-class PaymentRequest {
+class PaymentRequest implements iRequest {
 
 
 	/**
@@ -769,7 +772,7 @@ class PaymentRequest {
 	 *
 	 * @return PaymentRequest
 	 */
-	public function addRecurring(Recurring $recurring ) {
+	public function addRecurring( Recurring $recurring ) {
 		$this->recurring = $recurring;
 
 		return $this;
@@ -782,11 +785,38 @@ class PaymentRequest {
 	 *
 	 * @return PaymentRequest
 	 */
-	public function addMpi(Mpi $mpi ) {
+	public function addMpi( Mpi $mpi ) {
 		$this->mpi = $mpi;
 
 		return $this;
 	}
 
+	/**
+	 * {@inheritdoc}
+	 */
+	public function toXml() {
+		return XmlUtils::toXml( $this, new MessageType( MessageType::PAYMENT ) );
+	}
 
+	/**
+	 * {@inheritdoc}
+	 */
+	public function fromXml( $xml ) {
+		//return XmlUtils::fromXml()
+	}
+
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function generateDefaults( $secret ) {
+		// TODO: Implement generateDefaults() method.
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function responseFromXml( $xml ) {
+		// TODO: Implement responseFromXml() method.
+	}
 }
