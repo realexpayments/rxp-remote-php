@@ -2,6 +2,7 @@
 
 
 namespace com\realexpayments\remote\sdk\domain\payment;
+
 use com\realexpayments\remote\sdk\domain\Amount;
 use com\realexpayments\remote\sdk\domain\Card;
 
@@ -182,8 +183,7 @@ class PaymentRequest {
 	/**
 	 * Constructor for Payment Request
 	 */
-	public function __construct()
-	{
+	public function __construct() {
 
 	}
 
@@ -205,6 +205,314 @@ class PaymentRequest {
 	public function setTssInfo( TssInfo $tssInfo ) {
 		$this->tssInfo = $tssInfo;
 	}
+
+
+	/**
+	 * Getter for timestamp
+	 *
+	 * @return string
+	 */
+	public function getTimestamp() {
+		return $this->timestamp;
+	}
+
+	/**
+	 * Setter for timestamp
+	 *
+	 * @param string $timestamp
+	 */
+	public function setTimestamp( $timestamp ) {
+		$this->timestamp = $timestamp;
+	}
+
+	/**
+	 * Getter for type
+	 *
+	 * @return string
+	 */
+	public function getType() {
+		return $this->type;
+	}
+
+	/**
+	 * Setter for type
+	 *
+	 * @param string $type
+	 */
+	public function setType( $type ) {
+		$this->type = $type;
+	}
+
+	/**
+	 * Getter for merchantId
+	 *
+	 * @return string
+	 */
+	public function getMerchantId() {
+		return $this->merchantId;
+	}
+
+	/**
+	 * Setter for merchantId
+	 *
+	 * @param string $merchantId
+	 */
+	public function setMerchantId( $merchantId ) {
+		$this->merchantId = $merchantId;
+	}
+
+	/**
+	 * Getter for account
+	 *
+	 * @return string
+	 */
+	public function getAccount() {
+		return $this->account;
+	}
+
+	/**
+	 * Setter for account
+	 *
+	 * @param string $account
+	 */
+	public function setAccount( $account ) {
+		$this->account = $account;
+	}
+
+	/**
+	 * Getter for channel
+	 *
+	 * @return string
+	 */
+	public function getChannel() {
+		return $this->channel;
+	}
+
+	/**
+	 * Setter for channel
+	 *
+	 * @param string $channel
+	 */
+	public function setChannel( $channel ) {
+		$this->channel = $channel;
+	}
+
+	/**
+	 * Getter for orderId
+	 *
+	 * @return string
+	 */
+	public function getOrderId() {
+		return $this->orderId;
+	}
+
+	/**
+	 * Setter for orderId
+	 *
+	 * @param string $orderId
+	 */
+	public function setOrderId( $orderId ) {
+		$this->orderId = $orderId;
+	}
+
+	/**
+	 * Getter for amount
+	 *
+	 * @return Amount
+	 */
+	public function getAmount() {
+		return $this->amount;
+	}
+
+	/**
+	 * Setter for amount
+	 *
+	 * @param Amount $amount
+	 */
+	public function setAmount( $amount ) {
+		$this->amount = $amount;
+	}
+
+	/**
+	 * Getter for card
+	 *
+	 * @return Card
+	 */
+	public function getCard() {
+		return $this->card;
+	}
+
+	/**
+	 * Setter for card
+	 *
+	 * @param Card $card
+	 */
+	public function setCard( $card ) {
+		$this->card = $card;
+	}
+
+	/**
+	 * Getter for autoSettle
+	 *
+	 * @return AutoSettle
+	 */
+	public function getAutoSettle() {
+		return $this->autoSettle;
+	}
+
+	/**
+	 * Setter for autoSettle
+	 *
+	 * @param AutoSettle $autoSettle
+	 */
+	public function setAutoSettle( $autoSettle ) {
+		$this->autoSettle = $autoSettle;
+	}
+
+	/**
+	 * Getter for hash
+	 *
+	 * @return string
+	 */
+	public function getHash() {
+		return $this->hash;
+	}
+
+	/**
+	 * Setter for hash
+	 *
+	 * @param string $hash
+	 */
+	public function setHash( $hash ) {
+		$this->hash = $hash;
+	}
+
+	/**
+	 * Getter for comments
+	 *
+	 * @return array
+	 */
+	public function getComments() {
+		return $this->comments;
+	}
+
+	/**
+	 * Setter for comments
+	 *
+	 * @param array $comments
+	 */
+	public function setComments( $comments ) {
+		$this->comments = $comments;
+	}
+
+	/**
+	 * Getter for paymentsReference
+	 *
+	 * @return string
+	 */
+	public function getPaymentsReference() {
+		return $this->paymentsReference;
+	}
+
+	/**
+	 * Setter for paymentsReference
+	 *
+	 * @param string $paymentsReference
+	 */
+	public function setPaymentsReference( $paymentsReference ) {
+		$this->paymentsReference = $paymentsReference;
+	}
+
+	/**
+	 * Getter for refundHash
+	 *
+	 * @return string
+	 */
+	public function getRefundHash() {
+		return $this->refundHash;
+	}
+
+	/**
+	 * Setter for refundHash
+	 *
+	 * @param string $refundHash
+	 */
+	public function setRefundHash( $refundHash ) {
+		$this->refundHash = $refundHash;
+	}
+
+	/**
+	 * Getter for authCode
+	 *
+	 * @return string
+	 */
+	public function getAuthCode() {
+		return $this->authCode;
+	}
+
+	/**
+	 * Setter for authCode
+	 *
+	 * @param string $authCode
+	 */
+	public function setAuthCode( $authCode ) {
+		$this->authCode = $authCode;
+	}
+
+	/**
+	 * Getter for fraudFilter
+	 *
+	 * @return string
+	 */
+	public function getFraudFilter() {
+		return $this->fraudFilter;
+	}
+
+	/**
+	 * Setter for fraudFilter
+	 *
+	 * @param string $fraudFilter
+	 */
+	public function setFraudFilter( $fraudFilter ) {
+		$this->fraudFilter = $fraudFilter;
+	}
+
+	/**
+	 * Getter for recurring
+	 *
+	 * @return Recurring
+	 */
+	public function getRecurring() {
+		return $this->recurring;
+	}
+
+	/**
+	 * Setter for recurring
+	 *
+	 * @param Recurring $recurring
+	 */
+	public function setRecurring( $recurring ) {
+		$this->recurring = $recurring;
+	}
+
+	/**
+	 * Getter for mpi
+	 *
+	 * @return Mpi
+	 */
+	public function getMpi() {
+		return $this->mpi;
+	}
+
+	/**
+	 * Setter for mpi
+	 *
+	 * @param Mpi $mpi
+	 */
+	public function setMpi( $mpi ) {
+		$this->mpi = $mpi;
+	}
+
 
 	/**
 	 * Helper method for adding TSS info
@@ -235,12 +543,247 @@ class PaymentRequest {
 	/**
 	 * Helper method for adding a type
 	 *
-	 * @param string $type
+	 * @param PaymentType $type
 	 *
 	 * @return PaymentRequest
 	 */
-	public function addType( $type ) {
-		$this->type = $type;
+	public function addPaymentType( PaymentType $type ) {
+		$this->type = $type->getType();
+
+		return $this;
+	}
+
+	/**
+	 * Helper method for adding a merchantId
+	 *
+	 * @param string $merchantId
+	 *
+	 * @return PaymentRequest
+	 */
+	public function addMerchantId( $merchantId ) {
+		$this->merchantId = $merchantId;
+
+		return $this;
+	}
+
+	/**
+	 * Helper method for adding a account
+	 *
+	 * @param string $account
+	 *
+	 * @return PaymentRequest
+	 */
+	public function addAccount( $account ) {
+		$this->account = $account;
+
+		return $this;
+	}
+
+	/**
+	 * Helper method for adding a timestamp
+	 *
+	 * @param string $timestamp
+	 *
+	 * @return PaymentRequest
+	 */
+	public function addTimestamp( $timestamp ) {
+		$this->timestamp = $timestamp;
+
+		return $this;
+	}
+
+	/**
+	 * Helper method for adding a orderId
+	 *
+	 * @param string $orderId
+	 *
+	 * @return PaymentRequest
+	 */
+	public function addOrderId( $orderId ) {
+		$this->orderId = $orderId;
+
+		return $this;
+	}
+
+	/**
+	 * Helper method for adding a amount
+	 *
+	 * @param int $amount
+	 *
+	 * @return PaymentRequest
+	 */
+	public function addAmount( $amount ) {
+		if ( is_null( $this->amount ) ) {
+			$this->amount = ( new Amount() )->addAmount( $amount );
+		} else {
+			$this->amount->addAmount( $amount );
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Helper method for adding a currency
+	 *
+	 * @param string $currency
+	 *
+	 * @return PaymentRequest
+	 */
+	public function addCurrency( $currency ) {
+		if ( is_null( $this->amount ) ) {
+			$this->amount = ( new Amount() )->addCurrency( $currency );
+		} else {
+			$this->amount->addCurrency( $currency );
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Helper method for adding a card
+	 *
+	 * @param Card $card
+	 *
+	 * @return PaymentRequest
+	 */
+	public function addCard( Card $card ) {
+		$this->card = $card;
+
+		return $this;
+	}
+
+	/**
+	 * Helper method for adding a autoSettle
+	 *
+	 * @param AutoSettle $autoSettle
+	 *
+	 * @return PaymentRequest
+	 */
+	public function addAutoSettle( AutoSettle $autoSettle ) {
+		$this->autoSettle = $autoSettle;
+
+		return $this;
+	}
+
+	/**
+	 * Helper method for adding a comment. NB Only 2 comments will be accepted by Realex.
+	 *
+	 * @param string $comment
+	 *
+	 * @return PaymentRequest
+	 */
+	public function addComment( $comment ) {
+		//create new comments array list if null
+		if ( is_null( $this->comments ) ) {
+			$this->comments = array();
+		}
+
+		$size             = count( $this->comments );
+		$this->comments[] = ( new Comment() )->addComment( $comment )->addId( ++ $size );
+
+		return $this;
+	}
+
+	/**
+	 * Helper method for adding a paymentsReference
+	 *
+	 * @param string $paymentsReference
+	 *
+	 * @return PaymentRequest
+	 */
+	public function addPaymentsReference( $paymentsReference ) {
+		$this->paymentsReference = $paymentsReference;
+
+		return $this;
+	}
+
+	/**
+	 * Helper method for adding a authCode
+	 *
+	 * @param string $authCode
+	 *
+	 * @return PaymentRequest
+	 */
+	public function addAuthCode( $authCode ) {
+		$this->authCode = $authCode;
+
+		return $this;
+	}
+
+	/**
+	 * Helper method for adding a refundHash
+	 *
+	 * @param string $refundHash
+	 *
+	 * @return PaymentRequest
+	 */
+	public function addRefundHash( $refundHash ) {
+		$this->refundHash = $refundHash;
+
+		return $this;
+	}
+
+	/**
+	 * Helper method for adding a hash
+	 *
+	 * @param string $hash
+	 *
+	 * @return PaymentRequest
+	 */
+	public function addHash( $hash ) {
+		$this->hash = $hash;
+
+		return $this;
+	}
+
+	/**
+	 * Helper method for adding a channel
+	 *
+	 * @param string $channel
+	 *
+	 * @return PaymentRequest
+	 */
+	public function addChannel( $channel ) {
+		$this->channel = $channel;
+
+		return $this;
+	}
+
+	/**
+	 * Helper method for adding a fraudFilter
+	 *
+	 * @param string $fraudFilter
+	 *
+	 * @return PaymentRequest
+	 */
+	public function addFraudFilter( $fraudFilter ) {
+		$this->fraudFilter = $fraudFilter;
+
+		return $this;
+	}
+
+	/**
+	 * Helper method for adding a recurring
+	 *
+	 * @param Recurring $recurring
+	 *
+	 * @return PaymentRequest
+	 */
+	public function addRecurring(Recurring $recurring ) {
+		$this->recurring = $recurring;
+
+		return $this;
+	}
+
+	/**
+	 * Helper method for adding a mpi
+	 *
+	 * @param Mpi $mpi
+	 *
+	 * @return PaymentRequest
+	 */
+	public function addMpi(Mpi $mpi ) {
+		$this->mpi = $mpi;
 
 		return $this;
 	}
