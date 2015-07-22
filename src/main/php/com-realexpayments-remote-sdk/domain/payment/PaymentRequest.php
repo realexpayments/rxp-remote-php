@@ -8,6 +8,9 @@ use com\realexpayments\remote\sdk\domain\Card;
 use com\realexpayments\remote\sdk\domain\iRequest;
 use com\realexpayments\remote\sdk\utils\MessageType;
 use com\realexpayments\remote\sdk\utils\XmlUtils;
+use Doctrine\OXM\Mapping as DOM;
+
+
 
 /**
  * Class PaymentRequest
@@ -65,6 +68,7 @@ use com\realexpayments\remote\sdk\utils\XmlUtils;
  *
  * @author vicpada
  * @package com\realexpayments\remote\sdk\domain\payment
+ * @Dom\XmlRootEntity(xml="request")
  */
 class PaymentRequest implements iRequest {
 

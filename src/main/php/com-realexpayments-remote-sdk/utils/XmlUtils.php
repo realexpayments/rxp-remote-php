@@ -3,9 +3,8 @@
 
 namespace com\realexpayments\remote\sdk\utils;
 
-use com\realexpayments\remote\sdk\domain\iResponse;
+
 use com\realexpayments\remote\sdk\RealexException;
-use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\OXM\Configuration;
 use Doctrine\OXM\Mapping\ClassMetadataFactory;
@@ -57,6 +56,7 @@ class XmlUtils {
 			$xml = self::$marshaller->marshalToString($object);
 
 		} catch ( Exception $e ) {
+
 			self::$logger->error( "Error unmarshalling to XML", $e );
 			throw new RealexException( "Error unmarshalling to XML", $e );
 		}
