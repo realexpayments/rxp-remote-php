@@ -4,12 +4,12 @@
 namespace com\realexpayments\remote\sdk\domain\payment;
 
 
-use SplEnum;
+use com\realexpayments\remote\sdk\EnumBase;
 
 /**
  * The address type enum. Can be shipping or billing.
  */
-class AddressType extends SplEnum {
+class AddressType extends EnumBase {
 
 	const __default = self::NONE;
 
@@ -30,6 +30,7 @@ class AddressType extends SplEnum {
 	 */
 	public function __construct($addressType)
 	{
+		parent::__construct($addressType);
 		$this->addressType = $addressType;
 	}
 

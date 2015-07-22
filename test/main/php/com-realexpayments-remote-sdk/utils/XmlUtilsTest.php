@@ -25,10 +25,10 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * Tests conversion of {@link PaymentRequest} to and from XML using the helper methods.
 	 */
-	public function paymentRequestXmlHelpersTest() {
+	public function testPaymentRequestXmlHelpers() {
 		$cvn = ( new CVN() )
 			->addNumber( SampleXmlValidationUtils::CARD_CVN_NUMBER )
-			->addPresenceIndicator( SampleXmlValidationUtils::$CARD_CVN_PRESENCE );
+			->addPresenceIndicatorType( SampleXmlValidationUtils::$CARD_CVN_PRESENCE );
 
 		$card = ( new Card() )
 			->addExpiryDate( SampleXmlValidationUtils::CARD_EXPIRY_DATE )
@@ -80,8 +80,10 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$xml = $request->toXml();
 
 		// Convert from XML back to PaymentRequest
-		$fromXmlRequest = (new PaymentRequest())->fromXml($xml);
-		SampleXmlValidationUtils::checkUnmarshalledPaymentRequest($fromXmlRequest,$this);
+
+		/* @var PaymentRequest $fromXmlRequest */
+		$fromXmlRequest = ( new PaymentRequest() )->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledPaymentRequest( $fromXmlRequest, $this );
 	}
 
 }

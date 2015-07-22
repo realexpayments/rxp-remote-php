@@ -10,8 +10,9 @@ use Phockito;
 
 class RealexClientTest extends \PHPUnit_Framework_TestCase {
 
-	public function sendTest() {
+	public function testSend() {
 
+		$this->markTestSkipped('TO BE DONE');
 		//get sample response XML
 		$file            = fopen( SampleXmlValidationUtils::PAYMENT_RESPONSE_XML_PATH, "r" );
 		$fromXMLResponse = ( new PaymentResponse() )->fromXml( $file );

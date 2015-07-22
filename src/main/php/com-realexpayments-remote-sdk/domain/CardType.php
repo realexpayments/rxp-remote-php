@@ -4,13 +4,13 @@
 namespace com\realexpayments\remote\sdk\domain;
 
 
-use SplEnum;
+use com\realexpayments\remote\sdk\EnumBase;
 
 
 /**
  * Enumeration representing card types.
  */
-class CardType extends SplEnum {
+class CardType extends EnumBase {
 
 	const __default = self::VISA;
 
@@ -29,7 +29,8 @@ class CardType extends SplEnum {
 	/**
 	 * @param string $type
 	 */
-	public function __construct($type){
+	public function __construct( $type ) {
+		parent::__construct( $type );
 
 		$this->type = $type;
 	}

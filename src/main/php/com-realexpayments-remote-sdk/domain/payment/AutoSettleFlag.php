@@ -4,9 +4,9 @@
 namespace com\realexpayments\remote\sdk\domain\payment;
 
 
-use SplEnum;
+use com\realexpayments\remote\sdk\EnumBase;
 
-class AutoSettleFlag extends SplEnum {
+class AutoSettleFlag extends EnumBase {
 	const TRUE = "1";
 	const FALSE = "0";
 	const MULTI = "MULTI";
@@ -22,6 +22,7 @@ class AutoSettleFlag extends SplEnum {
 	 * @param string $flag
 	 */
 	public function __construct( $flag ) {
+		parent::__construct($flag);
 		$this->flag = $flag;
 	}
 

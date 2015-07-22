@@ -3,10 +3,9 @@
 
 namespace com\realexpayments\remote\sdk\utils;
 
+use com\realexpayments\remote\sdk\EnumBase;
 
-use SplEnum;
-
-class MessageType extends SplEnum  {
+class MessageType extends EnumBase  {
 
 	const __default = self::PAYMENT;
 
@@ -33,6 +32,7 @@ class MessageType extends SplEnum  {
 	 * @param string $type
 	 */
 	public function __construct( $type ) {
+		parent::__construct($type);
 		$this->type = $type;
 	}
 

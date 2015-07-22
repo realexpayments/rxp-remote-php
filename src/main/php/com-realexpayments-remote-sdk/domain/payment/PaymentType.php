@@ -4,13 +4,13 @@
 namespace com\realexpayments\remote\sdk\domain\payment;
 
 
-use SplEnum;
+use com\realexpayments\remote\sdk\EnumBase;
 
 /**
  * Class PaymentType
  * Enumeration for the Payment type.
  */
-class PaymentType  extends SplEnum {
+class PaymentType  extends EnumBase {
 
 	const __default = self::AUTH;
 	const  AUTH = "auth";
@@ -26,6 +26,7 @@ class PaymentType  extends SplEnum {
 	 */
 	public function __construct($type)
 	{
+		parent::__construct($type);
 		$this->type = $type;
 	}
 

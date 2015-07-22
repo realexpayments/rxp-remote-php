@@ -4,7 +4,7 @@
 namespace com\realexpayments\remote\sdk\domain;
 
 
-use SplEnum;
+use com\realexpayments\remote\sdk\EnumBase;
 
 /**
  * <p>
@@ -17,7 +17,7 @@ use SplEnum;
  * </ol>
  * </p>
  */
-class PresenceIndicator extends SplEnum{
+class PresenceIndicator extends EnumBase{
 
 	const __default = self::CVN_PRESENT;
 
@@ -39,7 +39,7 @@ class PresenceIndicator extends SplEnum{
 	 */
 	public function __construct($indicator)
 	{
-
+		parent::__construct($indicator);
 		$this->indicator = $indicator;
 	}
 
