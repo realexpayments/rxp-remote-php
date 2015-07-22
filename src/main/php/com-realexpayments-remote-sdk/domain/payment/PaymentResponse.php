@@ -51,4 +51,11 @@ class PaymentResponse implements iResponse{
 	public function isSuccess() {
 		// TODO: Implement isSuccess() method.
 	}
+
+	/**
+	 *
+	 * @return string
+	 */
+	public function getAccount() {
+	}
 }

@@ -3,10 +3,12 @@
 
 namespace com\realexpayments\remote\sdk\utils;
 
-use com\realexpayments\remote\sdk\domain\iResponse;
+use com\realexpayments\remote\sdk\domain\CardType;
 use com\realexpayments\remote\sdk\domain\payment\AddressType;
-use com\realexpayments\remote\sdk\domain\payment\AutoSettle;
 use com\realexpayments\remote\sdk\domain\payment\AutoSettleFlag;
+use com\realexpayments\remote\sdk\domain\payment\PaymentRequest;
+use com\realexpayments\remote\sdk\domain\payment\PaymentResponse;
+use com\realexpayments\remote\sdk\domain\payment\PaymentType;
 use com\realexpayments\remote\sdk\domain\PresenceIndicator;
 use PHPUnit_Framework_TestCase;
 
@@ -30,9 +32,16 @@ class SampleXmlValidationUtils {
 
 	//Card
 	const CARD_NUMBER = "420000000000000000";
-	//const CardType CARD_TYPE = CardType . VISA;
+	/**
+	 * @var CardType
+	 */
+	static $CARD_TYPE;
+
 	const CARD_HOLDER_NAME = "Joe Smith";
 	const  CARD_CVN_NUMBER = 123;
+	/**
+	 * @var PresenceIndicator
+	 */
 	public static $CARD_CVN_PRESENCE;
 	const CARD_EXPIRY_DATE = "0119";
 	const CARD_ISSUE_NUMBER = 1;
@@ -42,6 +51,9 @@ class SampleXmlValidationUtils {
 	const MERCHANT_ID = "thestore";
 	const AMOUNT = 29900;
 	const CURRENCY = "EUR";
+	/**
+	 * @var AutoSettleFlag
+	 */
 	static $AUTO_SETTLE_FLAG;
 	const TIMESTAMP = "20120926112654";
 	const CHANNEL = "yourChannel";
@@ -62,10 +74,16 @@ class SampleXmlValidationUtils {
 //public static final RecurringSequence RECURRING_SEQUENCE = RecurringSequence.FIRST;
 
 	//Address
+	/**
+	 * @var AddressType
+	 */
 	public static $ADDRESS_TYPE_BUSINESS;
 	const ADDRESS_CODE_BUSINESS = "21|578";
 	const ADDRESS_COUNTRY_BUSINESS = "IE";
 
+	/**
+	 * @var AddressType
+	 */
 	public static $ADDRESS_TYPE_SHIPPING;
 	const ADDRESS_CODE_SHIPPING = "77|9876";
 	const ADDRESS_COUNTRY_SHIPPING = "GB";
@@ -130,23 +148,82 @@ class SampleXmlValidationUtils {
 	const THREE_D_SECURE_SIG_RESPONSE_HASH = "e5a7745da5dc32d234c3f52860132c482107e9ac";
 
 	static function Init() {
-		self::$CARD_CVN_PRESENCE = new PresenceIndicator( PresenceIndicator::CVN_PRESENT );
-		self::$ADDRESS_TYPE_BUSINESS = new AddressType(AddressType::BILLING);
-		self::$ADDRESS_TYPE_SHIPPING = new AddressType(AddressType::SHIPPING);
-		self::$AUTO_SETTLE_FLAG= new AutoSettleFlag(AutoSettleFlag::MULTI);
+		self::$CARD_CVN_PRESENCE     = new PresenceIndicator( PresenceIndicator::CVN_PRESENT );
+		self::$ADDRESS_TYPE_BUSINESS = new AddressType( AddressType::BILLING );
+		self::$ADDRESS_TYPE_SHIPPING = new AddressType( AddressType::SHIPPING );
+		self::$AUTO_SETTLE_FLAG      = new AutoSettleFlag( AutoSettleFlag::MULTI );
+		self::$CARD_TYPE             = new CardType( CardType::VISA );
 	}
 
 	/**
 	 *  Check all fields match expected values.
 	 *
-	 * @param iResponse $fromXmlResponse
+	 * @param PaymentResponse $fromXmlResponse
 	 * @param PHPUnit_Framework_TestCase $testCase
 	 */
-	public static function checkUnmarshalledPaymentResponse( iResponse $fromXmlResponse, PHPUnit_Framework_TestCase $testCase ) {
+	public static function checkUnmarshalledPaymentResponse( PaymentResponse $fromXmlResponse, PHPUnit_Framework_TestCase $testCase ) {
 		$testCase->assertEquals( self::ACCOUNT, $fromXmlResponse->getAccount() );
 	}
 
-	public static function checkUnmarshalledPaymentRequest( $fromXmlRequest, $this ) {
+	/**
+	 * Check all fields match expected values.
+	 *
+	 * @param PaymentRequest $fromXmlRequest
+	 * @param PHPUnit_Framework_TestCase $testCase
+	 */
+	public static function checkUnmarshalledPaymentRequest( PaymentRequest $fromXmlRequest, PHPUnit_Framework_TestCase $testCase ) {
+
+		$testCase->assertNotNull( $fromXmlRequest );
+		$testCase->assertEquals( self::CARD_NUMBER, $fromXmlRequest->getCard()->getNumber() );
+
+		$testCase->assertEquals( self::$CARD_TYPE->getType(), $fromXmlRequest->getCard()->getType() );
+		$testCase->assertEquals( self::CARD_HOLDER_NAME, $fromXmlRequest->getCard()->getCardHolderName() );
+		$testCase->assertEquals( self::CARD_CVN_NUMBER, $fromXmlRequest->getCard()->getCvn()->getNumber() );
+		$testCase->assertEquals( self::$CARD_CVN_PRESENCE->getIndicator(), $fromXmlRequest->getCard()->getCvn()->getPresenceIndicator() );
+		$testCase->assertEquals( self::CARD_ISSUE_NUMBER, $fromXmlRequest->getCard()->getIssueNumber() );
+		$testCase->assertEquals( self::CARD_EXPIRY_DATE, $fromXmlRequest->getCard()->getExpiryDate() );
+
+		$testCase->assertEquals( self::ACCOUNT, $fromXmlRequest->getAccount() );
+		$testCase->assertEquals( self::MERCHANT_ID, $fromXmlRequest->getMerchantId() );
+		$testCase->assertEquals( PaymentType::AUTH, $fromXmlRequest->getType() );
+		$testCase->assertEquals( self:: AMOUNT, $fromXmlRequest->getAmount()->getAmount() );
+		$testCase->assertEquals( self::CURRENCY, $fromXmlRequest->getAmount()->getCurrency() );
+		$testCase->assertEquals( self::$AUTO_SETTLE_FLAG->getFlag(), $fromXmlRequest->getAutoSettle()->getFlag() );
+		$testCase->assertEquals( self::TIMESTAMP, $fromXmlRequest->getTimeStamp() );
+		$testCase->assertEquals( self::CHANNEL, $fromXmlRequest->getChannel() );
+		$testCase->assertEquals( self::ORDER_ID, $fromXmlRequest->getOrderId() );
+		$testCase->assertEquals( self::REQUEST_HASH, $fromXmlRequest->getHash() );
+		$testCase->assertEquals( self::COMMENT1, $fromXmlRequest->getComments()[0]->getComment() );
+		$testCase->assertEquals( "1", $fromXmlRequest->getComments()[0]->getId()->toString() );
+		$testCase->assertEquals( self::COMMENT2, $fromXmlRequest->getComments()[1]->getComment() );
+		$testCase->assertEquals( "2", $fromXmlRequest->getComments()[1]->getId()->toString() );
+		$testCase->assertEquals( self::PASREF, $fromXmlRequest->getPaymentsReference() );
+		$testCase->assertEquals( self::AUTH_CODE, $fromXmlRequest->getAuthCode() );
+		$testCase->assertEquals( self::REFUND_HASH, $fromXmlRequest->getRefundHash() );
+		$testCase->assertEquals( self::FRAUD_FILTER, $fromXmlRequest->getFraudFilter() );
+
+		// TODO: Next iteration
+		//$testCase->assertEquals( self::RECURRING_FLAG->getRecurringFlag(), $fromXmlRequest->getRecurring()->getFlag() );
+		//$testCase->assertEquals( self::RECURRING_TYPE->getType(), $fromXmlRequest->getRecurring()->getType() );
+		//$testCase->assertEquals( self::RECURRING_SEQUENCE->getSequence(), $fromXmlRequest->getRecurring()->getSequence() );
+
+		$testCase->assertEquals( self::CUSTOMER_NUMBER, $fromXmlRequest->getTssInfo()->getCustomerNumber() );
+		$testCase->assertEquals( self::PRODUCT_ID, $fromXmlRequest->getTssInfo()->getProductId() );
+		$testCase->assertEquals( self::VARIABLE_REFERENCE, $fromXmlRequest->getTssInfo()->getVariableReference() );
+		$testCase->assertEquals( self::CUSTOMER_IP, $fromXmlRequest->getTssInfo()->getCustomerIpAddress() );
+		$testCase->assertEquals( self::$ADDRESS_TYPE_BUSINESS->getAddressType(), $fromXmlRequest->getTssInfo()->getAddresses()[0]->getType() );
+		$testCase->assertEquals( self::ADDRESS_CODE_BUSINESS, $fromXmlRequest->getTssInfo()->getAddresses()[0]->getCode() );
+		$testCase->assertEquals( self::ADDRESS_COUNTRY_BUSINESS, $fromXmlRequest->getTssInfo()->getAddresses()[0]->getCountry() );
+		$testCase->assertEquals( self::$ADDRESS_TYPE_SHIPPING->getAddressType(), $fromXmlRequest->getTssInfo()->getAddresses()[1]->getType() );
+		$testCase->assertEquals( self::ADDRESS_CODE_SHIPPING, $fromXmlRequest->getTssInfo()->getAddresses()[1]->getCode() );
+		$testCase->assertEquals( self::ADDRESS_COUNTRY_SHIPPING, $fromXmlRequest->getTssInfo()->getAddresses()[1]->getCountry() );
+
+		// TODO: Next iteration
+		//$testCase->assertEquals( self::THREE_D_SECURE_CAVV, $fromXmlRequest->getMpi()->getCavv() );
+		//$testCase->assertEquals( self::THREE_D_SECURE_XID, $fromXmlRequest->getMpi()->getXid() );
+		//$testCase->assertEquals( self::THREE_D_SECURE_ECI, $fromXmlRequest->getMpi()->getEci() );
+
+
 	}
 }
 
