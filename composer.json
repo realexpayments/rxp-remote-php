@@ -1,10 +1,17 @@
 {
+  "repositories" :[
+    {
+      "url" : "https://github.com/bragento/oxm.git",
+      "type":"git"
+    }
+  ],
+
   "require": {
     "phpunit/phpunit": "4.7.7",
     "hafriedlander/phockito": "1.0.0",
     "apache/log4php": "2.3.0",
     "doctrine/common": "2.5.0",
-    "doctrine/oxm": "2.0.0"
+    "doctrine/oxm": "dev-master"
   },
   "autoload": {
     "psr-4": {

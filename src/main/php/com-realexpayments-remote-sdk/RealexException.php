@@ -14,7 +14,7 @@ use RuntimeException;
  */
 class RealexException extends RuntimeException {
 
-	const serialVersionUID = -6404893161440391367;
+	const serialVersionUID = - 6404893161440391367;
 
 	/**
 	 * Constructor for RealexException
@@ -22,7 +22,7 @@ class RealexException extends RuntimeException {
 	 * @param string $message
 	 * @param Exception $previous
 	 */
-	function __construct($message, Exception $previous = null){
-		parent::__construct($message,$previous);
+	function __construct( $message, Exception $previous = null ) {
+		parent::__construct( $message, $code = 0, $previous );
 	}
 }
