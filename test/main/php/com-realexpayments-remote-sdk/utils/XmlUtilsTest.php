@@ -78,7 +78,6 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		// convert to XML
 
 		$xml = $request->toXml();
-
 		// Convert from XML back to PaymentRequest
 
 		/* @var PaymentRequest $fromXmlRequest */

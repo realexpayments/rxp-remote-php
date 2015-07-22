@@ -11,7 +11,6 @@ use com\realexpayments\remote\sdk\utils\XmlUtils;
 use Doctrine\OXM\Mapping as DOM;
 
 
-
 /**
  * Class PaymentRequest
  *
@@ -76,6 +75,8 @@ class PaymentRequest implements iRequest {
 	/**
 	 * @var string Format of timestamp is yyyyMMddhhmmss  e.g. 20150131094559 for 31/01/2015 09:45:59.
 	 * If the timestamp is more than a day (86400 seconds) away from the server time, then the request is rejected.
+	 *
+	 * @Dom\XmlText(type="string")
 	 */
 	private $timestamp;
 
@@ -806,7 +807,7 @@ class PaymentRequest implements iRequest {
 	 * {@inheritdoc}
 	 */
 	public function fromXml( $xml ) {
-		//return XmlUtils::fromXml()
+		return XmlUtils::fromXml( $xml, new MessageType( MessageType::PAYMENT ) );
 	}
 
 
