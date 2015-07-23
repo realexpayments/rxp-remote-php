@@ -252,7 +252,6 @@ class PaymentResponse implements iResponse {
 		          . "."
 		          . $authCode;
 
-
 		//check if calculated hash matches returned value
 		$expectedHash = GenerationUtils::generateHash( $toHash, $secret );
 		if ( $expectedHash == $this->hash ) {

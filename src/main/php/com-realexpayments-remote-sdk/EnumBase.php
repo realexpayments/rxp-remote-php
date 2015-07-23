@@ -27,8 +27,7 @@ class EnumBase {
 			$value = $this::__default;
 		}
 
-		$c = new ReflectionClass( $this );
-		if ( ! in_array( $value, $c->getConstants() ) ) {
+		if ( ! $this->isValidValue( $value ) ) {
 			throw new \InvalidArgumentException();
 		}
 		$this->value = $value;
@@ -39,5 +38,19 @@ class EnumBase {
 	 */
 	final public function __toString() {
 		return $this->value;
+	}
+
+	/**
+	 * @param string $value
+	 *
+	 * @return bool
+	 */
+	public static function isValidValue( $value ) {
+		$c = new ReflectionClass( get_called_class() );
+		if ( in_array( $value, $c->getConstants() ) ) {
+			return true;
+		}
+
+		return false;
 	}
 }

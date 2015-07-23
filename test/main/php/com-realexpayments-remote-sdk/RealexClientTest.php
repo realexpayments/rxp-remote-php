@@ -50,7 +50,7 @@ class RealexClientTest extends \PHPUnit_Framework_TestCase {
 		\Phockito::when( $httpClientMock->execute( \Hamcrest_Core_IsAnything::anything() ) )->return( $httpResponseMock );
 
 		// execute and send on client
-		$realexClient = new RealexClient( SampleXmlValidationUtils::SECRET, $httpClientMock, $httpConfiguration );
+		$realexClient = new RealexClient( SampleXmlValidationUtils::SECRET, $httpConfiguration, $httpClientMock );
 		$response     = $realexClient->send( $request );
 
 		// validate response
@@ -86,7 +86,7 @@ class RealexClientTest extends \PHPUnit_Framework_TestCase {
 		\Phockito::when( $httpClientMock->execute( \Hamcrest_Core_IsAnything::anything() ) )->return( $httpResponseMock );
 
 		// execute and send on client
-		$realexClient = new RealexClient( SampleXmlValidationUtils::SECRET, $httpClientMock, $httpConfiguration );
+		$realexClient = new RealexClient( SampleXmlValidationUtils::SECRET, $httpConfiguration, $httpClientMock );
 
 		try {
 			$realexClient->send( $request );
@@ -128,7 +128,7 @@ class RealexClientTest extends \PHPUnit_Framework_TestCase {
 		\Phockito::when( $httpClientMock->execute( \Hamcrest_Core_IsAnything::anything() ) )->return( $httpResponseMock );
 
 		// execute and send on client
-		$realexClient = new RealexClient( SampleXmlValidationUtils::SECRET, $httpClientMock, $httpConfiguration );
+		$realexClient = new RealexClient( SampleXmlValidationUtils::SECRET, $httpConfiguration, $httpClientMock );
 
 
 		$response = $realexClient->send( $request );
@@ -171,7 +171,7 @@ class RealexClientTest extends \PHPUnit_Framework_TestCase {
 		\Phockito::when( $httpClientMock->execute( \Hamcrest_Core_IsAnything::anything() ) )->return( $httpResponseMock );
 
 		// execute and send on client
-		$realexClient = new RealexClient( SampleXmlValidationUtils::SECRET, $httpClientMock, $httpConfiguration );
+		$realexClient = new RealexClient( SampleXmlValidationUtils::SECRET, $httpConfiguration, $httpClientMock );
 
 
 		$correctExceptionThrown = false;
@@ -198,15 +198,15 @@ class RealexClientTest extends \PHPUnit_Framework_TestCase {
 	public function  testSendInvalidResponseHash() {
 
 		//get sample response XML
-		$path            = SampleXmlValidationUtils::PAYMENT_RESPONSE_XML_PATH;
-		$prefix          = __DIR__ . '/../../resources';
-		$xml             = file_get_contents( $prefix . $path );
+		$path   = SampleXmlValidationUtils::PAYMENT_RESPONSE_XML_PATH;
+		$prefix = __DIR__ . '/../../resources';
+		$xml    = file_get_contents( $prefix . $path );
 
 		/** @var PaymentResponse $fromXMLResponse */
 		$fromXMLResponse = ( new PaymentResponse() )->fromXml( $xml );
 
 		//add invalid hash
-		$fromXMLResponse->setHash("invalid hash");
+		$fromXMLResponse->setHash( "invalid hash" );
 
 		//mock HttpResponse
 		/** @var HttpResponse $httpResponseMock */
@@ -226,11 +226,11 @@ class RealexClientTest extends \PHPUnit_Framework_TestCase {
 		\Phockito::when( $httpClientMock->execute( \Hamcrest_Core_IsAnything::anything() ) )->return( $httpResponseMock );
 
 		// execute and send on client
-		$realexClient = new RealexClient( SampleXmlValidationUtils::SECRET, $httpClientMock, $httpConfiguration );
+		$realexClient = new RealexClient( SampleXmlValidationUtils::SECRET, $httpConfiguration, $httpClientMock );
 		$realexClient->send( $request );
 
 		//shouldn't get this far
-		$this->fail("RealexException should have been thrown before this point.");
+		$this->fail( "RealexException should have been thrown before this point." );
 
 	}
 

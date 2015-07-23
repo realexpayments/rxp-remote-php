@@ -105,7 +105,7 @@ class XmlUtils {
 
 		$config = new Configuration();
 		$config->setMetadataDriverImpl( $config->newDefaultAnnotationDriver( array(
-			"src/main/php/com-realexpayments-remote-sdk/domain/payment/"
+			__DIR__ . "/../domain/payment/"
 		) ) );
 
 		$config->setMetadataCacheImpl( new ArrayCache() );

@@ -2,7 +2,6 @@
 
 namespace com\realexpayments\remote\sdk;
 
-use com\realexpayments\remote\sdk\domain\iHttpClient;
 use com\realexpayments\remote\sdk\domain\payment\PaymentRequest;
 use com\realexpayments\remote\sdk\domain\payment\PaymentResponse;
 use com\realexpayments\remote\sdk\http\HttpClient;
@@ -87,7 +86,7 @@ class RealexClient {
 	 * @param HttpClient $httpClient
 	 * @param HttpConfiguration $httpConfiguration
 	 */
-	public function __construct( $secret, HttpClient $httpClient = null, HttpConfiguration $httpConfiguration = null ) {
+	public function __construct( $secret,  HttpConfiguration $httpConfiguration = null , HttpClient $httpClient = null) {
 		$this->logger = Logger::getLogger( __CLASS__ );
 		$this->secret = $secret;
 
