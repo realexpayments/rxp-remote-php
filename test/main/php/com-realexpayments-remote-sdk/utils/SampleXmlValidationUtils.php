@@ -259,12 +259,12 @@ class SampleXmlValidationUtils {
 	 * @param RealexServerException $ex
 	 * @param PHPUnit_Framework_TestCase $testCase
 	 */
-	public static function checkBasicResponseError(RealexServerException $ex, PHPUnit_Framework_TestCase $testCase ) {
+	public static function checkBasicResponseError( RealexServerException $ex, PHPUnit_Framework_TestCase $testCase ) {
 
-		$testCase->assertEquals(self::RESULT_BASIC_ERROR, $ex->getErrorCode());
-		$testCase->assertEquals(self::MESSAGE_BASIC_ERROR, $ex->getMessage());
-		$testCase->assertEquals(self::TIMESTAMP_BASIC_ERROR, $ex->getTimeStamp());
-		$testCase->assertEquals(self::ORDER_ID_BASIC_ERROR, $ex->getOrderId());
+		$testCase->assertEquals( self::RESULT_BASIC_ERROR, $ex->getErrorCode() );
+		$testCase->assertEquals( self::MESSAGE_BASIC_ERROR, $ex->getMessage() );
+		$testCase->assertEquals( self::TIMESTAMP_BASIC_ERROR, $ex->getTimeStamp() );
+		$testCase->assertEquals( self::ORDER_ID_BASIC_ERROR, $ex->getOrderId() );
 	}
 
 	/**
@@ -273,32 +273,32 @@ class SampleXmlValidationUtils {
 	 * @param PaymentResponse $response
 	 * @param PHPUnit_Framework_TestCase $testCase
 	 */
-	public static function checkFullResponseError(PaymentResponse $response, PHPUnit_Framework_TestCase $testCase ) {
+	public static function checkFullResponseError( PaymentResponse $response, PHPUnit_Framework_TestCase $testCase ) {
 
-		$testCase->assertEquals(self::ACCOUNT, $response->getAccount());
-		$testCase->assertEquals(self::ACQUIRER_RESPONSE, $response->getAcquirerResponse());
-		$testCase->assertEquals(self::AUTH_CODE, $response->getAuthCode());
-		$testCase->assertEquals(self::AUTH_TIME_TAKEN, $response->getAuthTimeTaken());
-		$testCase->assertEquals(self::BATCH_ID, $response->getBatchId());
-		$testCase->assertEquals(self::BANK, $response->getCardIssuer()->getBank());
-		$testCase->assertEquals(self::COUNTRY, $response->getCardIssuer()->getCountry());
-		$testCase->assertEquals(self::COUNTRY_CODE, $response->getCardIssuer()->getCountryCode());
-		$testCase->assertEquals(self::REGION, $response->getCardIssuer()->getRegion());
-		$testCase->assertEquals(self::CVN_RESULT, $response->getCvnResult());
-		$testCase->assertEquals(self::MERCHANT_ID, $response->getMerchantId());
-		$testCase->assertEquals(self::MESSAGE_FULL_ERROR, $response->getMessage());
-		$testCase->assertEquals(self::ORDER_ID, $response->getOrderId());
-		$testCase->assertEquals(self::PASREF, $response->getPaymentsReference());
-		$testCase->assertEquals(self::RESULT_FULL_ERROR, $response->getResult());
-		$testCase->assertEquals(self::RESPONSE_FULL_ERROR_HASH, $response->getHash());
-		$testCase->assertEquals(self::TIMESTAMP, $response->getTimeStamp());
-		$testCase->assertEquals(self::TIME_TAKEN, $response->getTimeTaken());
-		$testCase->assertEquals(self::TSS_RESULT, $response->getTssResult()->getResult());
-		$testCase->assertEquals(self::TSS_RESULT_CHECK1_ID, $response->getTssResult()->getChecks()[0]->getId());
-		$testCase->assertEquals(self::TSS_RESULT_CHECK1_VALUE, $response->getTssResult()->getChecks()[0]->getValue());
-		$testCase->assertEquals(self::TSS_RESULT_CHECK2_ID, $response->getTssResult()->getChecks()[1]->getId());
-		$testCase->assertEquals(self::TSS_RESULT_CHECK2_VALUE, $response->getTssResult()->getChecks()[1]->getValue());
-		$testCase->assertFalse($response->isSuccess());
+		$testCase->assertEquals( self::ACCOUNT, $response->getAccount() );
+		$testCase->assertEquals( self::ACQUIRER_RESPONSE, $response->getAcquirerResponse() );
+		$testCase->assertEquals( self::AUTH_CODE, $response->getAuthCode() );
+		$testCase->assertEquals( self::AUTH_TIME_TAKEN, $response->getAuthTimeTaken() );
+		$testCase->assertEquals( self::BATCH_ID, $response->getBatchId() );
+		$testCase->assertEquals( self::BANK, $response->getCardIssuer()->getBank() );
+		$testCase->assertEquals( self::COUNTRY, $response->getCardIssuer()->getCountry() );
+		$testCase->assertEquals( self::COUNTRY_CODE, $response->getCardIssuer()->getCountryCode() );
+		$testCase->assertEquals( self::REGION, $response->getCardIssuer()->getRegion() );
+		$testCase->assertEquals( self::CVN_RESULT, $response->getCvnResult() );
+		$testCase->assertEquals( self::MERCHANT_ID, $response->getMerchantId() );
+		$testCase->assertEquals( self::MESSAGE_FULL_ERROR, $response->getMessage() );
+		$testCase->assertEquals( self::ORDER_ID, $response->getOrderId() );
+		$testCase->assertEquals( self::PASREF, $response->getPaymentsReference() );
+		$testCase->assertEquals( self::RESULT_FULL_ERROR, $response->getResult() );
+		$testCase->assertEquals( self::RESPONSE_FULL_ERROR_HASH, $response->getHash() );
+		$testCase->assertEquals( self::TIMESTAMP, $response->getTimeStamp() );
+		$testCase->assertEquals( self::TIME_TAKEN, $response->getTimeTaken() );
+		$testCase->assertEquals( self::TSS_RESULT, $response->getTssResult()->getResult() );
+		$testCase->assertEquals( self::TSS_RESULT_CHECK1_ID, $response->getTssResult()->getChecks()[0]->getId() );
+		$testCase->assertEquals( self::TSS_RESULT_CHECK1_VALUE, $response->getTssResult()->getChecks()[0]->getValue() );
+		$testCase->assertEquals( self::TSS_RESULT_CHECK2_ID, $response->getTssResult()->getChecks()[1]->getId() );
+		$testCase->assertEquals( self::TSS_RESULT_CHECK2_VALUE, $response->getTssResult()->getChecks()[1]->getValue() );
+		$testCase->assertFalse( $response->isSuccess() );
 
 	}
 }

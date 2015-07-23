@@ -139,4 +139,55 @@ class RealexClientTest extends \PHPUnit_Framework_TestCase {
 	}
 
 
+	/**
+	 * Test sending a payment request and receiving a payment response error.
+	 */
+	public function  testSendWithErrorResponseInvalidCode() {
+
+		//get sample response XML
+		$path   = SampleXmlValidationUtils::PAYMENT_RESPONSE_BASIC_ERROR_XML_PATH;
+		$prefix = __DIR__ . '/../../resources';
+		$xml    = file_get_contents( $prefix . $path );
+
+		/** @var PaymentResponse $fromXMLResponse */
+		$fromXMLResponse = ( new PaymentResponse() )->fromXml( $xml );
+		$fromXMLResponse->setResult( "invalid" );
+
+		//mock HttpResponse
+		/** @var HttpResponse $httpResponseMock */
+		$httpResponseMock = Phockito::mock( HttpResponse::class );
+		\Phockito::when( $httpResponseMock->getBody() )->return( $fromXMLResponse->toXML() );
+		\Phockito::when( $httpResponseMock->getResponseCode() )->return( 200 );
+
+
+		// create empty request
+		$request = new PaymentRequest();
+
+		$httpConfiguration = new HttpConfiguration();
+		$httpConfiguration->setOnlyAllowHttps( false );
+
+		// mock HttpClient instance
+		$httpClientMock = Phockito::mock( HttpClient::class );
+		\Phockito::when( $httpClientMock->execute( \Hamcrest_Core_IsAnything::anything() ) )->return( $httpResponseMock );
+
+		// execute and send on client
+		$realexClient = new RealexClient( SampleXmlValidationUtils::SECRET, $httpClientMock, $httpConfiguration );
+
+
+		$correctExceptionThrown = false;
+
+		try {
+			$realexClient->send( $request );
+			$this->fail( "RealexException should have been thrown before this point." );
+
+		} catch ( RealexServerException $e ) {
+			$this->fail( "Incorrect exception thrown. Expected RealexException as result code is invalid." );
+		} catch ( RealexException $e ) {
+			$correctExceptionThrown = true;
+		}
+
+		$this->assertTrue( $correctExceptionThrown, "Incorrect exception thrown." );
+	}
+
+
 }
