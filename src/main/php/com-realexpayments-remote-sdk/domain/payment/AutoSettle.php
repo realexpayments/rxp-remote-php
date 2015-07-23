@@ -25,7 +25,7 @@ use Doctrine\OXM\Mapping as DOM;
  *
  * @package com\realexpayments\remote\sdk\domain\payment
  *
- * @Dom\XmlEntity
+ * @Dom\XmlEntity(xml="autosettle")
  */
 class AutoSettle {
 

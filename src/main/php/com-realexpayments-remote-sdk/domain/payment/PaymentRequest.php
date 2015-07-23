@@ -148,10 +148,10 @@ class PaymentRequest implements iRequest {
 	private $hash;
 
 	/**
-	 * @var Comment[] List of {@link Comment} objects to be passed in request. Optionally, up to two comments
+	 * @var CommentCollection List of {@link Comment} objects to be passed in request. Optionally, up to two comments
 	 * can be associated with any transaction.
 	 *
-	 * @Dom\XmlElement(type="com\realexpayments\remote\sdk\domain\payment\Comment", collection=true, direct=true, name="comments")
+	 * @Dom\XmlElement(type="com\realexpayments\remote\sdk\domain\payment\CommentCollection", name="comments")
 	 */
 	private $comments;
 
@@ -432,7 +432,7 @@ class PaymentRequest implements iRequest {
 	/**
 	 * Getter for comments
 	 *
-	 * @return Comment[]
+	 * @return CommentCollection
 	 *
 	 */
 	public function getComments() {
@@ -442,7 +442,7 @@ class PaymentRequest implements iRequest {
 	/**
 	 * Setter for comments
 	 *
-	 * @param Comment[] $comments
+	 * @param CommentCollection $comments
 	 */
 	public function setComments( $comments ) {
 		$this->comments = $comments;
@@ -718,11 +718,11 @@ class PaymentRequest implements iRequest {
 	public function addComment( $comment ) {
 		//create new comments array list if null
 		if ( is_null( $this->comments ) ) {
-			$this->comments = array();
+			$this->comments = new CommentCollection();
 		}
 
-		$size             = count( $this->comments );
-		$this->comments[] = ( new Comment() )->addComment( $comment )->addId( ++ $size );
+		$size = $this->comments->getSize();
+		$this->comments->add( ( new Comment() )->addComment( $comment )->addId( ++ $size ) );
 
 		return $this;
 	}

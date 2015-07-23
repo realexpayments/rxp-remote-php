@@ -57,6 +57,7 @@ class XmlUtils {
 			self::$logger->debug($xml);
 
 		} catch ( Exception $e ) {
+			self::$logger->debug($e);
 
 			self::$logger->error( "Error unmarshalling to XML", $e );
 			throw new RealexException( "Error unmarshalling to XML", $e );
@@ -84,6 +85,7 @@ class XmlUtils {
 
 		} catch ( Exception $e ) {
 
+			self::$logger->debug($e);
 			self::$logger->error( "Error unmarshalling from XML", $e );
 			throw new RealexException( "Error unmarshalling from XML", $e );
 		}

@@ -12,6 +12,7 @@ use com\realexpayments\remote\sdk\domain\payment\Address;
 use com\realexpayments\remote\sdk\domain\payment\AutoSettle;
 use com\realexpayments\remote\sdk\domain\payment\CardIssuer;
 use com\realexpayments\remote\sdk\domain\payment\Comment;
+use com\realexpayments\remote\sdk\domain\payment\CommentCollection;
 use com\realexpayments\remote\sdk\domain\payment\Mpi;
 use com\realexpayments\remote\sdk\domain\payment\PaymentRequest;
 use com\realexpayments\remote\sdk\domain\payment\PaymentResponse;
@@ -188,15 +189,15 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$request->setOrderId( SampleXmlValidationUtils::ORDER_ID );
 		$request->setHash( SampleXmlValidationUtils::REQUEST_HASH );
 
-		$comments = array();
+		$comments = new CommentCollection();
 		$comment  = new Comment();
 		$comment->setId( 1 );
 		$comment->setComment( SampleXmlValidationUtils::COMMENT1 );
-		$comments[] = $comment;
-		$comment    = new Comment();
+		$comments->add( $comment );
+		$comment = new Comment();
 		$comment->setId( 2 );
 		$comment->setComment( SampleXmlValidationUtils::COMMENT2 );
-		$comments[] = $comment;
+		$comments->add( $comment );
 		$request->setComments( $comments );
 
 		$request->setPaymentsReference( SampleXmlValidationUtils::PASREF );
@@ -311,14 +312,27 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 	 * Tests conversion of {@link PaymentResponse} from XML file
 	 */
 	public function testPaymentResponseXmlFromFile() {
-		$path = SampleXmlValidationUtils::PAYMENT_RESPONSE_XML_PATH;
+		$path   = SampleXmlValidationUtils::PAYMENT_RESPONSE_XML_PATH;
 		$prefix = __DIR__ . '/../../../resources';
-		$xml  = file_get_contents( $prefix . $path );
+		$xml    = file_get_contents( $prefix . $path );
 
 		//unmarshal back to response
 		/* @var PaymentResponse $fromXmlResponse */
 		$fromXmlResponse = ( new PaymentResponse() )->fromXml( $xml );
 		SampleXmlValidationUtils::checkUnmarshalledPaymentResponse( $fromXmlResponse, $this );
+	}
+
+	public function testPaymentRequestXmlFromFile() {
+
+		$path   = SampleXmlValidationUtils::PAYMENT_REQUEST_XML_PATH;
+		$prefix = __DIR__ . '/../../../resources';
+		$xml    = file_get_contents( $prefix . $path );
+
+
+		/* @var PaymentRequest $fromXmlRequest */
+		$fromXmlRequest = ( new PaymentRequest() )->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledPaymentRequest( $fromXmlRequest, $this );
+
 	}
 
 

@@ -14,8 +14,8 @@ class AddressType extends EnumBase {
 	const __default = self::NONE;
 
 	const NONE = "None";
-	const SHIPPING = "Shipping";
-	const BILLING = "Billing";
+	const SHIPPING = "shipping";
+	const BILLING = "billing";
 
 	/**
 	 * @var string The type value
