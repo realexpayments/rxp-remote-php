@@ -10,6 +10,7 @@ use com\realexpayments\remote\sdk\domain\payment\PaymentRequest;
 use com\realexpayments\remote\sdk\domain\payment\PaymentResponse;
 use com\realexpayments\remote\sdk\domain\payment\PaymentType;
 use com\realexpayments\remote\sdk\domain\PresenceIndicator;
+use com\realexpayments\remote\sdk\RealexServerException;
 use PHPUnit_Framework_TestCase;
 
 class SampleXmlValidationUtils {
@@ -219,10 +220,10 @@ class SampleXmlValidationUtils {
 		$testCase->assertEquals( self::CHANNEL, $fromXmlRequest->getChannel() );
 		$testCase->assertEquals( self::ORDER_ID, $fromXmlRequest->getOrderId() );
 		$testCase->assertEquals( self::REQUEST_HASH, $fromXmlRequest->getHash() );
-		$testCase->assertEquals( self::COMMENT1, $fromXmlRequest->getComments()->get(0)->getComment() );
-		$testCase->assertEquals( "1", $fromXmlRequest->getComments()->get(0)->getId() );
-		$testCase->assertEquals( self::COMMENT2, $fromXmlRequest->getComments()->get(1)->getComment() );
-		$testCase->assertEquals( "2", $fromXmlRequest->getComments()->get(1)->getId() );
+		$testCase->assertEquals( self::COMMENT1, $fromXmlRequest->getComments()->get( 0 )->getComment() );
+		$testCase->assertEquals( "1", $fromXmlRequest->getComments()->get( 0 )->getId() );
+		$testCase->assertEquals( self::COMMENT2, $fromXmlRequest->getComments()->get( 1 )->getComment() );
+		$testCase->assertEquals( "2", $fromXmlRequest->getComments()->get( 1 )->getId() );
 		$testCase->assertEquals( self::PASREF, $fromXmlRequest->getPaymentsReference() );
 		$testCase->assertEquals( self::AUTH_CODE, $fromXmlRequest->getAuthCode() );
 		$testCase->assertEquals( self::REFUND_HASH, $fromXmlRequest->getRefundHash() );
@@ -250,6 +251,20 @@ class SampleXmlValidationUtils {
 		//$testCase->assertEquals( self::THREE_D_SECURE_ECI, $fromXmlRequest->getMpi()->getEci() );
 
 
+	}
+
+	/**
+	 * Check all fields match expected values.
+	 *
+	 * @param RealexServerException $ex
+	 * @param PHPUnit_Framework_TestCase $testCase
+	 */
+	public static function checkBasicResponseError(RealexServerException $ex, PHPUnit_Framework_TestCase $testCase ) {
+
+		$testCase->assertEquals(self::RESULT_BASIC_ERROR, $ex->getErrorCode());
+		$testCase->assertEquals(self::MESSAGE_BASIC_ERROR, $ex->getMessage());
+		$testCase->assertEquals(self::TIMESTAMP_BASIC_ERROR, $ex->getTimeStamp());
+		$testCase->assertEquals(self::ORDER_ID_BASIC_ERROR, $ex->getOrderId());
 	}
 }
 

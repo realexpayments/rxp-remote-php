@@ -21,6 +21,9 @@ class RealexClientTest extends \PHPUnit_Framework_TestCase {
 		\Phockito::include_hamcrest( false );
 	}
 
+	/**
+	 * Test sending a payment request and receiving a payment response.
+	 */
 	public function testSend() {
 
 		//get sample response XML
@@ -52,6 +55,49 @@ class RealexClientTest extends \PHPUnit_Framework_TestCase {
 
 		// validate response
 		SampleXmlValidationUtils::checkUnmarshalledPaymentResponse( $response, $this );
+	}
+
+	/**
+	 * Test sending a payment request and receiving a payment response error.
+	 */
+	public function  testSendWithShortErrorResponse()
+	{
+
+		//get sample response XML
+		$path            = SampleXmlValidationUtils::PAYMENT_RESPONSE_BASIC_ERROR_XML_PATH;
+		$prefix          = __DIR__ . '/../../resources';
+		$xml             = file_get_contents( $prefix . $path );
+		$fromXMLResponse = ( new PaymentResponse() )->fromXml( $xml );
+
+		//mock HttpResponse
+		/** @var HttpResponse $httpResponseMock */
+		$httpResponseMock = Phockito::mock( HttpResponse::class );
+		\Phockito::when( $httpResponseMock->getBody() )->return( $fromXMLResponse->toXML() );
+		\Phockito::when( $httpResponseMock->getResponseCode() )->return( 200 );
+
+
+		// create empty request
+		$request = new PaymentRequest();
+
+		$httpConfiguration = new HttpConfiguration();
+		$httpConfiguration->setOnlyAllowHttps( false );
+
+		// mock HttpClient instance
+		$httpClientMock = Phockito::mock( HttpClient::class );
+		\Phockito::when( $httpClientMock->execute( \Hamcrest_Core_IsAnything::anything() ) )->return( $httpResponseMock );
+
+		// execute and send on client
+		$realexClient = new RealexClient( SampleXmlValidationUtils::SECRET, $httpClientMock, $httpConfiguration );
+
+		try {
+			$realexClient->send( $request );
+			$this->fail("RealexException should have been thrown before this point.");
+		}
+		catch(RealexException $e)
+		{
+			//validate error
+			SampleXmlValidationUtils::checkBasicResponseError($e,$this);
+		}
 
 	}
 
