@@ -80,7 +80,7 @@ class HttpUtils {
 			$scheme = parse_url( $httpPost->getUrl(), PHP_URL_SCHEME );
 			if ( ! $scheme || strtolower( $scheme ) != strtolower( self::HTTPS_PROTOCOL ) ) {
 				self::$logger->error( "Protocol must be " . self::HTTPS_PROTOCOL );
-				throw new RealexException( "Protocol must be" . self::HTTPS_PROTOCOL );
+				throw new RealexException( "Protocol must be " . self::HTTPS_PROTOCOL );
 			}
 
 		} else {
