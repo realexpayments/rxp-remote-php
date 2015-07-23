@@ -3,6 +3,8 @@
 
 namespace com\realexpayments\remote\sdk\utils;
 
+use DateTime;
+
 
 /**
  * Utils for the auto-generation of fields, for example the SHA1 hash.
@@ -66,9 +68,67 @@ class GenerationUtils {
 		$toHashFirstPass = sha1( $toHash );
 
 		//second pass takes the first hash, adds the secret and hashes again
-		$toHashSecondPass = $toHashFirstPass . $secret;
+		$toHashSecondPass = $toHashFirstPass . "." . $secret;
 
 		return sha1( $toHashSecondPass );
 
 	}
+
+	/**
+	 * Generate the current datetimestamp in the string formaat (YYYYMMDDHHSS) required in a
+	 * request to Realex.
+	 *
+	 * @return string current timestamp in YYYYMMDDHHSS format
+	 */
+	public static function generateTimestamp() {
+
+		$date = new DateTime();
+
+		return $date->format( "YmdHis" );
+
+	}
+
+	/**
+	 * Order Id for a initial request should be unique per client ID. This method generates a unique
+	 * order Id using the Java UUID class and then convert it to base64 to shorten the length to 22
+	 * characters. Order Id for a subsequent request (void, rebate, settle ect.) should use the
+	 * order Id of the initial request.
+	 *
+	 * * the order ID uses the Java UUID (universally unique identifier) so in theory it may not
+	 * be unique but the odds of this are extremely remote (see
+	 * <a href="http://en.wikipedia.org/wiki/Universally_unique_identifier#Random_UUID_probability_of_duplicates">
+	 * http://en.wikipedia.org/wiki/Universally_unique_identifier#Random_UUID_probability_of_duplicates</a>)
+	 *
+	 */
+	public static function generateOrderId() {
+
+		$uuid                 = self::getGuid();
+		$mostSignificantBits  = substr( $uuid, 0, 8 );
+		$leastSignificantBits = substr( $uuid, 23, 8 );
+
+
+		return substr( base64_encode( $mostSignificantBits . $leastSignificantBits ), 0, 22 );
+	}
+
+
+	private static function getGuid() {
+		if ( function_exists( 'com_create_guid' ) ) {
+			return trim( com_create_guid(), '{}' );
+		} else {
+
+			mt_srand( (double) microtime() * 10000 );//optional for php 4.2.0 and up.
+			$charId = strtoupper( md5( uniqid( rand(), true ) ) );
+			$hyphen = chr( 45 );// "-"
+			$uuid   = chr( 123 )// "{"
+			          . substr( $charId, 0, 8 ) . $hyphen
+			          . substr( $charId, 8, 4 ) . $hyphen
+			          . substr( $charId, 12, 4 ) . $hyphen
+			          . substr( $charId, 16, 4 ) . $hyphen
+			          . substr( $charId, 20, 12 )
+			          . chr( 125 );// "}"
+			return $uuid;
+		}
+
+	}
+
 }

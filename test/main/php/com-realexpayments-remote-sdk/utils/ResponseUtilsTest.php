@@ -12,7 +12,7 @@ use com\realexpayments\remote\sdk\domain\payment\PaymentResponse;
  * @author vicpada
  *
  */
-class Test extends \PHPUnit_Framework_TestCase {
+class ResponseUtilsTest extends \PHPUnit_Framework_TestCase {
 
 	/**
 	 * Test if the response is a basic response.
