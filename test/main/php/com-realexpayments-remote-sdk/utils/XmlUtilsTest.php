@@ -22,6 +22,7 @@ use com\realexpayments\remote\sdk\domain\payment\TssInfo;
 use com\realexpayments\remote\sdk\domain\payment\TssResult;
 use com\realexpayments\remote\sdk\domain\payment\TssResultCheck;
 
+
 /**
  * Unit test class for XmlUtils.
  *
@@ -322,6 +323,9 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		SampleXmlValidationUtils::checkUnmarshalledPaymentResponse( $fromXmlResponse, $this );
 	}
 
+	/**
+	 * Tests conversion of {@link PaymentRequest} from XML file.
+	 */
 	public function testPaymentRequestXmlFromFile() {
 
 		$path   = SampleXmlValidationUtils::PAYMENT_REQUEST_XML_PATH;
@@ -333,6 +337,33 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$fromXmlRequest = ( new PaymentRequest() )->fromXml( $xml );
 		SampleXmlValidationUtils::checkUnmarshalledPaymentRequest( $fromXmlRequest, $this );
 
+	}
+
+	/**
+	 * Tests conversion of {@link PaymentResponse} from XML file with unknown element.
+	 */
+	public function  testPaymentResponseXmlFromFileUnknownElement() {
+		$path   = SampleXmlValidationUtils::PAYMENT_RESPONSE_XML_PATH_UNKNOWN_ELEMENT;
+		$prefix = __DIR__ . '/../../../resources';
+		$xml    = file_get_contents( $prefix . $path );
+
+		//unmarshal back to response
+		/* @var PaymentResponse $fromXmlResponse */
+		$fromXmlResponse = ( new PaymentResponse() )->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledPaymentResponse( $fromXmlResponse, $this );
+
+	}
+
+	/**
+	 * Test expected {@link RealexException} when unmarshalling invalid xml.
+	 *
+	 * @expectedException     com\realexpayments\remote\sdk\RealexException
+	 */
+	public function testFromXmlError()
+	{
+
+		//Try to unmarshal invalid XML
+		XmlUtils::fromXml("<xml>test</xml>xml>",new MessageType(MessageType::PAYMENT));
 	}
 
 

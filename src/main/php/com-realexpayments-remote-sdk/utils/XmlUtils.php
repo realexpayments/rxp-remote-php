@@ -53,11 +53,9 @@ class XmlUtils {
 
 		try {
 
-			$xml = self::$marshaller->marshalToString($object);
-			self::$logger->debug($xml);
+			$xml = self::$marshaller->marshalToString( $object );
 
 		} catch ( Exception $e ) {
-			self::$logger->debug($e);
 
 			self::$logger->error( "Error unmarshalling to XML", $e );
 			throw new RealexException( "Error unmarshalling to XML", $e );
@@ -81,11 +79,9 @@ class XmlUtils {
 
 		try {
 
-			$object = self::$marshaller->unmarshalFromString($xml);
+			$object = self::$marshaller->unmarshalFromString( $xml );
 
 		} catch ( Exception $e ) {
-
-			self::$logger->debug($e);
 			self::$logger->error( "Error unmarshalling from XML", $e );
 			throw new RealexException( "Error unmarshalling from XML", $e );
 		}
@@ -112,9 +108,9 @@ class XmlUtils {
 			"src/main/php/com-realexpayments-remote-sdk/domain/payment/"
 		) ) );
 
-		$config->setMetadataCacheImpl(new ArrayCache());
-		$metadataFactory = new ClassMetadataFactory($config);
-		self::$marshaller = new XmlMarshaller($metadataFactory);
+		$config->setMetadataCacheImpl( new ArrayCache() );
+		$metadataFactory  = new ClassMetadataFactory( $config );
+		self::$marshaller = new XmlMarshaller( $metadataFactory );
 
 	}
 
