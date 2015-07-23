@@ -26,6 +26,11 @@ class HttpUtils {
 
 
 	/**
+	 * Get a default HttpClient based on the HttpConfiguration object. If required the defaults can
+	 * be altered to meet the requirements of the SDK user. The default client does not use connection
+	 * pooling and does not reuse connections. Timeouts for connection and socket are taken from the
+	 * {@link HttpConfiguration} object.
+	 *
 	 * @param HttpConfiguration $httpConfiguration
 	 *
 	 * @return HttpClient httpclient
@@ -34,12 +39,13 @@ class HttpUtils {
 
 		self::getLogger();
 
-		// TODO: set Connect Timeout
-		// TODO: set Socket Timeout
-
 		self::$logger->debug( "Creating HttpClient with simple no pooling/no connection reuse default settings." );
 
-		return new HttpClient();
+		$httpClient = new HttpClient();
+		$httpClient->setConnectTimeout($httpConfiguration->getTimeout());
+		$httpClient->setSocketTimeout($httpConfiguration->getTimeout());
+
+		return $httpClient;
 	}
 
 	/**

@@ -3,8 +3,12 @@
 namespace com\realexpayments\remote\sdk;
 
 use com\realexpayments\remote\sdk\domain\iHttpClient;
+use com\realexpayments\remote\sdk\domain\payment\PaymentRequest;
+use com\realexpayments\remote\sdk\domain\payment\PaymentResponse;
+use com\realexpayments\remote\sdk\http\HttpClient;
 use com\realexpayments\remote\sdk\http\HttpConfiguration;
 use com\realexpayments\remote\sdk\http\HttpUtils;
+use com\realexpayments\remote\sdk\utils\ResponseUtils;
 use Logger;
 
 /**
@@ -58,17 +62,14 @@ class RealexClient {
 
 
 	/**
-	 * The shared secret issued by Realex. Used to create the SHA-1 hash in the request and
+	 * @var string The shared secret issued by Realex. Used to create the SHA-1 hash in the request and
 	 * to verify the validity of the XML response.
-	 *
-	 * @var string secret
 	 */
 	private $secret;
 
 
 	/**
-	 * HttpClient instance
-	 * @var iHttpClient httpclient
+	 * @var HttpClient HttpClient instance
 	 */
 	private $httpClient;
 
@@ -79,25 +80,140 @@ class RealexClient {
 	 */
 	private $httpConfiguration;
 
+	/**
+	 * RealexClient constructor.
+	 *
+	 * @param string $secret
+	 * @param HttpClient $httpClient
+	 * @param HttpConfiguration $httpConfiguration
+	 */
+	public function __construct( $secret, HttpClient $httpClient = null, HttpConfiguration $httpConfiguration = null ) {
+		$this->logger = Logger::getLogger( __CLASS__ );
+		$this->secret = $secret;
+
+		if ( is_null( $httpConfiguration ) ) {
+			$this->httpConfiguration = new HttpConfiguration();
+		} else {
+			$this->httpConfiguration = $httpConfiguration;
+		}
+
+		if ( is_null( $httpClient ) ) {
+			$this->httpClient = HttpUtils::getDefaultClient( $this->httpConfiguration );
+		} else {
+			$this->httpClient = $httpClient;
+		}
+	}
 
 	/**
-	 * Realex client constructor. Will use default HTTP configuration.
+	 * Getter for secret
 	 *
-	 * @param $secret string secret
+	 * @return string
 	 */
-	public function __construct($secret) {
-		$this->logger = Logger::getLogger( __CLASS__ );
-		$this->secret= $secret;
-		$this->httpConfiguration = new HttpConfiguration();
-		$this->httpClient = HttpUtils::getDefaultClient($this->httpConfiguration);
+	public function getSecret() {
+		return $this->secret;
+	}
+
+	/**
+	 * Setter for secret
+	 *
+	 * @param string $secret
+	 */
+	public function setSecret( $secret ) {
+		$this->secret = $secret;
+	}
+
+	/**
+	 * Getter for httpClient
+	 *
+	 * @return HttpClient
+	 */
+	public function getHttpClient() {
+		return $this->httpClient;
+	}
+
+	/**
+	 * Setter for httpClient
+	 *
+	 * @param HttpClient $httpClient
+	 */
+	public function setHttpClient( $httpClient ) {
+		$this->httpClient = $httpClient;
+	}
+
+	/**
+	 * Getter for httpConfiguration
+	 *
+	 * @return HttpConfiguration
+	 */
+	public function getHttpConfiguration() {
+		return $this->httpConfiguration;
+	}
+
+	/**
+	 * Setter for httpConfiguration
+	 *
+	 * @param HttpConfiguration $httpConfiguration
+	 */
+	public function setHttpConfiguration( $httpConfiguration ) {
+		$this->httpConfiguration = $httpConfiguration;
 	}
 
 
-
-
 	/**
-	 * @param $request
+	 * <p>
+	 * Sends the request to Realex. Actions:
+	 *
+	 * <ol>
+	 * <li>Generates any defaults on the request e.g. hash, time stamp order ID.</li>
+	 * <li>Marshals request to XML.</li>
+	 * <li>Sends request to Realex.</li>
+	 * <li>Unmarshals response.</li>
+	 * <li>Checks result code (If response is an error then throws {@link RealexServerException}).</li>
+	 * <li>Validates response hash (If invalid throws {@link RealexException}).</li>
+	 * </ol>
+	 * </p>
+	 *
+	 * @param  PaymentRequest $request
+	 *
+	 * @return PaymentResponse
 	 */
-	public function send( $request ) {
+	public function send( PaymentRequest $request ) {
+
+		$this->logger->info( "Sending XML request to Realex." );
+
+		//generate any required defaults e.g. order ID, time stamp, hash
+		$request->generateDefaults( $this->secret );
+
+		//convert request to XML
+		$this->logger->debug( "Marshalling request object to XML." );
+		$xmlRequest = $request->toXml();
+
+		//send request to Realex.
+		$xmlResult = HttpUtils::sendMessage( $xmlRequest, $this->httpClient, $this->httpConfiguration );
+
+		//log the response
+		$this->logger->trace( "Response XML from server: {}", $xmlResult );
+
+		//convert XML to response object
+		$this->logger->debug( "Unmarshalling XML to response object." );
+		$response = $request->responseFromXml( $xmlResult );
+
+		//throw exception if short response returned (indicating request could not be processed).
+		if ( ResponseUtils::isBasicResponse( $response->getResult() ) ) {
+			$this->logger->error( "Error response received from Realex with code " . $response->getResult() . " and message " . $response->getMessage() . "." );
+			throw new RealexServerException( $response->getTimeStamp(), $response->getOrderId(), $response->getResult(), $response->getMessage() );
+		}
+
+		//validate response hash
+		$this->logger->debug( "Verifying response hash." );
+
+		if ( ! $response->isHashValid( $this->secret ) ) {
+			//Hash invalid. Throw exception.
+			$this->logger->error( "Response hash is invalid. This response's validity cannot be verified." );
+			throw new RealexException( "Response hash is invalid. This response's validity cannot be verified." );
+		}
+
+		return $response;
+
 	}
 }

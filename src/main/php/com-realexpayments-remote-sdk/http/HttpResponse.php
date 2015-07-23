@@ -11,7 +11,7 @@ namespace com\realexpayments\remote\sdk\http;
 class HttpResponse {
 
 	/**
-	 * @var string
+	 * @var int
 	 */
 	private $responseCode;
 
@@ -31,7 +31,7 @@ class HttpResponse {
 	/**
 	 * Getter for responseCode
 	 *
-	 * @return string
+	 * @return int
 	 */
 	public function getResponseCode() {
 		return $this->responseCode;
@@ -40,7 +40,7 @@ class HttpResponse {
 	/**
 	 * Setter for responseCode
 	 *
-	 * @param string $responseCode
+	 * @param int $responseCode
 	 */
 	public function setResponseCode( $responseCode ) {
 		$this->responseCode = $responseCode;

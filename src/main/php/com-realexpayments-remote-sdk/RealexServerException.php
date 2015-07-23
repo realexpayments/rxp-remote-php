@@ -10,9 +10,9 @@ namespace com\realexpayments\remote\sdk;
  *
  * @author vicpada
  */
-class RealexServerException  extends  RealexException{
+class RealexServerException extends RealexException {
 
-	const serialVersionUID = -298850091427275465;
+	const serialVersionUID = - 298850091427275465;
 
 	/**
 	 * @var string The error code returned from Realex
@@ -33,13 +33,13 @@ class RealexServerException  extends  RealexException{
 	/**
 	 * RealexServerException constructor.
 	 *
-	 * @param string $errorCode
-	 * @param string $orderId
 	 * @param string $timeStamp
+	 * @param string $orderId
+	 * @param string $errorCode
 	 * @param string $message
 	 */
-	public function __construct( $errorCode, $orderId, $timeStamp, $message ) {
-		parent::__construct($message);
+	public function __construct( $timeStamp, $orderId, $errorCode, $message ) {
+		parent::__construct( $message );
 
 		$this->errorCode = $errorCode;
 		$this->orderId   = $orderId;
