@@ -10,12 +10,16 @@ use com\realexpayments\remote\sdk\domain\CardType;
 use com\realexpayments\remote\sdk\domain\CVN;
 use com\realexpayments\remote\sdk\domain\payment\Address;
 use com\realexpayments\remote\sdk\domain\payment\AutoSettle;
+use com\realexpayments\remote\sdk\domain\payment\CardIssuer;
 use com\realexpayments\remote\sdk\domain\payment\Comment;
 use com\realexpayments\remote\sdk\domain\payment\Mpi;
 use com\realexpayments\remote\sdk\domain\payment\PaymentRequest;
+use com\realexpayments\remote\sdk\domain\payment\PaymentResponse;
 use com\realexpayments\remote\sdk\domain\payment\PaymentType;
 use com\realexpayments\remote\sdk\domain\payment\Recurring;
 use com\realexpayments\remote\sdk\domain\payment\TssInfo;
+use com\realexpayments\remote\sdk\domain\payment\TssResult;
+use com\realexpayments\remote\sdk\domain\payment\TssResultCheck;
 
 /**
  * Unit test class for XmlUtils.
@@ -87,6 +91,9 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		SampleXmlValidationUtils::checkUnmarshalledPaymentRequest( $fromXmlRequest, $this );
 	}
 
+	/**
+	 * Tests conversion of {@link PaymentRequest} to and from XML using the helper methods with no enums.
+	 */
 	public function  testPaymentRequestXmlHelpersNoEnums() {
 		$card = ( new Card() )
 			->addExpiryDate( SampleXmlValidationUtils::CARD_EXPIRY_DATE )
@@ -145,6 +152,9 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		SampleXmlValidationUtils::checkUnmarshalledPaymentRequest( $fromXmlRequest, $this );
 	}
 
+	/**
+	 * Tests conversion of {@link PaymentRequest} to and from XML using setters.
+	 */
 	public function testPaymentRequestXmlSetters() {
 		$card = new Card();
 		$card->setExpiryDate( SampleXmlValidationUtils::CARD_EXPIRY_DATE );
@@ -238,5 +248,65 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$fromXmlRequest = ( new PaymentRequest() )->fromXml( $xml );
 		SampleXmlValidationUtils::checkUnmarshalledPaymentRequest( $fromXmlRequest, $this );
 	}
+
+	/**
+	 * Tests conversion of {@link PaymentResponse} to and from XML.
+	 */
+	public function testPaymentResponseXml(){
+
+		$response = new PaymentResponse();
+
+		$response->setAccount(SampleXmlValidationUtils::ACCOUNT);
+		$response->setAcquirerResponse(SampleXmlValidationUtils::ACQUIRER_RESPONSE);
+		$response->setAuthCode(SampleXmlValidationUtils::AUTH_CODE);
+		$response->setAuthTimeTaken(SampleXmlValidationUtils::AUTH_TIME_TAKEN);
+		$response->setBatchId(SampleXmlValidationUtils::BATCH_ID);
+
+		$cardIssuer = new CardIssuer();
+		$cardIssuer->setBank(SampleXmlValidationUtils::BANK);
+		$cardIssuer->setCountry(SampleXmlValidationUtils::COUNTRY);
+		$cardIssuer->setCountryCode(SampleXmlValidationUtils::COUNTRY_CODE);
+		$cardIssuer->setRegion(SampleXmlValidationUtils::REGION);
+		$response->setCardIssuer($cardIssuer);
+
+		$response->setCvnResult(SampleXmlValidationUtils::CVN_RESULT);
+		$response->setMerchantId(SampleXmlValidationUtils::MERCHANT_ID);
+		$response->setMessage(SampleXmlValidationUtils::MESSAGE);
+		$response->setOrderId(SampleXmlValidationUtils::ORDER_ID);
+		$response->setPaymentsReference(SampleXmlValidationUtils::PASREF);
+		$response->setResult(SampleXmlValidationUtils::RESULT_SUCCESS);
+		$response->setHash(SampleXmlValidationUtils::RESPONSE_HASH);
+		$response->setTimeStamp(SampleXmlValidationUtils::TIMESTAMP);
+		$response->setTimeTaken(SampleXmlValidationUtils::TIME_TAKEN);
+
+		$tssResult = new TssResult();
+		$tssResult->setResult(SampleXmlValidationUtils::TSS_RESULT);
+
+		$checks = array();
+		$check = new TssResultCheck();
+		$check->setId(SampleXmlValidationUtils::TSS_RESULT_CHECK1_ID);
+		$check->setValue(SampleXmlValidationUtils::TSS_RESULT_CHECK1_VALUE);
+		$checks[] = $check;
+		$check = new TssResultCheck();
+		$check->setId(SampleXmlValidationUtils::TSS_RESULT_CHECK2_ID);
+		$check->setValue(SampleXmlValidationUtils::TSS_RESULT_CHECK2_VALUE);
+		$checks[] = $check;
+
+		$tssResult->setChecks($checks);
+		$response->setTssResult($tssResult);
+
+		$response->setAvsAddressResponse(SampleXmlValidationUtils::AVS_ADDRESS);
+		$response->setAvsPostcodeResponse(SampleXmlValidationUtils::AVS_POSTCODE);
+
+		//marshal to XML
+		$xml = $response->toXml();
+
+		//unmarshal back to response
+		/* @var PaymentResponse $fromXmlResponse */
+		$fromXmlResponse = (new PaymentResponse())->fromXml($xml);
+		SampleXmlValidationUtils::checkUnmarshalledPaymentResponse( $fromXmlResponse, $this );
+
+	}
+
 
 }

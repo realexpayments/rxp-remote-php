@@ -162,7 +162,33 @@ class SampleXmlValidationUtils {
 	 * @param PHPUnit_Framework_TestCase $testCase
 	 */
 	public static function checkUnmarshalledPaymentResponse( PaymentResponse $fromXmlResponse, PHPUnit_Framework_TestCase $testCase ) {
+
 		$testCase->assertEquals( self::ACCOUNT, $fromXmlResponse->getAccount() );
+		$testCase->assertEquals( self::ACQUIRER_RESPONSE, $fromXmlResponse->getAcquirerResponse() );
+		$testCase->assertEquals( self::AUTH_CODE, $fromXmlResponse->getAuthCode() );
+		$testCase->assertEquals( self::AUTH_TIME_TAKEN, $fromXmlResponse->getAuthTimeTaken() );
+		$testCase->assertEquals( self::BATCH_ID, $fromXmlResponse->getBatchId() );
+		$testCase->assertEquals( self::BANK, $fromXmlResponse->getCardIssuer()->getBank() );
+		$testCase->assertEquals( self::COUNTRY, $fromXmlResponse->getCardIssuer()->getCountry() );
+		$testCase->assertEquals( self::COUNTRY_CODE, $fromXmlResponse->getCardIssuer()->getCountryCode() );
+		$testCase->assertEquals( self::REGION, $fromXmlResponse->getCardIssuer()->getRegion() );
+		$testCase->assertEquals( self::CVN_RESULT, $fromXmlResponse->getCvnResult() );
+		$testCase->assertEquals( self::MERCHANT_ID, $fromXmlResponse->getMerchantId() );
+		$testCase->assertEquals( self::MESSAGE, $fromXmlResponse->getMessage() );
+		$testCase->assertEquals( self::ORDER_ID, $fromXmlResponse->getOrderId() );
+		$testCase->assertEquals( self::PASREF, $fromXmlResponse->getPaymentsReference() );
+		$testCase->assertEquals( self::RESULT_SUCCESS, $fromXmlResponse->getResult() );
+		$testCase->assertEquals( self::RESPONSE_HASH, $fromXmlResponse->getHash() );
+		$testCase->assertEquals( self::TIMESTAMP, $fromXmlResponse->getTimeStamp() );
+		$testCase->assertEquals( self::TIME_TAKEN, $fromXmlResponse->getTimeTaken() );
+		$testCase->assertEquals( self::TSS_RESULT, $fromXmlResponse->getTssResult()->getResult() );
+		$testCase->assertEquals( self::TSS_RESULT_CHECK1_ID, $fromXmlResponse->getTssResult()->getChecks()[0]->getId() );
+		$testCase->assertEquals( self::TSS_RESULT_CHECK1_VALUE, $fromXmlResponse->getTssResult()->getChecks()[0]->getValue() );
+		$testCase->assertEquals( self::TSS_RESULT_CHECK2_ID, $fromXmlResponse->getTssResult()->getChecks()[1]->getId() );
+		$testCase->assertEquals( self::TSS_RESULT_CHECK2_VALUE, $fromXmlResponse->getTssResult()->getChecks()[1]->getValue() );
+		$testCase->assertEquals( self::AVS_ADDRESS, $fromXmlResponse->getAvsAddressResponse() );
+		$testCase->assertEquals( self::AVS_POSTCODE, $fromXmlResponse->getAvsPostcodeResponse() );
+		$testCase->assertTrue( $fromXmlResponse->isSuccess() );
 	}
 
 	/**
