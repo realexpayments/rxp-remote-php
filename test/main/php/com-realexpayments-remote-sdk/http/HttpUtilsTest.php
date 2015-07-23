@@ -3,8 +3,8 @@
 
 namespace com\realexpayments\remote\sdk\http;
 
-use com\realexpayments\remote\sdk\domain\iHttpClient;
 use Exception;
+
 
 
 /**
@@ -18,7 +18,8 @@ class HttpUtilsTest extends \PHPUnit_Framework_TestCase {
 	 * Test sending a message, expecting a successful response.
 	 */
 	public function testSendMessageSuccess() {
-		$this->markTestSkipped("To be done");
+
+		\Phockito::include_hamcrest( false );
 
 		try {
 			$endpoint       = 'https://some-test-endpoint';
@@ -27,18 +28,22 @@ class HttpUtilsTest extends \PHPUnit_Framework_TestCase {
 			$xml = "<element>test response xml</element>";
 
 			// Dummy and Mock required objects
-			$statusCode   = 200;
-			$statusReason = "";
+			$statusCode = 200;
 
-			$httpResponse = new HttpResponse( $statusCode, $statusReason );
-			$httpResponse->setEntity( $xml );
+			$httpResponse = new HttpResponse();
+			$httpResponse->setResponseCode( $statusCode );
+			$httpResponse->setBody( $xml );
 
+			/** @var HttpConfiguration $configurationMock */
 			$configurationMock = \Phockito::mock( HttpConfiguration::class );
-			when( $configurationMock->getEndPoint() )->then( $endpoint );
-			when( $configurationMock->isOnlyAllowHttps )->then( $onlyAllowHttps );
+			\Phockito::when( $configurationMock->getEndPoint() )->return( $endpoint );
+			\Phockito::when( $configurationMock->isOnlyAllowHttps() )->return( $onlyAllowHttps );
 
-			$httpClientMock = \Phockito::mock( iHttpClient::class );
-			when( $httpClientMock->execute( anything() ) )->return( $httpResponse );
+			/** @var HttpClient $httpClientMock */
+			$httpClientMock = \Phockito::mock( HttpClient::class );
+
+			/** @var HttpRequest $anything */
+			\Phockito::when( $httpClientMock->execute( \Hamcrest_Core_IsAnything::anything() ) )->return( $httpResponse );
 
 			// execute the method
 			$response = HttpUtils::sendMessage( $xml, $httpClientMock, $configurationMock );
@@ -48,7 +53,7 @@ class HttpUtilsTest extends \PHPUnit_Framework_TestCase {
 
 
 		} catch ( Exception $e ) {
-			$this->fail( "Unexpected exception:" + $e->getMessage() );
+			$this->fail( "Unexpected exception:" . $e->getMessage() );
 		}
 	}
 

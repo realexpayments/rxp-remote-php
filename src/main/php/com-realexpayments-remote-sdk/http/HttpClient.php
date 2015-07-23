@@ -11,4 +11,14 @@ class HttpClient {
 	 */
 	public function __construct() {
 	}
+
+	/**
+	 * @param HttpRequest $httpRequest
+	 *
+	 * @return HttpResponse
+	 */
+	public function execute($httpRequest) {
+
+		return new HttpResponse();
+	}
 }

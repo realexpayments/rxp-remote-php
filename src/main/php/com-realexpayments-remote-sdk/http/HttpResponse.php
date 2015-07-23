@@ -4,42 +4,63 @@
 namespace com\realexpayments\remote\sdk\http;
 
 
-use com\realexpayments\remote\sdk\domain\iHttpResponse;
-
-class HttpResponse implements iHttpResponse {
-
-	/**
-	 * @var string entity
-	 */
-	private $entity;
-
-	private $statusCode;
-	private $statusReason;
+/**
+ * Class HttpResponse
+ * @package com\realexpayments\remote\sdk\http
+ */
+class HttpResponse {
 
 	/**
-	 * @return string entity
+	 * @var string
 	 */
-	public function getEntity() {
-		return $this->entity;
-	}
+	private $responseCode;
 
 	/**
-	 * @param string $entity
+	 * @var string
 	 */
-	public function setEntity( $entity ) {
-		$this->entity = $entity;
+	private $body;
+
+
+	/**
+	 * HttpResponse constructor.
+	 */
+	public function __construct() {
 	}
 
 
 	/**
-	 * Constructor of HttpResponse
+	 * Getter for responseCode
 	 *
-	 * @param $statusCode string
-	 * @param $statusReason string
+	 * @return string
 	 */
-	public function  __construct( $statusCode, $statusReason ) {
-		$this->statusCode   = $statusCode;
-		$this->statusReason = $statusReason;
+	public function getResponseCode() {
+		return $this->responseCode;
 	}
 
+	/**
+	 * Setter for responseCode
+	 *
+	 * @param string $responseCode
+	 */
+	public function setResponseCode( $responseCode ) {
+		$this->responseCode = $responseCode;
+	}
+
+	/**
+	 * Getter for body
+	 *
+	 * @return string
+	 */
+	public function getBody() {
+		return $this->body;
+	}
+
+	/**
+	 * Setter for body
+	 *
+	 * @param string $body
+	 */
+	public function setBody( $body ) {
+		$this->body = $body;
+	}
 }
