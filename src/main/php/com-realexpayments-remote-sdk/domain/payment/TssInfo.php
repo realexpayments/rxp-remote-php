@@ -31,7 +31,7 @@ use Doctrine\OXM\Mapping as DOM;
  *
  * @author vicpada
  *
- * @Dom\XmlEntity
+ * @Dom\XmlEntity(xml="tssinfo")
  */
 class TssInfo {
 

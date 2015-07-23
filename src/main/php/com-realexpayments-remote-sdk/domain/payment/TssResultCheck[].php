@@ -10,14 +10,14 @@ use Doctrine\OXM\Mapping as DOM;
  * @package com\realexpayments\remote\sdk\domain\payment
  * @author vicpada
  *
- * @Dom\XmlEntity
+ * @Dom\XmlEntity(xml="check")
  */
 class TssResultCheck {
 
 	/**
 	 * @var string The ID of the realscore check
 	 *
-	 * @Dom\XmlText(type="string",name="id")
+	 * @Dom\XmlAttribute(type="string",name="id")
 	 */
 	private $id;
 

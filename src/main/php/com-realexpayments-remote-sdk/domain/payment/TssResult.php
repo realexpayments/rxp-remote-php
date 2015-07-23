@@ -11,7 +11,7 @@ use Doctrine\OXM\Mapping as DOM;
  * @package com\realexpayments\remote\sdk\domain\payment
  * @author vicpada
  *
- * @Dom\XmlEntity
+ * @Dom\XmlEntity(xml="tss")
  */
 class TssResult {
 

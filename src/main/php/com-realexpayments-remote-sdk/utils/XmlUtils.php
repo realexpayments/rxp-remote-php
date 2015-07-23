@@ -54,6 +54,7 @@ class XmlUtils {
 		try {
 
 			$xml = self::$marshaller->marshalToString($object);
+			self::$logger->debug($xml);
 
 		} catch ( Exception $e ) {
 
@@ -74,7 +75,6 @@ class XmlUtils {
 	public static function  fromXml( $xml, MessageType $messageType ) {
 		self::Initialise();
 
-		self::$logger->debug($xml);
 		self::$logger->debug( "Unmarshalling XML to domain object" );
 		$object = null;
 
@@ -83,6 +83,7 @@ class XmlUtils {
 			$object = self::$marshaller->unmarshalFromString($xml);
 
 		} catch ( Exception $e ) {
+
 			self::$logger->error( "Error unmarshalling from XML", $e );
 			throw new RealexException( "Error unmarshalling from XML", $e );
 		}
@@ -117,3 +118,4 @@ class XmlUtils {
 
 
 }
+

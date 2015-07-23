@@ -252,60 +252,73 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * Tests conversion of {@link PaymentResponse} to and from XML.
 	 */
-	public function testPaymentResponseXml(){
+	public function testPaymentResponseXml() {
 
 		$response = new PaymentResponse();
 
-		$response->setAccount(SampleXmlValidationUtils::ACCOUNT);
-		$response->setAcquirerResponse(SampleXmlValidationUtils::ACQUIRER_RESPONSE);
-		$response->setAuthCode(SampleXmlValidationUtils::AUTH_CODE);
-		$response->setAuthTimeTaken(SampleXmlValidationUtils::AUTH_TIME_TAKEN);
-		$response->setBatchId(SampleXmlValidationUtils::BATCH_ID);
+		$response->setAccount( SampleXmlValidationUtils::ACCOUNT );
+		$response->setAcquirerResponse( SampleXmlValidationUtils::ACQUIRER_RESPONSE );
+		$response->setAuthCode( SampleXmlValidationUtils::AUTH_CODE );
+		$response->setAuthTimeTaken( SampleXmlValidationUtils::AUTH_TIME_TAKEN );
+		$response->setBatchId( SampleXmlValidationUtils::BATCH_ID );
 
 		$cardIssuer = new CardIssuer();
-		$cardIssuer->setBank(SampleXmlValidationUtils::BANK);
-		$cardIssuer->setCountry(SampleXmlValidationUtils::COUNTRY);
-		$cardIssuer->setCountryCode(SampleXmlValidationUtils::COUNTRY_CODE);
-		$cardIssuer->setRegion(SampleXmlValidationUtils::REGION);
-		$response->setCardIssuer($cardIssuer);
+		$cardIssuer->setBank( SampleXmlValidationUtils::BANK );
+		$cardIssuer->setCountry( SampleXmlValidationUtils::COUNTRY );
+		$cardIssuer->setCountryCode( SampleXmlValidationUtils::COUNTRY_CODE );
+		$cardIssuer->setRegion( SampleXmlValidationUtils::REGION );
+		$response->setCardIssuer( $cardIssuer );
 
-		$response->setCvnResult(SampleXmlValidationUtils::CVN_RESULT);
-		$response->setMerchantId(SampleXmlValidationUtils::MERCHANT_ID);
-		$response->setMessage(SampleXmlValidationUtils::MESSAGE);
-		$response->setOrderId(SampleXmlValidationUtils::ORDER_ID);
-		$response->setPaymentsReference(SampleXmlValidationUtils::PASREF);
-		$response->setResult(SampleXmlValidationUtils::RESULT_SUCCESS);
-		$response->setHash(SampleXmlValidationUtils::RESPONSE_HASH);
-		$response->setTimeStamp(SampleXmlValidationUtils::TIMESTAMP);
-		$response->setTimeTaken(SampleXmlValidationUtils::TIME_TAKEN);
+		$response->setCvnResult( SampleXmlValidationUtils::CVN_RESULT );
+		$response->setMerchantId( SampleXmlValidationUtils::MERCHANT_ID );
+		$response->setMessage( SampleXmlValidationUtils::MESSAGE );
+		$response->setOrderId( SampleXmlValidationUtils::ORDER_ID );
+		$response->setPaymentsReference( SampleXmlValidationUtils::PASREF );
+		$response->setResult( SampleXmlValidationUtils::RESULT_SUCCESS );
+		$response->setHash( SampleXmlValidationUtils::RESPONSE_HASH );
+		$response->setTimeStamp( SampleXmlValidationUtils::TIMESTAMP );
+		$response->setTimeTaken( SampleXmlValidationUtils::TIME_TAKEN );
 
 		$tssResult = new TssResult();
-		$tssResult->setResult(SampleXmlValidationUtils::TSS_RESULT);
+		$tssResult->setResult( SampleXmlValidationUtils::TSS_RESULT );
 
 		$checks = array();
-		$check = new TssResultCheck();
-		$check->setId(SampleXmlValidationUtils::TSS_RESULT_CHECK1_ID);
-		$check->setValue(SampleXmlValidationUtils::TSS_RESULT_CHECK1_VALUE);
+		$check  = new TssResultCheck();
+		$check->setId( SampleXmlValidationUtils::TSS_RESULT_CHECK1_ID );
+		$check->setValue( SampleXmlValidationUtils::TSS_RESULT_CHECK1_VALUE );
 		$checks[] = $check;
-		$check = new TssResultCheck();
-		$check->setId(SampleXmlValidationUtils::TSS_RESULT_CHECK2_ID);
-		$check->setValue(SampleXmlValidationUtils::TSS_RESULT_CHECK2_VALUE);
+		$check    = new TssResultCheck();
+		$check->setId( SampleXmlValidationUtils::TSS_RESULT_CHECK2_ID );
+		$check->setValue( SampleXmlValidationUtils::TSS_RESULT_CHECK2_VALUE );
 		$checks[] = $check;
 
-		$tssResult->setChecks($checks);
-		$response->setTssResult($tssResult);
+		$tssResult->setChecks( $checks );
+		$response->setTssResult( $tssResult );
 
-		$response->setAvsAddressResponse(SampleXmlValidationUtils::AVS_ADDRESS);
-		$response->setAvsPostcodeResponse(SampleXmlValidationUtils::AVS_POSTCODE);
+		$response->setAvsAddressResponse( SampleXmlValidationUtils::AVS_ADDRESS );
+		$response->setAvsPostcodeResponse( SampleXmlValidationUtils::AVS_POSTCODE );
 
 		//marshal to XML
 		$xml = $response->toXml();
 
 		//unmarshal back to response
 		/* @var PaymentResponse $fromXmlResponse */
-		$fromXmlResponse = (new PaymentResponse())->fromXml($xml);
+		$fromXmlResponse = ( new PaymentResponse() )->fromXml( $xml );
 		SampleXmlValidationUtils::checkUnmarshalledPaymentResponse( $fromXmlResponse, $this );
+	}
 
+	/**
+	 * Tests conversion of {@link PaymentResponse} from XML file
+	 */
+	public function testPaymentResponseXmlFromFile() {
+		$path = SampleXmlValidationUtils::PAYMENT_RESPONSE_XML_PATH;
+		$prefix = __DIR__ . '/../../../resources';
+		$xml  = file_get_contents( $prefix . $path );
+
+		//unmarshal back to response
+		/* @var PaymentResponse $fromXmlResponse */
+		$fromXmlResponse = ( new PaymentResponse() )->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledPaymentResponse( $fromXmlResponse, $this );
 	}
 
 

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<request type="auth" timestamp="20120926112654">
+    <merchantid>thestore</merchantid>
+    <account>internet</account>
+    <orderid>ORD453-11</orderid>
+    <channel>yourChannel</channel>
+    <amount currency="EUR">29900</amount>
+    <card>
+        <number>420000000000000000</number>
+        <expdate>0119</expdate>
+        <chname>Joe Smith</chname>
+        <type>VISA</type>
+        <issueno>1</issueno>
+        <cvn>
+            <number>123</number>
+            <presind>1</presind>
+        </cvn>
+    </card>
+    <autosettle flag="MULTI"/>
+    <sha1hash>581b84c1dbfd0a6c9c7d4e2d0a620157e879dac5</sha1hash>
+    <comments>
+        <comment id="1">comment 1</comment>
+        <comment id="2">comment 2</comment>
+    </comments>
+    <pasref>3737468273643</pasref>
+    <authcode>79347</authcode>
+    <refundhash>hjfdg78h34tyvklasjr89t</refundhash>
+    <fraudfilter>fraud filter</fraudfilter>
+    <recurring flag="1" sequence="first" type="fixed"/>
+    <tssinfo>
+        <custnum>cust num</custnum>
+        <prodid>prod ID</prodid>
+        <varref>variable ref 1234</varref>
+        <custipaddress>127.0.0.1</custipaddress>
+        <address type="billing">
+            <code>21|578</code>
+            <country>IE</country>
+        </address>
+        <address type="shipping">
+            <code>77|9876</code>
+            <country>GB</country>
+        </address>
+    </tssinfo>
+    <mpi>
+        <cavv>AAABASY3QHgwUVdEBTdAAAAAAAA=</cavv>
+        <xid>e9dafe706f7142469c45d4877aaf5984</xid>
+        <eci>5</eci>
+    </mpi>
+</request>
