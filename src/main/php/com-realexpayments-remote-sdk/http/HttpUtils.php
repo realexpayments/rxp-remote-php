@@ -9,7 +9,6 @@ use Exception;
 use Logger;
 
 
-
 /**
  * HTTP Utils class for dealing with HTTP and actual message sending.
  *
@@ -105,6 +104,9 @@ class HttpUtils {
 			$xmlResponse = $response->getBody();
 
 			return $xmlResponse;
+
+		} catch ( RealexException $e ) {
+			throw $e;
 
 		} catch ( Exception $e ) {
 
