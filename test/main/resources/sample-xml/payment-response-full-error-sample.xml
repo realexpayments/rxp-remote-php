@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<response timestamp="20120926112654">
+    <merchantid>thestore</merchantid>
+    <account>internet</account>
+    <orderid>ORD453-11</orderid>
+    <result>101</result>
+    <authcode>79347</authcode>
+    <message>Bank Error</message>
+    <pasref>3737468273643</pasref>
+    <cvnresult>M</cvnresult>
+    <timetaken>54564</timetaken>
+    <authtimetaken>1001</authtimetaken>
+    <acquirerresponse><![CDATA[<response>test acquirer response</response>]]></acquirerresponse>
+    <batchid>-1</batchid>
+    <cardissuer>
+        <bank>bank</bank>
+        <country>Ireland</country>
+        <countrycode>IE</countrycode>
+        <region>Dublin</region>
+    </cardissuer>
+    <sha1hash>0ad8a9f121c4041b4b832ae8069e80674269e22f</sha1hash>
+    <tss>
+        <result>67</result>
+        <check id="1">99</check>test@exam
+        <check id="2">199</check>
+    </tss>
+</response>

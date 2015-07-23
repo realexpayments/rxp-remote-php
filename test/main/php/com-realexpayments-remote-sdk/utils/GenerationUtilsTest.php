@@ -36,8 +36,6 @@ class GenerationUtilsTest extends \PHPUnit_Framework_TestCase {
 	public function testGenerateOrderId() {
 		$result = GenerationUtils::generateOrderId();
 
-		var_dump($result);
-
 		$this->assertEquals( 22,
 			strlen( $result ), "OrderId " . $result . " should be 22 characters, is " . strlen( $result ) . " characters: " . $result );
 
