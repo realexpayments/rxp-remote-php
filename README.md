@@ -24,7 +24,7 @@ The official PHP Remote SDK of Realex Payments
 ```
 
 4. Use the sdk <br/>
-```
+```php
  $card = ( new Card() )
          ->addNumber( "4263971921001307" )                                                                                                                                                                                              
          ->addCardHolderName( "JoeBloggs" )
@@ -46,28 +46,29 @@ use com\realexpayments\remote\sdk\RealexClient;
                                                                                           
 // test payment                                                                           
                                                                                           
-try {                                                                                    
-        $card = ( new Card() )                                                            
-                ->addNumber( "4263971921001307" )                                         
-                ->addCardHolderName( "JoeBloggs" )                                        
-                ->addType( CardType::VISA )                                               
-                ->addExpiryDate( "1220" );                                                
-                                                                                          
-        $request = ( new PaymentRequest )                                                 
-                ->addType( PaymentType::AUTH )                                            
-                ->addCard( $card )                                                        
-                ->addMerchantId( "merchant123" )                                       
-                ->addAccount( "internet" )                                                
-                ->addAmount( 50 )                                                         
-                ->addCurrency( "EUR" )                                                    
-                ->addAutoSettle( ( new AutoSettle() )->addFlag( AutoSettleFlag::TRUE ) ); 
-                                                                                          
-                                                                                          
-        $client   = new RealexClient( "secret" );                                     
-        $response = $client->send( $request );                                            
-    } catch ( Exception $e ) {                                                                
-        echo $e->getMessage();                                                                             
-    }                       
+                                                                                   
+$card = ( new Card() )                                                            
+        ->addNumber( "4263971921001307" )                                         
+        ->addCardHolderName( "JoeBloggs" )                                        
+        ->addType( CardType::VISA )                                               
+        ->addExpiryDate( "1220" );                                                
+                                                                                  
+$request = ( new PaymentRequest )                                                 
+        ->addType( PaymentType::AUTH )                                            
+        ->addCard( $card )                                                        
+        ->addMerchantId( "merchant123" )                                       
+        ->addAccount( "internet" )                                                
+        ->addAmount( 50 )                                                         
+        ->addCurrency( "EUR" )                                                    
+        ->addAutoSettle( ( new AutoSettle() )->addFlag( AutoSettleFlag::TRUE ) ); 
+                                                                                  
+                                                                                  
+$client   = new RealexClient( "secret" );                                     
+$response = $client->send( $request );
+
+// do something with the response
+echo $response->toXML();
+                           
 ```
                                                                                           
                                                                                           
