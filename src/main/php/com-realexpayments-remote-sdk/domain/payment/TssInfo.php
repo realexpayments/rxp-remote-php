@@ -2,6 +2,7 @@
 
 
 namespace com\realexpayments\remote\sdk\domain\payment;
+use Doctrine\OXM\Mapping as DOM;
 
 
 /**
@@ -29,33 +30,45 @@ namespace com\realexpayments\remote\sdk\domain\payment;
  * </pre></code></p>
  *
  * @author vicpada
+ *
+ * @Dom\XmlEntity
  */
 class TssInfo {
 
 	/**
 	 * @var string  The number you assign to the customer. This can allow checking of previous transactions
 	 * by this customer.
+	 *
+	 * @Dom\XmlText(type="string",name="custnum")
 	 */
 	private $customerNumber;
 
 	/**
 	 * @var string The product code you assign to the product.
+	 *
+	 * @Dom\XmlText(type="string",name="prodid")
 	 */
 	private $productId;
 
 	/**
 	 * @var string Any reference you also would like to assign to the customer. This can allow checking,
 	 * using realscore, of previous transactions by this customer.
+	 *
+	 * @Dom\XmlText(type="string",name="varref")
 	 */
 	private $variableReference;
 
 	/**
 	 * @var string  The IP address of the customer.
+	 *
+	 * @Dom\XmlText(type="string",name="custipaddress")
 	 */
 	private $customerIpAddress;
 
 	/**
-	 * @var array The address of the customer.
+	 * @var Address[] The address of the customer.
+	 *
+	 * @Dom\XmlElement(type="com\realexpayments\remote\sdk\domain\payment\Address", collection=true, direct=true, name="address")
 	 */
 	private $addresses;
 
@@ -134,7 +147,7 @@ class TssInfo {
 	/**
 	 * Getter for addresses
 	 *
-	 * @return array
+	 * @return Address[]
 	 */
 	public function getAddresses() {
 		return $this->addresses;
@@ -143,7 +156,7 @@ class TssInfo {
 	/**
 	 * Setter for address list.
 	 *
-	 * @param array $addresses
+	 * @param Address[] $addresses
 	 */
 	public function setAddresses( array $addresses ) {
 		$this->addresses = $addresses;

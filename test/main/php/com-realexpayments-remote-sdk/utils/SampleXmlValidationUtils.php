@@ -194,9 +194,9 @@ class SampleXmlValidationUtils {
 		$testCase->assertEquals( self::ORDER_ID, $fromXmlRequest->getOrderId() );
 		$testCase->assertEquals( self::REQUEST_HASH, $fromXmlRequest->getHash() );
 		$testCase->assertEquals( self::COMMENT1, $fromXmlRequest->getComments()[0]->getComment() );
-		$testCase->assertEquals( "1", $fromXmlRequest->getComments()[0]->getId()->toString() );
+		$testCase->assertEquals( "1", $fromXmlRequest->getComments()[0]->getId() );
 		$testCase->assertEquals( self::COMMENT2, $fromXmlRequest->getComments()[1]->getComment() );
-		$testCase->assertEquals( "2", $fromXmlRequest->getComments()[1]->getId()->toString() );
+		$testCase->assertEquals( "2", $fromXmlRequest->getComments()[1]->getId() );
 		$testCase->assertEquals( self::PASREF, $fromXmlRequest->getPaymentsReference() );
 		$testCase->assertEquals( self::AUTH_CODE, $fromXmlRequest->getAuthCode() );
 		$testCase->assertEquals( self::REFUND_HASH, $fromXmlRequest->getRefundHash() );

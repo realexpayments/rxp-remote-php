@@ -2,6 +2,7 @@
 
 
 namespace com\realexpayments\remote\sdk\domain;
+use Doctrine\OXM\Mapping as DOM;
 
 
 /**
@@ -23,16 +24,22 @@ namespace com\realexpayments\remote\sdk\domain;
  * @author vicpada
  *
  * @package com\realexpayments\remote\sdk\domain
+ *
+ * @Dom\XmlEntity
  */
 class Amount {
 
 	/**
 	 * @var int The amount should be in the smallest unit of the required currency (For example: 2000=20 euro, dollar or pounds).
+	 *
+	 * @Dom\XmlValue(type="integer",name="amount")
 	 */
 	private $amount;
 
 	/**
 	 * @var string The type of curency, e.g. GBP (Sterling) or EUR (Euro)
+	 *
+	 * @Dom\XmlAttribute(type="string",name="currency")
 	 */
 	private $currency;
 

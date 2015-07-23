@@ -2,6 +2,7 @@
 
 
 namespace com\realexpayments\remote\sdk\domain;
+use Doctrine\OXM\Mapping as DOM;
 
 
 /**
@@ -20,6 +21,7 @@ namespace com\realexpayments\remote\sdk\domain;
  *
  * @author vicpada
  *
+ * @Dom\XmlEntity
  */
 class CVN {
 
@@ -29,6 +31,8 @@ class CVN {
 	 * For an AMEX card, it is a four digit number.
 	 *
 	 * @var integer The number
+	 *
+	 * @Dom\XmlText(type="integer",name="number")
 	 */
 	private $number;
 
@@ -45,6 +49,8 @@ class CVN {
 	 * </p>
 	 *
 	 * @var string Presence Indicator
+	 *
+	 * @Dom\XmlText(type="string",name="presind")
 	 */
 	private $presenceIndicator;
 

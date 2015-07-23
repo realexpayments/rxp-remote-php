@@ -2,6 +2,7 @@
 
 
 namespace com\realexpayments\remote\sdk\domain\payment;
+use Doctrine\OXM\Mapping as DOM;
 
 
 /**
@@ -19,23 +20,31 @@ namespace com\realexpayments\remote\sdk\domain\payment;
  *  *
  * @package com\realexpayments\remote\sdk\domain\payment
  * @author vicpada
+ *
+ * @Dom\XmlEntity
  */
 class Address {
 
 
 	/**
 	 * @var string The address type. Can be shipping or billing.
+	 *
+	 * @Dom\XmlAttribute(type="string",name="type")
 	 */
 	private $type;
 
 	/**
 	 * @var string The ZIP|Postal code of the address. This can be checked (in conjunction with the country)
 	 * against a table of high-risk area codes. This field is used address verification with certain acquirers.
+	 *
+	 * @Dom\XmlText(type="string",name="code")
 	 */
 	private $code;
 
 	/**
 	 * @var string The country of the address. This can be checked against a table of high-risk countries.
+	 *
+	 * @Dom\XmlText(type="string",name="country")
 	 */
 	private $country;
 
