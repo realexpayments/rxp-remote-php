@@ -115,7 +115,7 @@ class CVN {
 	/**
 	 * Helper method to add a presence indicator.
 	 *
-	 * @param int $presenceIndicator
+	 * @param string $presenceIndicator
 	 *
 	 * @return $this
 	 */

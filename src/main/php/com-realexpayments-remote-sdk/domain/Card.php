@@ -1,6 +1,7 @@
 <?php
 
 namespace com\realexpayments\remote\sdk\domain;
+
 use Doctrine\OXM\Mapping as DOM;
 
 
@@ -202,12 +203,17 @@ class Card {
 	/**
 	 * Helper method to add CVN. If the {@link Cvn} field is null then one is created.
 	 *
-	 * @param $cnv
+	 * @param integer $cvn
 	 *
 	 * @return $this
 	 */
-	public function addCvn( $cnv ) {
-		$this->cvn = $cnv;
+	public function addCvn( $cvn ) {
+
+		if ( is_null( $this->cvn ) ) {
+			$this->cvn = ( new CVN() )->addNumber( $cvn );
+		} else {
+			$this->cvn->addNumber( $cvn );
+		}
 
 		return $this;
 	}
@@ -221,7 +227,7 @@ class Card {
 	 * @return $this
 	 */
 	public function  addCvnPresenceIndicator( $presenceIndicator ) {
-		if ( null == $this->cvn ) {
+		if ( is_null( $this->cvn ) ) {
 			$this->cvn = ( new CVN() )->addPresenceIndicator( $presenceIndicator );
 		} else {
 			$this->cvn->addPresenceIndicator( $presenceIndicator );
@@ -265,10 +271,12 @@ class Card {
 	 * Helper method to add an issue number.
 	 *
 	 * @param integer $issueNumber
+	 *
 	 * @return $this
 	 */
 	public function addIssueNumber( $issueNumber ) {
 		$this->issueNumber = $issueNumber;
+
 		return $this;
 	}
 
@@ -276,11 +284,12 @@ class Card {
 	 * Helper method to add a card holder name.
 	 *
 	 * @param string $cardHolderName
+	 *
 	 * @return $this
 	 */
-	public function addCardHolderName($cardHolderName)
-	{
+	public function addCardHolderName( $cardHolderName ) {
 		$this->cardHolderName = $cardHolderName;
+
 		return $this;
 	}
 
@@ -288,11 +297,12 @@ class Card {
 	 * Helper method to add a card type.
 	 *
 	 * @param string $type
+	 *
 	 * @return $this
 	 */
-	public function addType($type)
-	{
-		$this->type =$type;
+	public function addType( $type ) {
+		$this->type = $type;
+
 		return $this;
 	}
 
@@ -300,11 +310,12 @@ class Card {
 	 * Helper method to add a {@link CardType}.
 	 *
 	 * @param CardType $type
+	 *
 	 * @return $this
 	 */
-	public function addCardType(CardType $type)
-	{
-		$this->type =$type->getType();
+	public function addCardType( CardType $type ) {
+		$this->type = $type->getType();
+
 		return $this;
 	}
 

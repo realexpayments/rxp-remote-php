@@ -76,7 +76,6 @@ class XmlUtils {
 	public static function  fromXml( $xml, MessageType $messageType ) {
 		self::Initialise();
 
-		self::$logger->debug( $xml );
 		self::$logger->debug( "Unmarshalling XML to domain object" );
 		$object = null;
 
