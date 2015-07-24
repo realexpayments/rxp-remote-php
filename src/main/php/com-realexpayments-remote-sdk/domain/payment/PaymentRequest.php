@@ -890,7 +890,7 @@ class PaymentRequest implements iRequest {
 	 *
 	 * @return PaymentRequest
 	 */
-	private function hash( $secret ) {
+	public function hash( $secret ) {
 
 		//check for any null values and set them to empty string for hashing
 		$timeStamp  = null == $this->timestamp ? "" : $this->timestamp;
