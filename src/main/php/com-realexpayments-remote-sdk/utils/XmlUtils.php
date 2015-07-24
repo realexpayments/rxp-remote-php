@@ -94,7 +94,7 @@ class XmlUtils {
 			return;
 		}
 
-		self::$logger = Logger::getLogger( self::class );
+		self::$logger = Logger::getLogger( "XmlUtils" );
 
 		self::InitialiseMarshaller();
 

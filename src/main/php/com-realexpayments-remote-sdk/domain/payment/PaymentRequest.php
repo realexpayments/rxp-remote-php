@@ -194,7 +194,7 @@ class PaymentRequest implements iRequest {
 	private $refundHash;
 
 	/**
-	 * @var string TODO - info on this
+	 * @var string wellTODO - info on this
 	 *
 	 * @Dom\XmlText(type="string",name="fraudfilter")
 	 */
@@ -658,7 +658,8 @@ class PaymentRequest implements iRequest {
 	 */
 	public function addAmount( $amount ) {
 		if ( is_null( $this->amount ) ) {
-			$this->amount = ( new Amount() )->addAmount( $amount );
+			$this->amount = new Amount();
+			$this->amount->addAmount( $amount );
 		} else {
 			$this->amount->addAmount( $amount );
 		}
@@ -675,7 +676,8 @@ class PaymentRequest implements iRequest {
 	 */
 	public function addCurrency( $currency ) {
 		if ( is_null( $this->amount ) ) {
-			$this->amount = ( new Amount() )->addCurrency( $currency );
+			$this->amount = new Amount();
+			$this->amount->addCurrency( $currency );
 		} else {
 			$this->amount->addCurrency( $currency );
 		}
@@ -722,8 +724,9 @@ class PaymentRequest implements iRequest {
 			$this->comments = new CommentCollection();
 		}
 
-		$size = $this->comments->getSize();
-		$this->comments->add( ( new Comment() )->addComment( $comment )->addId( ++ $size ) );
+		$size          = $this->comments->getSize();
+		$commentObject = new Comment();
+		$this->comments->add( $commentObject->addComment( $comment )->addId( ++ $size ) );
 
 		return $this;
 	}
@@ -874,7 +877,10 @@ class PaymentRequest implements iRequest {
 	 * {@inheritdoc}
 	 */
 	public function responseFromXml( $xml ) {
-		return ( new PaymentResponse() )->fromXML( $xml );
+
+		$paymentResponse = new PaymentResponse();
+
+		return $paymentResponse->fromXML( $xml );
 	}
 
 	/**

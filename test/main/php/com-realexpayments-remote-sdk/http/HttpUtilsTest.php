@@ -42,12 +42,12 @@ class HttpUtilsTest extends \PHPUnit_Framework_TestCase {
 			$httpResponse->setBody( $xml );
 
 			/** @var HttpConfiguration $configurationMock */
-			$configurationMock = \Phockito::mock( HttpConfiguration::class );
+			$configurationMock = \Phockito::mock( "com\\realexpayments\\remote\\sdk\\http\\HttpConfiguration" );
 			\Phockito::when( $configurationMock->getEndPoint() )->return( $endpoint );
 			\Phockito::when( $configurationMock->isOnlyAllowHttps() )->return( $onlyAllowHttps );
 
 			/** @var HttpClient $httpClientMock */
-			$httpClientMock = \Phockito::mock( HttpClient::class );
+			$httpClientMock = \Phockito::mock( "com\\realexpayments\\remote\\sdk\\http\\HttpClient" );
 
 			/** @var HttpRequest $anything */
 			\Phockito::when( $httpClientMock->execute( \Hamcrest_Core_IsAnything::anything() ) )->return( $httpResponse );
@@ -71,7 +71,7 @@ class HttpUtilsTest extends \PHPUnit_Framework_TestCase {
 		// Dummy and Mock required objects
 		$statusCode = 400;
 
-		$this->setExpectedException( RealexException::class, "Unexpected http status code [" . $statusCode . "]" );
+		$this->setExpectedException( "com\\realexpayments\\remote\\sdk\\RealexException", "Unexpected http status code [" . $statusCode . "]" );
 
 		try {
 			$endpoint       = 'https://some-test-endpoint';
@@ -84,12 +84,12 @@ class HttpUtilsTest extends \PHPUnit_Framework_TestCase {
 			$httpResponse->setBody( $xml );
 
 			/** @var HttpConfiguration $configurationMock */
-			$configurationMock = \Phockito::mock( HttpConfiguration::class );
+			$configurationMock = \Phockito::mock( "com\\realexpayments\\remote\\sdk\\http\\HttpConfiguration" );
 			\Phockito::when( $configurationMock->getEndPoint() )->return( $endpoint );
 			\Phockito::when( $configurationMock->isOnlyAllowHttps() )->return( $onlyAllowHttps );
 
 			/** @var HttpClient $httpClientMock */
-			$httpClientMock = \Phockito::mock( HttpClient::class );
+			$httpClientMock = \Phockito::mock( "com\\realexpayments\\remote\\sdk\\http\\HttpClient" );
 
 			/** @var HttpRequest $anything */
 			\Phockito::when( $httpClientMock->execute( \Hamcrest_Core_IsAnything::anything() ) )->return( $httpResponse );
@@ -112,7 +112,7 @@ class HttpUtilsTest extends \PHPUnit_Framework_TestCase {
 		// Dummy and Mock required objects
 		$statusCode = 200;
 
-		$this->setExpectedException( RealexException::class, "Protocol must be https" );
+		$this->setExpectedException( "com\\realexpayments\\remote\\sdk\\RealexException", "Protocol must be https" );
 
 		try {
 			$endpoint       = 'http://some-test-endpoint';
@@ -125,12 +125,12 @@ class HttpUtilsTest extends \PHPUnit_Framework_TestCase {
 			$httpResponse->setBody( $xml );
 
 			/** @var HttpConfiguration $configurationMock */
-			$configurationMock = \Phockito::mock( HttpConfiguration::class );
+			$configurationMock = \Phockito::mock( "com\\realexpayments\\remote\\sdk\\http\\HttpConfiguration" );
 			\Phockito::when( $configurationMock->getEndPoint() )->return( $endpoint );
 			\Phockito::when( $configurationMock->isOnlyAllowHttps() )->return( $onlyAllowHttps );
 
 			/** @var HttpClient $httpClientMock */
-			$httpClientMock = \Phockito::mock( HttpClient::class );
+			$httpClientMock = \Phockito::mock( "com\\realexpayments\\remote\\sdk\\http\\HttpClient" );
 
 			/** @var HttpRequest $anything */
 			\Phockito::when( $httpClientMock->execute( \Hamcrest_Core_IsAnything::anything() ) )->return( $httpResponse );
