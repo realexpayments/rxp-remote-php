@@ -3,7 +3,7 @@ The official PHP Remote SDK of Realex Payments
 
 
 ## Requeriments ##
-- PHP 5.5
+- PHP >= 5.3
 - Composer (https://getcomposer.org/)
 
 ## Instructions ##
