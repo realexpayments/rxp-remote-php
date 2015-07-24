@@ -3,9 +3,9 @@
     <merchantid>thestore</merchantid>
     <account>internet</account>
     <orderid>ORD453-11</orderid>
-    <result>00</result>
+    <result>101</result>
     <authcode>79347</authcode>
-    <message>Successful</message>
+    <message>Bank Error</message>
     <pasref>3737468273643</pasref>
     <cvnresult>M</cvnresult>
     <timetaken>54564</timetaken>
@@ -18,12 +18,10 @@
         <countrycode>IE</countrycode>
         <region>Dublin</region>
     </cardissuer>
-    <sha1hash>368df010076481d47a21e777871012b62b976339</sha1hash>
+    <sha1hash>0ad8a9f121c4041b4b832ae8069e80674269e22f</sha1hash>
     <tss>
         <result>67</result>
-        <check id="1">99</check>
+        <check id="1">99</check>test@exam
         <check id="2">199</check>
     </tss>
-    <avspostcoderesponse>M</avspostcoderesponse>
-    <avsaddressresponse>P</avsaddressresponse>
 </response>

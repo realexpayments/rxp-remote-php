@@ -3,7 +3,15 @@
 
 namespace com\realexpayments\remote\sdk\utils;
 
-//use com\realexpayments\remote\sdk\domain\payment\AddressType;
+use com\realexpayments\remote\sdk\domain\CardType;
+use com\realexpayments\remote\sdk\domain\payment\AddressType;
+use com\realexpayments\remote\sdk\domain\payment\AutoSettleFlag;
+use com\realexpayments\remote\sdk\domain\payment\PaymentRequest;
+use com\realexpayments\remote\sdk\domain\payment\PaymentResponse;
+use com\realexpayments\remote\sdk\domain\payment\PaymentType;
+use com\realexpayments\remote\sdk\domain\PresenceIndicator;
+use com\realexpayments\remote\sdk\RealexServerException;
+use PHPUnit_Framework_TestCase;
 
 class SampleXmlValidationUtils {
 
@@ -25,10 +33,17 @@ class SampleXmlValidationUtils {
 
 	//Card
 	const CARD_NUMBER = "420000000000000000";
-	//const CardType CARD_TYPE = CardType . VISA;
+	/**
+	 * @var CardType
+	 */
+	static $CARD_TYPE;
+
 	const CARD_HOLDER_NAME = "Joe Smith";
 	const  CARD_CVN_NUMBER = 123;
-	//const PresenceIndicator CARD_CVN_PRESENCE = PresenceIndicator . CVN_PRESENT;
+	/**
+	 * @var PresenceIndicator
+	 */
+	public static $CARD_CVN_PRESENCE;
 	const CARD_EXPIRY_DATE = "0119";
 	const CARD_ISSUE_NUMBER = 1;
 
@@ -37,7 +52,10 @@ class SampleXmlValidationUtils {
 	const MERCHANT_ID = "thestore";
 	const AMOUNT = 29900;
 	const CURRENCY = "EUR";
-	//public static final AutoSettleFlag AUTO_SETTLE_FLAG = AutoSettleFlag.MULTI;
+	/**
+	 * @var AutoSettleFlag
+	 */
+	static $AUTO_SETTLE_FLAG;
 	const TIMESTAMP = "20120926112654";
 	const CHANNEL = "yourChannel";
 	const ORDER_ID = "ORD453-11";
@@ -57,11 +75,17 @@ class SampleXmlValidationUtils {
 //public static final RecurringSequence RECURRING_SEQUENCE = RecurringSequence.FIRST;
 
 	//Address
-//public static final AddressType ADDRESS_TYPE_BUSINESS = AddressType.BILLING;
+	/**
+	 * @var AddressType
+	 */
+	public static $ADDRESS_TYPE_BUSINESS;
 	const ADDRESS_CODE_BUSINESS = "21|578";
 	const ADDRESS_COUNTRY_BUSINESS = "IE";
 
-	//static $ADDRESS_TYPE_SHIPPING = AddressType::getShippingAddressType();
+	/**
+	 * @var AddressType
+	 */
+	public static $ADDRESS_TYPE_SHIPPING;
 	const ADDRESS_CODE_SHIPPING = "77|9876";
 	const ADDRESS_COUNTRY_SHIPPING = "GB";
 
@@ -124,4 +148,160 @@ class SampleXmlValidationUtils {
 	const THREE_D_SECURE_ENROLLED_RESPONSE_HASH = "728cdbef90ff535ed818748f329ed8b1df6b8f5a";
 	const THREE_D_SECURE_SIG_RESPONSE_HASH = "e5a7745da5dc32d234c3f52860132c482107e9ac";
 
+	static function Init() {
+		self::$CARD_CVN_PRESENCE     = new PresenceIndicator( PresenceIndicator::CVN_PRESENT );
+		self::$ADDRESS_TYPE_BUSINESS = new AddressType( AddressType::BILLING );
+		self::$ADDRESS_TYPE_SHIPPING = new AddressType( AddressType::SHIPPING );
+		self::$AUTO_SETTLE_FLAG      = new AutoSettleFlag( AutoSettleFlag::MULTI );
+		self::$CARD_TYPE             = new CardType( CardType::VISA );
+	}
+
+	/**
+	 *  Check all fields match expected values.
+	 *
+	 * @param PaymentResponse $fromXmlResponse
+	 * @param PHPUnit_Framework_TestCase $testCase
+	 */
+	public static function checkUnmarshalledPaymentResponse( PaymentResponse $fromXmlResponse, PHPUnit_Framework_TestCase $testCase ) {
+
+		$testCase->assertEquals( self::ACCOUNT, $fromXmlResponse->getAccount() );
+		$testCase->assertEquals( self::ACQUIRER_RESPONSE, $fromXmlResponse->getAcquirerResponse() );
+		$testCase->assertEquals( self::AUTH_CODE, $fromXmlResponse->getAuthCode() );
+		$testCase->assertEquals( self::AUTH_TIME_TAKEN, $fromXmlResponse->getAuthTimeTaken() );
+		$testCase->assertEquals( self::BATCH_ID, $fromXmlResponse->getBatchId() );
+		$testCase->assertEquals( self::BANK, $fromXmlResponse->getCardIssuer()->getBank() );
+		$testCase->assertEquals( self::COUNTRY, $fromXmlResponse->getCardIssuer()->getCountry() );
+		$testCase->assertEquals( self::COUNTRY_CODE, $fromXmlResponse->getCardIssuer()->getCountryCode() );
+		$testCase->assertEquals( self::REGION, $fromXmlResponse->getCardIssuer()->getRegion() );
+		$testCase->assertEquals( self::CVN_RESULT, $fromXmlResponse->getCvnResult() );
+		$testCase->assertEquals( self::MERCHANT_ID, $fromXmlResponse->getMerchantId() );
+		$testCase->assertEquals( self::MESSAGE, $fromXmlResponse->getMessage() );
+		$testCase->assertEquals( self::ORDER_ID, $fromXmlResponse->getOrderId() );
+		$testCase->assertEquals( self::PASREF, $fromXmlResponse->getPaymentsReference() );
+		$testCase->assertEquals( self::RESULT_SUCCESS, $fromXmlResponse->getResult() );
+		$testCase->assertEquals( self::RESPONSE_HASH, $fromXmlResponse->getHash() );
+		$testCase->assertEquals( self::TIMESTAMP, $fromXmlResponse->getTimeStamp() );
+		$testCase->assertEquals( self::TIME_TAKEN, $fromXmlResponse->getTimeTaken() );
+		$testCase->assertEquals( self::TSS_RESULT, $fromXmlResponse->getTssResult()->getResult() );
+		$testCase->assertEquals( self::TSS_RESULT_CHECK1_ID, $fromXmlResponse->getTssResult()->getChecks()[0]->getId() );
+		$testCase->assertEquals( self::TSS_RESULT_CHECK1_VALUE, $fromXmlResponse->getTssResult()->getChecks()[0]->getValue() );
+		$testCase->assertEquals( self::TSS_RESULT_CHECK2_ID, $fromXmlResponse->getTssResult()->getChecks()[1]->getId() );
+		$testCase->assertEquals( self::TSS_RESULT_CHECK2_VALUE, $fromXmlResponse->getTssResult()->getChecks()[1]->getValue() );
+		$testCase->assertEquals( self::AVS_ADDRESS, $fromXmlResponse->getAvsAddressResponse() );
+		$testCase->assertEquals( self::AVS_POSTCODE, $fromXmlResponse->getAvsPostcodeResponse() );
+		$testCase->assertTrue( $fromXmlResponse->isSuccess() );
+	}
+
+	/**
+	 * Check all fields match expected values.
+	 *
+	 * @param PaymentRequest $fromXmlRequest
+	 * @param PHPUnit_Framework_TestCase $testCase
+	 */
+	public static function checkUnmarshalledPaymentRequest( PaymentRequest $fromXmlRequest, PHPUnit_Framework_TestCase $testCase ) {
+
+		$testCase->assertNotNull( $fromXmlRequest );
+		$testCase->assertEquals( self::CARD_NUMBER, $fromXmlRequest->getCard()->getNumber() );
+
+		$testCase->assertEquals( self::$CARD_TYPE->getType(), $fromXmlRequest->getCard()->getType() );
+		$testCase->assertEquals( self::CARD_HOLDER_NAME, $fromXmlRequest->getCard()->getCardHolderName() );
+		$testCase->assertEquals( self::CARD_CVN_NUMBER, $fromXmlRequest->getCard()->getCvn()->getNumber() );
+		$testCase->assertEquals( self::$CARD_CVN_PRESENCE->getIndicator(), $fromXmlRequest->getCard()->getCvn()->getPresenceIndicator() );
+		$testCase->assertEquals( self::CARD_ISSUE_NUMBER, $fromXmlRequest->getCard()->getIssueNumber() );
+		$testCase->assertEquals( self::CARD_EXPIRY_DATE, $fromXmlRequest->getCard()->getExpiryDate() );
+
+		$testCase->assertEquals( self::ACCOUNT, $fromXmlRequest->getAccount() );
+		$testCase->assertEquals( self::MERCHANT_ID, $fromXmlRequest->getMerchantId() );
+		$testCase->assertEquals( PaymentType::AUTH, $fromXmlRequest->getType() );
+		$testCase->assertEquals( self:: AMOUNT, $fromXmlRequest->getAmount()->getAmount() );
+		$testCase->assertEquals( self::CURRENCY, $fromXmlRequest->getAmount()->getCurrency() );
+		$testCase->assertEquals( self::$AUTO_SETTLE_FLAG->getFlag(), $fromXmlRequest->getAutoSettle()->getFlag() );
+		$testCase->assertEquals( self::TIMESTAMP, $fromXmlRequest->getTimeStamp() );
+		$testCase->assertEquals( self::CHANNEL, $fromXmlRequest->getChannel() );
+		$testCase->assertEquals( self::ORDER_ID, $fromXmlRequest->getOrderId() );
+		$testCase->assertEquals( self::REQUEST_HASH, $fromXmlRequest->getHash() );
+		$testCase->assertEquals( self::COMMENT1, $fromXmlRequest->getComments()->get( 0 )->getComment() );
+		$testCase->assertEquals( "1", $fromXmlRequest->getComments()->get( 0 )->getId() );
+		$testCase->assertEquals( self::COMMENT2, $fromXmlRequest->getComments()->get( 1 )->getComment() );
+		$testCase->assertEquals( "2", $fromXmlRequest->getComments()->get( 1 )->getId() );
+		$testCase->assertEquals( self::PASREF, $fromXmlRequest->getPaymentsReference() );
+		$testCase->assertEquals( self::AUTH_CODE, $fromXmlRequest->getAuthCode() );
+		$testCase->assertEquals( self::REFUND_HASH, $fromXmlRequest->getRefundHash() );
+		$testCase->assertEquals( self::FRAUD_FILTER, $fromXmlRequest->getFraudFilter() );
+
+		// TODO: Next iteration
+		//$testCase->assertEquals( self::RECURRING_FLAG->getRecurringFlag(), $fromXmlRequest->getRecurring()->getFlag() );
+		//$testCase->assertEquals( self::RECURRING_TYPE->getType(), $fromXmlRequest->getRecurring()->getType() );
+		//$testCase->assertEquals( self::RECURRING_SEQUENCE->getSequence(), $fromXmlRequest->getRecurring()->getSequence() );
+
+		$testCase->assertEquals( self::CUSTOMER_NUMBER, $fromXmlRequest->getTssInfo()->getCustomerNumber() );
+		$testCase->assertEquals( self::PRODUCT_ID, $fromXmlRequest->getTssInfo()->getProductId() );
+		$testCase->assertEquals( self::VARIABLE_REFERENCE, $fromXmlRequest->getTssInfo()->getVariableReference() );
+		$testCase->assertEquals( self::CUSTOMER_IP, $fromXmlRequest->getTssInfo()->getCustomerIpAddress() );
+		$testCase->assertEquals( self::$ADDRESS_TYPE_BUSINESS->getAddressType(), $fromXmlRequest->getTssInfo()->getAddresses()[0]->getType() );
+		$testCase->assertEquals( self::ADDRESS_CODE_BUSINESS, $fromXmlRequest->getTssInfo()->getAddresses()[0]->getCode() );
+		$testCase->assertEquals( self::ADDRESS_COUNTRY_BUSINESS, $fromXmlRequest->getTssInfo()->getAddresses()[0]->getCountry() );
+		$testCase->assertEquals( self::$ADDRESS_TYPE_SHIPPING->getAddressType(), $fromXmlRequest->getTssInfo()->getAddresses()[1]->getType() );
+		$testCase->assertEquals( self::ADDRESS_CODE_SHIPPING, $fromXmlRequest->getTssInfo()->getAddresses()[1]->getCode() );
+		$testCase->assertEquals( self::ADDRESS_COUNTRY_SHIPPING, $fromXmlRequest->getTssInfo()->getAddresses()[1]->getCountry() );
+
+		// TODO: Next iteration
+		//$testCase->assertEquals( self::THREE_D_SECURE_CAVV, $fromXmlRequest->getMpi()->getCavv() );
+		//$testCase->assertEquals( self::THREE_D_SECURE_XID, $fromXmlRequest->getMpi()->getXid() );
+		//$testCase->assertEquals( self::THREE_D_SECURE_ECI, $fromXmlRequest->getMpi()->getEci() );
+
+
+	}
+
+	/**
+	 * Check all fields match expected values.
+	 *
+	 * @param RealexServerException $ex
+	 * @param PHPUnit_Framework_TestCase $testCase
+	 */
+	public static function checkBasicResponseError( RealexServerException $ex, PHPUnit_Framework_TestCase $testCase ) {
+
+		$testCase->assertEquals( self::RESULT_BASIC_ERROR, $ex->getErrorCode() );
+		$testCase->assertEquals( self::MESSAGE_BASIC_ERROR, $ex->getMessage() );
+		$testCase->assertEquals( self::TIMESTAMP_BASIC_ERROR, $ex->getTimeStamp() );
+		$testCase->assertEquals( self::ORDER_ID_BASIC_ERROR, $ex->getOrderId() );
+	}
+
+	/**
+	 * Check all fields match expected values.
+	 *
+	 * @param PaymentResponse $response
+	 * @param PHPUnit_Framework_TestCase $testCase
+	 */
+	public static function checkFullResponseError( PaymentResponse $response, PHPUnit_Framework_TestCase $testCase ) {
+
+		$testCase->assertEquals( self::ACCOUNT, $response->getAccount() );
+		$testCase->assertEquals( self::ACQUIRER_RESPONSE, $response->getAcquirerResponse() );
+		$testCase->assertEquals( self::AUTH_CODE, $response->getAuthCode() );
+		$testCase->assertEquals( self::AUTH_TIME_TAKEN, $response->getAuthTimeTaken() );
+		$testCase->assertEquals( self::BATCH_ID, $response->getBatchId() );
+		$testCase->assertEquals( self::BANK, $response->getCardIssuer()->getBank() );
+		$testCase->assertEquals( self::COUNTRY, $response->getCardIssuer()->getCountry() );
+		$testCase->assertEquals( self::COUNTRY_CODE, $response->getCardIssuer()->getCountryCode() );
+		$testCase->assertEquals( self::REGION, $response->getCardIssuer()->getRegion() );
+		$testCase->assertEquals( self::CVN_RESULT, $response->getCvnResult() );
+		$testCase->assertEquals( self::MERCHANT_ID, $response->getMerchantId() );
+		$testCase->assertEquals( self::MESSAGE_FULL_ERROR, $response->getMessage() );
+		$testCase->assertEquals( self::ORDER_ID, $response->getOrderId() );
+		$testCase->assertEquals( self::PASREF, $response->getPaymentsReference() );
+		$testCase->assertEquals( self::RESULT_FULL_ERROR, $response->getResult() );
+		$testCase->assertEquals( self::RESPONSE_FULL_ERROR_HASH, $response->getHash() );
+		$testCase->assertEquals( self::TIMESTAMP, $response->getTimeStamp() );
+		$testCase->assertEquals( self::TIME_TAKEN, $response->getTimeTaken() );
+		$testCase->assertEquals( self::TSS_RESULT, $response->getTssResult()->getResult() );
+		$testCase->assertEquals( self::TSS_RESULT_CHECK1_ID, $response->getTssResult()->getChecks()[0]->getId() );
+		$testCase->assertEquals( self::TSS_RESULT_CHECK1_VALUE, $response->getTssResult()->getChecks()[0]->getValue() );
+		$testCase->assertEquals( self::TSS_RESULT_CHECK2_ID, $response->getTssResult()->getChecks()[1]->getId() );
+		$testCase->assertEquals( self::TSS_RESULT_CHECK2_VALUE, $response->getTssResult()->getChecks()[1]->getValue() );
+		$testCase->assertFalse( $response->isSuccess() );
+
+	}
 }
+
+SampleXmlValidationUtils::Init();
+
