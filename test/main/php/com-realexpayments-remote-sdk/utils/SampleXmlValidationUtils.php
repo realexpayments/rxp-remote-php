@@ -183,10 +183,11 @@ class SampleXmlValidationUtils {
 		$testCase->assertEquals( self::TIMESTAMP, $fromXmlResponse->getTimeStamp() );
 		$testCase->assertEquals( self::TIME_TAKEN, $fromXmlResponse->getTimeTaken() );
 		$testCase->assertEquals( self::TSS_RESULT, $fromXmlResponse->getTssResult()->getResult() );
-		$testCase->assertEquals( self::TSS_RESULT_CHECK1_ID, $fromXmlResponse->getTssResult()->getChecks()[0]->getId() );
-		$testCase->assertEquals( self::TSS_RESULT_CHECK1_VALUE, $fromXmlResponse->getTssResult()->getChecks()[0]->getValue() );
-		$testCase->assertEquals( self::TSS_RESULT_CHECK2_ID, $fromXmlResponse->getTssResult()->getChecks()[1]->getId() );
-		$testCase->assertEquals( self::TSS_RESULT_CHECK2_VALUE, $fromXmlResponse->getTssResult()->getChecks()[1]->getValue() );
+		$checks = $fromXmlResponse->getTssResult()->getChecks();
+		$testCase->assertEquals( self::TSS_RESULT_CHECK1_ID, $checks[0]->getId() );
+		$testCase->assertEquals( self::TSS_RESULT_CHECK1_VALUE, $checks[0]->getValue() );
+		$testCase->assertEquals( self::TSS_RESULT_CHECK2_ID, $checks[1]->getId() );
+		$testCase->assertEquals( self::TSS_RESULT_CHECK2_VALUE, $checks[1]->getValue() );
 		$testCase->assertEquals( self::AVS_ADDRESS, $fromXmlResponse->getAvsAddressResponse() );
 		$testCase->assertEquals( self::AVS_POSTCODE, $fromXmlResponse->getAvsPostcodeResponse() );
 		$testCase->assertTrue( $fromXmlResponse->isSuccess() );
@@ -238,12 +239,13 @@ class SampleXmlValidationUtils {
 		$testCase->assertEquals( self::PRODUCT_ID, $fromXmlRequest->getTssInfo()->getProductId() );
 		$testCase->assertEquals( self::VARIABLE_REFERENCE, $fromXmlRequest->getTssInfo()->getVariableReference() );
 		$testCase->assertEquals( self::CUSTOMER_IP, $fromXmlRequest->getTssInfo()->getCustomerIpAddress() );
-		$testCase->assertEquals( self::$ADDRESS_TYPE_BUSINESS->getAddressType(), $fromXmlRequest->getTssInfo()->getAddresses()[0]->getType() );
-		$testCase->assertEquals( self::ADDRESS_CODE_BUSINESS, $fromXmlRequest->getTssInfo()->getAddresses()[0]->getCode() );
-		$testCase->assertEquals( self::ADDRESS_COUNTRY_BUSINESS, $fromXmlRequest->getTssInfo()->getAddresses()[0]->getCountry() );
-		$testCase->assertEquals( self::$ADDRESS_TYPE_SHIPPING->getAddressType(), $fromXmlRequest->getTssInfo()->getAddresses()[1]->getType() );
-		$testCase->assertEquals( self::ADDRESS_CODE_SHIPPING, $fromXmlRequest->getTssInfo()->getAddresses()[1]->getCode() );
-		$testCase->assertEquals( self::ADDRESS_COUNTRY_SHIPPING, $fromXmlRequest->getTssInfo()->getAddresses()[1]->getCountry() );
+		$addresses = $fromXmlRequest->getTssInfo()->getAddresses();
+		$testCase->assertEquals( self::$ADDRESS_TYPE_BUSINESS->getAddressType(), $addresses[0]->getType() );
+		$testCase->assertEquals( self::ADDRESS_CODE_BUSINESS, $addresses[0]->getCode() );
+		$testCase->assertEquals( self::ADDRESS_COUNTRY_BUSINESS, $addresses[0]->getCountry() );
+		$testCase->assertEquals( self::$ADDRESS_TYPE_SHIPPING->getAddressType(), $addresses[1]->getType() );
+		$testCase->assertEquals( self::ADDRESS_CODE_SHIPPING, $addresses[1]->getCode() );
+		$testCase->assertEquals( self::ADDRESS_COUNTRY_SHIPPING, $addresses[1]->getCountry() );
 
 		// TODO: Next iteration
 		//$testCase->assertEquals( self::THREE_D_SECURE_CAVV, $fromXmlRequest->getMpi()->getCavv() );
@@ -294,10 +296,11 @@ class SampleXmlValidationUtils {
 		$testCase->assertEquals( self::TIMESTAMP, $response->getTimeStamp() );
 		$testCase->assertEquals( self::TIME_TAKEN, $response->getTimeTaken() );
 		$testCase->assertEquals( self::TSS_RESULT, $response->getTssResult()->getResult() );
-		$testCase->assertEquals( self::TSS_RESULT_CHECK1_ID, $response->getTssResult()->getChecks()[0]->getId() );
-		$testCase->assertEquals( self::TSS_RESULT_CHECK1_VALUE, $response->getTssResult()->getChecks()[0]->getValue() );
-		$testCase->assertEquals( self::TSS_RESULT_CHECK2_ID, $response->getTssResult()->getChecks()[1]->getId() );
-		$testCase->assertEquals( self::TSS_RESULT_CHECK2_VALUE, $response->getTssResult()->getChecks()[1]->getValue() );
+		$checks = $response->getTssResult()->getChecks();
+		$testCase->assertEquals( self::TSS_RESULT_CHECK1_ID, $checks[0]->getId() );
+		$testCase->assertEquals( self::TSS_RESULT_CHECK1_VALUE, $checks[0]->getValue() );
+		$testCase->assertEquals( self::TSS_RESULT_CHECK2_ID, $checks[1]->getId() );
+		$testCase->assertEquals( self::TSS_RESULT_CHECK2_VALUE, $checks[1]->getValue() );
 		$testCase->assertFalse( $response->isSuccess() );
 
 	}

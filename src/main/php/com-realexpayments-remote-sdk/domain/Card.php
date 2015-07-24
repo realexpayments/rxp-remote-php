@@ -192,7 +192,7 @@ class Card {
 	 *
 	 * @param integer $number
 	 *
-	 * @return $this
+	 * @return Card
 	 */
 	public function addNumber( $number ) {
 		$this->number = $number;
@@ -210,7 +210,8 @@ class Card {
 	public function addCvn( $cvn ) {
 
 		if ( is_null( $this->cvn ) ) {
-			$this->cvn = ( new CVN() )->addNumber( $cvn );
+			$this->cvn = new CVN();
+			$this->cvn->addNumber( $cvn );
 		} else {
 			$this->cvn->addNumber( $cvn );
 		}
@@ -228,7 +229,8 @@ class Card {
 	 */
 	public function  addCvnPresenceIndicator( $presenceIndicator ) {
 		if ( is_null( $this->cvn ) ) {
-			$this->cvn = ( new CVN() )->addPresenceIndicator( $presenceIndicator );
+			$this->cvn = new CVN();
+			$this->cvn->addPresenceIndicator( $presenceIndicator );
 		} else {
 			$this->cvn->addPresenceIndicator( $presenceIndicator );
 		}
@@ -245,7 +247,8 @@ class Card {
 	 */
 	public function  addCvnPresenceIndicatorType( PresenceIndicator $presenceIndicator ) {
 		if ( null == $this->cvn ) {
-			$this->cvn = ( new CVN() )->addPresenceIndicatorType( $presenceIndicator );
+			$this->cvn = new CVN();
+			$this->cvn->addPresenceIndicatorType( $presenceIndicator );
 		} else {
 			$this->cvn->addPresenceIndicatorType( $presenceIndicator );
 		}

@@ -78,7 +78,7 @@ class ResponseUtils {
 			return;
 		}
 
-		self::$logger = Logger::getLogger( self::class );
+		self::$logger = Logger::getLogger( "ResponseUtils" );
 
 		self::$initialised = true;
 	}

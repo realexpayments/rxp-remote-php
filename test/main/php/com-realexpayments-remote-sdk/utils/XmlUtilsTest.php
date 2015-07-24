@@ -34,41 +34,54 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 	 * Tests conversion of {@link PaymentRequest} to and from XML using the helper methods.
 	 */
 	public function testPaymentRequestXmlHelpers() {
-		$cvn = ( new CVN() )
+		$cvn = new CVN();
+		$cvn = $cvn
 			->addNumber( SampleXmlValidationUtils::CARD_CVN_NUMBER )
 			->addPresenceIndicatorType( SampleXmlValidationUtils::$CARD_CVN_PRESENCE );
 
-		$card = ( new Card() )
+
+		$card = new Card();
+		$card = $card
 			->addExpiryDate( SampleXmlValidationUtils::CARD_EXPIRY_DATE )
 			->addNumber( SampleXmlValidationUtils::CARD_NUMBER )
-			->addType( new CardType( CardType::VISA ) )
+			->addCardType( new CardType( CardType::VISA ) )
 			->addCardHolderName( SampleXmlValidationUtils::CARD_HOLDER_NAME )
 			->addIssueNumber( SampleXmlValidationUtils::CARD_ISSUE_NUMBER );
 
 		$card->setCvn( $cvn );
 
-		$tssInfo = ( new TssInfo() )
+		$tssInfo = new TssInfo();
+
+		$businessAddress = new Address();
+		$businessAddress = $businessAddress->addAddressType( SampleXmlValidationUtils::$ADDRESS_TYPE_BUSINESS )
+		                                   ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_BUSINESS )
+		                                   ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_BUSINESS );
+
+		$shippingAddress = new Address();
+		$shippingAddress = $shippingAddress->addAddressType( SampleXmlValidationUtils::$ADDRESS_TYPE_SHIPPING )
+		                                   ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_SHIPPING )
+		                                   ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_SHIPPING );
+		$tssInfo         = $tssInfo
 			->addCustomerNumber( SampleXmlValidationUtils::CUSTOMER_NUMBER )
 			->addProductId( SampleXmlValidationUtils::PRODUCT_ID )
 			->addVariableReference( SampleXmlValidationUtils::VARIABLE_REFERENCE )
 			->addCustomerIpAddress( SampleXmlValidationUtils::CUSTOMER_IP )
-			->addAddress( ( new Address() )
-				->addAddressType( SampleXmlValidationUtils::$ADDRESS_TYPE_BUSINESS )
-				->addCode( SampleXmlValidationUtils::ADDRESS_CODE_BUSINESS )
-				->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_BUSINESS ) )
-			->addAddress( ( new Address() )
-				->addAddressType( SampleXmlValidationUtils::$ADDRESS_TYPE_SHIPPING )
-				->addCode( SampleXmlValidationUtils::ADDRESS_CODE_SHIPPING )
-				->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_SHIPPING ) );
+			->addAddress( $businessAddress )
+			->addAddress( $shippingAddress );
 
-		$request = ( new PaymentRequest() )
+
+		$autoSettle = new AutoSettle();
+		$autoSettle = $autoSettle->addAutoSettleFlag( SampleXmlValidationUtils::$AUTO_SETTLE_FLAG );
+
+		$request = new PaymentRequest();
+		$request = $request
 			->addAccount( SampleXmlValidationUtils::ACCOUNT )
 			->addMerchantId( SampleXmlValidationUtils::MERCHANT_ID )
 			->addPaymentType( new PaymentType( PaymentType::AUTH ) )
 			->addAmount( SampleXmlValidationUtils::AMOUNT )
 			->addCurrency( SampleXmlValidationUtils::CURRENCY )
 			->addCard( $card )
-			->addAutoSettle( ( new AutoSettle() )->addAutoSettleFlag( SampleXmlValidationUtils::$AUTO_SETTLE_FLAG ) )
+			->addAutoSettle( $autoSettle )
 			->addTimestamp( SampleXmlValidationUtils::TIMESTAMP )
 			->addChannel( SampleXmlValidationUtils::CHANNEL )
 			->addOrderId( SampleXmlValidationUtils::ORDER_ID )
@@ -89,7 +102,8 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		// Convert from XML back to PaymentRequest
 
 		/* @var PaymentRequest $fromXmlRequest */
-		$fromXmlRequest = ( new PaymentRequest() )->fromXml( $xml );
+		$fromXmlRequest = new PaymentRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
 		SampleXmlValidationUtils::checkUnmarshalledPaymentRequest( $fromXmlRequest, $this );
 	}
 
@@ -97,38 +111,49 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 	 * Tests conversion of {@link PaymentRequest} to and from XML using the helper methods with no enums.
 	 */
 	public function  testPaymentRequestXmlHelpersNoEnums() {
-		$card = ( new Card() )
+		$card = new Card();
+		$card = $card
 			->addExpiryDate( SampleXmlValidationUtils::CARD_EXPIRY_DATE )
 			->addNumber( SampleXmlValidationUtils::CARD_NUMBER )
-			->addType( new CardType( CardType::VISA ) )
+			->addCardType( new CardType( CardType::VISA ) )
 			->addCardHolderName( SampleXmlValidationUtils::CARD_HOLDER_NAME )
 			->addCvn( SampleXmlValidationUtils::CARD_CVN_NUMBER )
 			->addCvnPresenceIndicator( SampleXmlValidationUtils::$CARD_CVN_PRESENCE->getIndicator() )
 			->addIssueNumber( SampleXmlValidationUtils::CARD_ISSUE_NUMBER );
 
 
-		$tssInfo = ( new TssInfo() )
+		$tssInfo = new TssInfo();
+
+		$businessAddress = new Address();
+		$businessAddress = $businessAddress->addAddressType( SampleXmlValidationUtils::$ADDRESS_TYPE_BUSINESS )
+		                                   ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_BUSINESS )
+		                                   ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_BUSINESS );
+
+		$shippingAddress = new Address();
+		$shippingAddress = $shippingAddress->addAddressType( SampleXmlValidationUtils::$ADDRESS_TYPE_SHIPPING )
+		                                   ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_SHIPPING )
+		                                   ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_SHIPPING );
+
+		$tssInfo = $tssInfo
 			->addCustomerNumber( SampleXmlValidationUtils::CUSTOMER_NUMBER )
 			->addProductId( SampleXmlValidationUtils::PRODUCT_ID )
 			->addVariableReference( SampleXmlValidationUtils::VARIABLE_REFERENCE )
 			->addCustomerIpAddress( SampleXmlValidationUtils::CUSTOMER_IP )
-			->addAddress( ( new Address() )
-				->addType( SampleXmlValidationUtils::$ADDRESS_TYPE_BUSINESS->getAddressType() )
-				->addCode( SampleXmlValidationUtils::ADDRESS_CODE_BUSINESS )
-				->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_BUSINESS ) )
-			->addAddress( ( new Address() )
-				->addType( SampleXmlValidationUtils::$ADDRESS_TYPE_SHIPPING->getAddressType() )
-				->addCode( SampleXmlValidationUtils::ADDRESS_CODE_SHIPPING )
-				->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_SHIPPING ) );
+			->addAddress( $businessAddress )
+			->addAddress( $shippingAddress );
 
-		$request = ( new PaymentRequest() )
+		$autoSettle = new AutoSettle();
+		$autoSettle = $autoSettle->addAutoSettleFlag( SampleXmlValidationUtils::$AUTO_SETTLE_FLAG );
+
+		$request = new PaymentRequest();
+		$request = $request
 			->addAccount( SampleXmlValidationUtils::ACCOUNT )
 			->addMerchantId( SampleXmlValidationUtils::MERCHANT_ID )
-			->addType( ( new PaymentType( PaymentType::AUTH ) )->getType() )
+			->addType( PaymentType::AUTH )
 			->addAmount( SampleXmlValidationUtils::AMOUNT )
 			->addCurrency( SampleXmlValidationUtils::CURRENCY )
 			->addCard( $card )
-			->addAutoSettle( ( new AutoSettle() )->addFlag( SampleXmlValidationUtils::$AUTO_SETTLE_FLAG->getFlag() ) )
+			->addAutoSettle( $autoSettle )
 			->addTimestamp( SampleXmlValidationUtils::TIMESTAMP )
 			->addChannel( SampleXmlValidationUtils::CHANNEL )
 			->addOrderId( SampleXmlValidationUtils::ORDER_ID )
@@ -150,7 +175,8 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		// Convert from XML back to PaymentRequest
 
 		/* @var PaymentRequest $fromXmlRequest */
-		$fromXmlRequest = ( new PaymentRequest() )->fromXml( $xml );
+		$fromXmlRequest = new PaymentRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
 		SampleXmlValidationUtils::checkUnmarshalledPaymentRequest( $fromXmlRequest, $this );
 	}
 
@@ -173,7 +199,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$request = new PaymentRequest();
 		$request->setAccount( SampleXmlValidationUtils::ACCOUNT );
 		$request->setMerchantId( SampleXmlValidationUtils::MERCHANT_ID );
-		$request->setType( ( new PaymentType( PaymentType::AUTH ) )->getType() );
+		$request->setType( PaymentType::AUTH );
 
 		$amount = new Amount();
 		$amount->setAmount( SampleXmlValidationUtils::AMOUNT );
@@ -247,7 +273,8 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 
 		//Convert from XML back to PaymentRequest
 		/* @var PaymentRequest $fromXmlRequest */
-		$fromXmlRequest = ( new PaymentRequest() )->fromXml( $xml );
+		$fromXmlRequest = new PaymentRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
 		SampleXmlValidationUtils::checkUnmarshalledPaymentRequest( $fromXmlRequest, $this );
 	}
 
@@ -305,7 +332,8 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 
 		//unmarshal back to response
 		/* @var PaymentResponse $fromXmlResponse */
-		$fromXmlResponse = ( new PaymentResponse() )->fromXml( $xml );
+		$fromXmlResponse = new PaymentResponse();
+		$fromXmlResponse = $fromXmlResponse->fromXml( $xml );
 		SampleXmlValidationUtils::checkUnmarshalledPaymentResponse( $fromXmlResponse, $this );
 	}
 
@@ -319,7 +347,8 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 
 		//unmarshal back to response
 		/* @var PaymentResponse $fromXmlResponse */
-		$fromXmlResponse = ( new PaymentResponse() )->fromXml( $xml );
+		$fromXmlResponse = new PaymentResponse();
+		$fromXmlResponse = $fromXmlResponse->fromXml( $xml );
 		SampleXmlValidationUtils::checkUnmarshalledPaymentResponse( $fromXmlResponse, $this );
 	}
 
@@ -334,7 +363,8 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 
 
 		/* @var PaymentRequest $fromXmlRequest */
-		$fromXmlRequest = ( new PaymentRequest() )->fromXml( $xml );
+		$fromXmlRequest = new PaymentRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
 		SampleXmlValidationUtils::checkUnmarshalledPaymentRequest( $fromXmlRequest, $this );
 
 	}
@@ -349,7 +379,8 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 
 		//unmarshal back to response
 		/* @var PaymentResponse $fromXmlResponse */
-		$fromXmlResponse = ( new PaymentResponse() )->fromXml( $xml );
+		$fromXmlResponse = new PaymentResponse();
+		$fromXmlResponse = $fromXmlResponse->fromXml( $xml );
 		SampleXmlValidationUtils::checkUnmarshalledPaymentResponse( $fromXmlResponse, $this );
 
 	}
@@ -359,11 +390,10 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 	 *
 	 * @expectedException     com\realexpayments\remote\sdk\RealexException
 	 */
-	public function testFromXmlError()
-	{
+	public function testFromXmlError() {
 
 		//Try to unmarshal invalid XML
-		XmlUtils::fromXml("<xml>test</xml>xml>",new MessageType(MessageType::PAYMENT));
+		XmlUtils::fromXml( "<xml>test</xml>xml>", new MessageType( MessageType::PAYMENT ) );
 	}
 
 
