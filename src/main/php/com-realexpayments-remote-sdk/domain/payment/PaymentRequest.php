@@ -928,4 +928,39 @@ class PaymentRequest implements iRequest {
 		return $this;
 
 	}
+
+	/**
+	 * <p>
+	 * This helper method adds Address Verification Service (AVS) fields to the request.
+	 * </p>
+	 * <p>
+	 * The Address Verification Service (AVS) verifies the cardholder's address by checking the
+	 * information provided by at the time of sale against the issuing bank's records.
+	 * </p>
+	 *
+	 * @param string $addressLine
+	 * @param string $postcode
+	 *
+	 * @return PaymentRequest
+	 */
+	public function addAddressVerificationServiceDetails( $addressLine, $postcode ) {
+
+		//build code in format <digits from postcode>|<digits from address>
+		$postcodeDigits    = preg_replace( "/\\D+/", "", $postcode );
+		$addressLineDigits = preg_replace( "/\\D+/", "", $addressLine );
+		$code              = $postcodeDigits . "|" . $addressLineDigits;
+		//construct billing address from code
+		$address = new Address();
+
+		$address->addCode( $code )
+		        ->addType( AddressType::BILLING );
+
+		//add address to TSS Info
+		if ( is_null( $this->tssInfo ) ) {
+			$this->tssInfo = new TssInfo();
+		}
+		$this->tssInfo->addAddress( $address );
+
+		return $this;
+	}
 }
