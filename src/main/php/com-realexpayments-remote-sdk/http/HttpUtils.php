@@ -5,6 +5,7 @@ namespace com\realexpayments\remote\sdk\http;
 
 
 use com\realexpayments\remote\sdk\RealexException;
+use com\realexpayments\remote\sdk\RPXLogger;
 use Exception;
 use Logger;
 
@@ -55,7 +56,7 @@ class HttpUtils {
 	 */
 	private static function getLogger() {
 		if ( ! self::$logger ) {
-			self::$logger = Logger::getLogger( __CLASS__ );
+			self::$logger = RPXLogger::getLogger( __CLASS__ );
 		}
 	}
 

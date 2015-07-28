@@ -5,6 +5,7 @@ namespace com\realexpayments\remote\sdk\utils;
 
 
 use com\realexpayments\remote\sdk\RealexException;
+use com\realexpayments\remote\sdk\RPXLogger;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\OXM\Configuration;
 use Doctrine\OXM\Mapping\ClassMetadataFactory;
@@ -94,7 +95,7 @@ class XmlUtils {
 			return;
 		}
 
-		self::$logger = Logger::getLogger( "XmlUtils" );
+		self::$logger = RPXLogger::getLogger( __CLASS__ );
 
 		self::InitialiseMarshaller();
 
