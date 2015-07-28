@@ -328,7 +328,35 @@ class SampleXmlValidationUtils {
 		$testCase->assertEquals( self::CURRENCY, $fromXmlRequest->getAmount()->getCurrency() );
 		$testCase->assertEquals( self::TIMESTAMP, $fromXmlRequest->getTimeStamp() );
 		$testCase->assertEquals( self::ORDER_ID, $fromXmlRequest->getOrderId() );
+
 		$testCase->assertEquals( self::THREE_D_SECURE_VERIFY_ENROLLED_REQUEST_HASH, $fromXmlRequest->getHash() );
+	}
+
+	/**
+	 * Check all fields match expected values.
+	 *
+	 * @param ThreeDSecureRequest $fromXmlRequest
+	 * @param PHPUnit_Framework_TestCase $testCase
+	 *
+	 */
+	public static function checkUnmarshalledVerifySigRequest( ThreeDSecureRequest $fromXmlRequest, PHPUnit_Framework_TestCase $testCase ) {
+
+		$testCase->assertNotNull( $fromXmlRequest );
+		$testCase->assertEquals( self::CARD_NUMBER, $fromXmlRequest->getCard()->getNumber() );
+		$testCase->assertEquals( self::$CARD_TYPE->getType(), $fromXmlRequest->getCard()->getType() );
+		$testCase->assertEquals( self::CARD_HOLDER_NAME, $fromXmlRequest->getCard()->getCardHolderName() );
+		$testCase->assertEquals( self::CARD_EXPIRY_DATE, $fromXmlRequest->getCard()->getExpiryDate() );
+
+		$testCase->assertEquals( self::ACCOUNT, $fromXmlRequest->getAccount() );
+		$testCase->assertEquals( self::MERCHANT_ID, $fromXmlRequest->getMerchantId() );
+		$testCase->assertEquals( ThreeDSecureType::VERIFY_SIG, $fromXmlRequest->getType() );
+		$testCase->assertEquals( self::AMOUNT, $fromXmlRequest->getAmount()->getAmount() );
+		$testCase->assertEquals( self::CURRENCY, $fromXmlRequest->getAmount()->getCurrency() );
+		$testCase->assertEquals( self::TIMESTAMP, $fromXmlRequest->getTimeStamp() );
+		$testCase->assertEquals( self::ORDER_ID, $fromXmlRequest->getOrderId() );
+
+		$testCase->assertEquals( self::THREE_D_SECURE_PARES, $fromXmlRequest->getPares() );
+		$testCase->assertEquals( self::THREE_D_SECURE_VERIFY_SIG_REQUEST_HASH, $fromXmlRequest->getHash() );
 	}
 
 
