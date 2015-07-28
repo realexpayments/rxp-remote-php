@@ -435,6 +435,9 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		SampleXmlValidationUtils::checkUnmarshalledVerifyEnrolledRequest( $fromXmlRequest, $this );
 	}
 
+	/**
+	 * Tests conversion of {@link ThreeDSecureRequest} to and from XML using the helper methods with no enums.
+	 */
 	public function testThreeDSecureRequestXmlHelpersNoEnums() {
 
 		$card = new Card();
@@ -469,6 +472,49 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$fromXmlRequest = new ThreeDSecureRequest();
 		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
 		SampleXmlValidationUtils::checkUnmarshalledVerifyEnrolledRequest( $fromXmlRequest, $this );
+	}
 
+	/**
+	 * Tests conversion of {@link ThreeDSecureRequest} verify enrolled to and from XML using setters.
+	 */
+	public function testThreeDSecureEnrolledRequestXmlWithSetters() {
+
+		$card = new Card();
+		$card->setExpiryDate( SampleXmlValidationUtils::CARD_EXPIRY_DATE );
+		$card->setNumber( SampleXmlValidationUtils::CARD_NUMBER );
+		$card->setType( SampleXmlValidationUtils::$CARD_TYPE->getType() );
+		$card->setCardHolderName( SampleXmlValidationUtils::CARD_HOLDER_NAME );
+		$card->setIssueNumber( SampleXmlValidationUtils::CARD_ISSUE_NUMBER );
+
+		$cvn = new Cvn();
+		$cvn->setNumber( SampleXmlValidationUtils::CARD_CVN_NUMBER );
+		$cvn->setPresenceIndicator( SampleXmlValidationUtils::$CARD_CVN_PRESENCE->getIndicator() );
+		$card->setCvn( $cvn );
+
+		$request = new ThreeDSecureRequest();
+		$request->setAccount( SampleXmlValidationUtils::ACCOUNT );
+		$request->setMerchantId( SampleXmlValidationUtils::MERCHANT_ID );
+
+		$amount = new Amount();
+		$amount->setAmount( SampleXmlValidationUtils::AMOUNT );
+		$amount->setCurrency( SampleXmlValidationUtils::CURRENCY );
+		$request->setAmount( $amount );
+
+
+		$request->setCard( $card );
+		$request->setTimeStamp( SampleXmlValidationUtils::TIMESTAMP );
+		$request->setOrderId( SampleXmlValidationUtils::ORDER_ID );
+		$request->setHash( SampleXmlValidationUtils::THREE_D_SECURE_VERIFY_ENROLLED_REQUEST_HASH );
+		$request->setType(ThreeDSecureType::VERIFY_ENROLLED);
+
+		//convert to XML
+		$xml = $request->toXml();
+
+		// Convert from XML back to PaymentRequest
+
+		/* @var ThreeDSecureRequest $fromXmlRequest */
+		$fromXmlRequest = new ThreeDSecureRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledVerifyEnrolledRequest( $fromXmlRequest, $this );
 	}
 }
