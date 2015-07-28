@@ -434,4 +434,41 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
 		SampleXmlValidationUtils::checkUnmarshalledVerifyEnrolledRequest( $fromXmlRequest, $this );
 	}
+
+	public function testThreeDSecureRequestXmlHelpersNoEnums() {
+
+		$card = new Card();
+		$card->addExpiryDate( SampleXmlValidationUtils::CARD_EXPIRY_DATE )
+		     ->addNumber( SampleXmlValidationUtils::CARD_NUMBER )
+		     ->addType( CardType::VISA )
+		     ->addCardHolderName( SampleXmlValidationUtils::CARD_HOLDER_NAME )
+		     ->addCvn( SampleXmlValidationUtils::CARD_CVN_NUMBER )
+		     ->addCvnPresenceIndicator( SampleXmlValidationUtils::$CARD_CVN_PRESENCE->getIndicator() )
+		     ->addIssueNumber( SampleXmlValidationUtils::CARD_ISSUE_NUMBER );
+
+
+		$request = new ThreeDSecureRequest();
+		$request
+			->addAccount( SampleXmlValidationUtils::ACCOUNT )
+			->addMerchantId( SampleXmlValidationUtils::MERCHANT_ID )
+			->addType( ThreeDSecureType::VERIFY_ENROLLED )
+			->addAmount( SampleXmlValidationUtils::AMOUNT )
+			->addCurrency( SampleXmlValidationUtils::CURRENCY )
+			->addCard( $card )
+			->addTimestamp( SampleXmlValidationUtils::TIMESTAMP )
+			->addOrderId( SampleXmlValidationUtils::ORDER_ID )
+			->addHash( SampleXmlValidationUtils::THREE_D_SECURE_VERIFY_ENROLLED_REQUEST_HASH );
+
+
+		// convert to XML
+		$xml = $request->toXml();
+
+		// Convert from XML back to PaymentRequest
+
+		/* @var ThreeDSecureRequest $fromXmlRequest */
+		$fromXmlRequest = new ThreeDSecureRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledVerifyEnrolledRequest( $fromXmlRequest, $this );
+
+	}
 }
