@@ -22,6 +22,7 @@ use com\realexpayments\remote\sdk\domain\payment\TssInfo;
 use com\realexpayments\remote\sdk\domain\payment\TssResult;
 use com\realexpayments\remote\sdk\domain\payment\TssResultCheck;
 use com\realexpayments\remote\sdk\domain\threeDSecure\ThreeDSecureRequest;
+use com\realexpayments\remote\sdk\domain\threeDSecure\ThreeDSecureResponse;
 use com\realexpayments\remote\sdk\domain\threeDSecure\ThreeDSecureType;
 
 
@@ -561,5 +562,22 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$fromXmlRequest = new ThreeDSecureRequest();
 		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
 		SampleXmlValidationUtils::checkUnmarshalledVerifySigRequest( $fromXmlRequest, $this );
+	}
+
+	/**
+	 * Tests conversion of {@link ThreeDSecureResponse} from XML file for verify enrolled
+	 */
+	public function testThreeDSecureEnrolledResponseXmlFromFile()
+	{
+		$path   = SampleXmlValidationUtils::THREE_D_SECURE_VERIFY_ENROLLED_RESPONSE_XML_PATH;
+		$prefix = __DIR__ . '/../../../resources';
+		$xml    = file_get_contents( $prefix . $path );
+
+		//unmarshal back to response
+		/* @var ThreeDSecureResponse $fromXmlResponse */
+		$fromXmlResponse = new ThreeDSecureResponse();
+		$fromXmlResponse = $fromXmlResponse->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledThreeDSecureEnrolledResponse( $fromXmlResponse, $this );
+
 	}
 }

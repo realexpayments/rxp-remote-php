@@ -11,6 +11,7 @@ use com\realexpayments\remote\sdk\domain\payment\PaymentResponse;
 use com\realexpayments\remote\sdk\domain\payment\PaymentType;
 use com\realexpayments\remote\sdk\domain\PresenceIndicator;
 use com\realexpayments\remote\sdk\domain\threeDSecure\ThreeDSecureRequest;
+use com\realexpayments\remote\sdk\domain\threeDSecure\ThreeDSecureResponse;
 use com\realexpayments\remote\sdk\domain\threeDSecure\ThreeDSecureType;
 use com\realexpayments\remote\sdk\RealexServerException;
 use PHPUnit_Framework_TestCase;
@@ -357,6 +358,32 @@ class SampleXmlValidationUtils {
 
 		$testCase->assertEquals( self::THREE_D_SECURE_PARES, $fromXmlRequest->getPares() );
 		$testCase->assertEquals( self::THREE_D_SECURE_VERIFY_SIG_REQUEST_HASH, $fromXmlRequest->getHash() );
+	}
+
+	/**
+	 * Check all fields match expected values.
+	 *
+	 * @param ThreeDSecureResponse $fromXmlResponse
+	 * @param PHPUnit_Framework_TestCase $testCase
+	 */
+	public static function checkUnmarshalledThreeDSecureEnrolledResponse( ThreeDSecureResponse $fromXmlResponse, PHPUnit_Framework_TestCase $testCase ) {
+
+		$testCase->assertEquals( self::ACCOUNT, $fromXmlResponse->getAccount() );
+		$testCase->assertEquals( self::AUTH_CODE, $fromXmlResponse->getAuthCode() );
+		$testCase->assertEquals( self::AUTH_TIME_TAKEN, $fromXmlResponse->getAuthTimeTaken() );
+		$testCase->assertEquals( self::MERCHANT_ID, $fromXmlResponse->getMerchantId() );
+		$testCase->assertEquals( self::THREE_D_SECURE_ENROLLED_MESSAGE, $fromXmlResponse->getMessage() );
+		$testCase->assertEquals( self::ORDER_ID, $fromXmlResponse->getOrderId() );
+		$testCase->assertEquals( self::PASREF, $fromXmlResponse->getPaymentsReference() );
+		$testCase->assertEquals( self::THREE_D_SECURE_ENROLLED_RESULT, $fromXmlResponse->getResult() );
+		$testCase->assertEquals( self::THREE_D_SECURE_ENROLLED_RESPONSE_HASH, $fromXmlResponse->getHash() );
+		$testCase->assertEquals( self::TIMESTAMP, $fromXmlResponse->getTimeStamp() );
+		$testCase->assertEquals( self::TIME_TAKEN, $fromXmlResponse->getTimeTaken() );
+		$testCase->assertEquals( self::THREE_D_SECURE_URL, $fromXmlResponse->getUrl() );
+		$testCase->assertEquals( self::THREE_D_SECURE_PAREQ, $fromXmlResponse->getPareq() );
+		$testCase->assertEquals( self::THREE_D_SECURE_ENROLLED_YES, $fromXmlResponse->getEnrolled() );
+		$testCase->assertEquals( self::THREE_D_SECURE_XID, $fromXmlResponse->getXid() );
+		$testCase->assertTrue( $fromXmlResponse->isSuccess() );
 	}
 
 
