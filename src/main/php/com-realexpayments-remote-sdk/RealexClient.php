@@ -86,7 +86,7 @@ class RealexClient {
 	 * @param HttpClient $httpClient
 	 * @param HttpConfiguration $httpConfiguration
 	 */
-	public function __construct( $secret,  HttpConfiguration $httpConfiguration = null , HttpClient $httpClient = null) {
+	public function __construct( $secret, HttpConfiguration $httpConfiguration = null, HttpClient $httpClient = null ) {
 		$this->logger = RPXLogger::getLogger( __CLASS__ );
 
 		$this->secret = $secret;
@@ -192,7 +192,7 @@ class RealexClient {
 		$xmlResult = HttpUtils::sendMessage( $xmlRequest, $this->httpClient, $this->httpConfiguration );
 
 		//log the response
-		$this->logger->trace( "Response XML from server: {}", $xmlResult );
+		$this->logger->trace( "Response XML from server: " . $xmlResult );
 
 		//convert XML to response object
 		$this->logger->debug( "Unmarshalling XML to response object." );

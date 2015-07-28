@@ -34,7 +34,14 @@ class RPXLogger {
 
 	private static function Initialise() {
 
-		Logger::configure( __DIR__ . '/config.xml' );
+		$path = $_SERVER['DOCUMENT_ROOT'] . '/config.xml';
+		if ( file_exists( $path ) ) {
+			Logger::configure( $path );
+		} else {
+			Logger::configure( __DIR__ . '/config.xml' );
+		}
+
+
 		self::$initialised = true;
 	}
 
