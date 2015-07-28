@@ -205,7 +205,7 @@ class PaymentResponse implements iResponse {
 	 * @return iResponse
 	 */
 	public function fromXML( $xml ) {
-		return XmlUtils::fromXml($xml, new MessageType(MessageType::PAYMENT));
+		return XmlUtils::fromXml($xml, new MessageType( MessageType::PAYMENT ));
 	}
 
 	/**
@@ -214,7 +214,7 @@ class PaymentResponse implements iResponse {
 	 * @return string
 	 */
 	public function toXML() {
-		return XmlUtils::toXml($this, new MessageType(MessageType::PAYMENT));
+		return XmlUtils::toXml($this, new MessageType( MessageType::PAYMENT ));
 	}
 
 	/**

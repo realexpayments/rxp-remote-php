@@ -10,6 +10,8 @@ use com\realexpayments\remote\sdk\domain\payment\PaymentRequest;
 use com\realexpayments\remote\sdk\domain\payment\PaymentResponse;
 use com\realexpayments\remote\sdk\domain\payment\PaymentType;
 use com\realexpayments\remote\sdk\domain\PresenceIndicator;
+use com\realexpayments\remote\sdk\domain\threeDSecure\ThreeDSecureRequest;
+use com\realexpayments\remote\sdk\domain\threeDSecure\ThreeDSecureType;
 use com\realexpayments\remote\sdk\RealexServerException;
 use PHPUnit_Framework_TestCase;
 
@@ -302,8 +304,34 @@ class SampleXmlValidationUtils {
 		$testCase->assertEquals( self::TSS_RESULT_CHECK2_ID, $checks[1]->getId() );
 		$testCase->assertEquals( self::TSS_RESULT_CHECK2_VALUE, $checks[1]->getValue() );
 		$testCase->assertFalse( $response->isSuccess() );
-
 	}
+
+	/**
+	 * Check all fields match expected values.
+	 *
+	 * @param ThreeDSecureRequest $fromXmlRequest
+	 * @param PHPUnit_Framework_TestCase $testCase
+	 *
+	 */
+	public static function checkUnmarshalledVerifyEnrolledRequest( ThreeDSecureRequest $fromXmlRequest, PHPUnit_Framework_TestCase $testCase ) {
+
+		$testCase->assertNotNull( $fromXmlRequest );
+		$testCase->assertEquals( self::CARD_NUMBER, $fromXmlRequest->getCard()->getNumber() );
+		$testCase->assertEquals( self::$CARD_TYPE->getType(), $fromXmlRequest->getCard()->getType() );
+		$testCase->assertEquals( self::CARD_HOLDER_NAME, $fromXmlRequest->getCard()->getCardHolderName() );
+		$testCase->assertEquals( self::CARD_EXPIRY_DATE, $fromXmlRequest->getCard()->getExpiryDate() );
+
+		$testCase->assertEquals( self::ACCOUNT, $fromXmlRequest->getAccount() );
+		$testCase->assertEquals( self::MERCHANT_ID, $fromXmlRequest->getMerchantId() );
+		$testCase->assertEquals( ThreeDSecureType::VERIFY_ENROLLED, $fromXmlRequest->getType() );
+		$testCase->assertEquals( self::AMOUNT, $fromXmlRequest->getAmount()->getAmount() );
+		$testCase->assertEquals( self::CURRENCY, $fromXmlRequest->getAmount()->getCurrency() );
+		$testCase->assertEquals( self::TIMESTAMP, $fromXmlRequest->getTimeStamp() );
+		$testCase->assertEquals( self::ORDER_ID, $fromXmlRequest->getOrderId() );
+		$testCase->assertEquals( self::THREE_D_SECURE_VERIFY_ENROLLED_REQUEST_HASH, $fromXmlRequest->getHash() );
+	}
+
+
 }
 
 SampleXmlValidationUtils::Init();
