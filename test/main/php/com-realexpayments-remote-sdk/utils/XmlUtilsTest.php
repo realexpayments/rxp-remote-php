@@ -44,7 +44,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 
 
 		$card = new Card();
-		$card = $card
+		$card
 			->addExpiryDate( SampleXmlValidationUtils::CARD_EXPIRY_DATE )
 			->addNumber( SampleXmlValidationUtils::CARD_NUMBER )
 			->addCardType( new CardType( CardType::VISA ) )
@@ -56,15 +56,15 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$tssInfo = new TssInfo();
 
 		$businessAddress = new Address();
-		$businessAddress = $businessAddress->addAddressType( SampleXmlValidationUtils::$ADDRESS_TYPE_BUSINESS )
+		$businessAddress ->addAddressType( SampleXmlValidationUtils::$ADDRESS_TYPE_BUSINESS )
 		                                   ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_BUSINESS )
 		                                   ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_BUSINESS );
 
 		$shippingAddress = new Address();
-		$shippingAddress = $shippingAddress->addAddressType( SampleXmlValidationUtils::$ADDRESS_TYPE_SHIPPING )
+		$shippingAddress ->addAddressType( SampleXmlValidationUtils::$ADDRESS_TYPE_SHIPPING )
 		                                   ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_SHIPPING )
 		                                   ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_SHIPPING );
-		$tssInfo         = $tssInfo
+		$tssInfo
 			->addCustomerNumber( SampleXmlValidationUtils::CUSTOMER_NUMBER )
 			->addProductId( SampleXmlValidationUtils::PRODUCT_ID )
 			->addVariableReference( SampleXmlValidationUtils::VARIABLE_REFERENCE )
@@ -87,7 +87,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		          ->addType( SampleXmlValidationUtils::$RECURRING_TYPE );
 
 		$request = new PaymentRequest();
-		$request = $request
+		$request
 			->addAccount( SampleXmlValidationUtils::ACCOUNT )
 			->addMerchantId( SampleXmlValidationUtils::MERCHANT_ID )
 			->addPaymentType( new PaymentType( PaymentType::AUTH ) )
@@ -146,7 +146,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		                ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_SHIPPING )
 		                ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_SHIPPING );
 
-		$tssInfo = $tssInfo
+		$tssInfo
 			->addCustomerNumber( SampleXmlValidationUtils::CUSTOMER_NUMBER )
 			->addProductId( SampleXmlValidationUtils::PRODUCT_ID )
 			->addVariableReference( SampleXmlValidationUtils::VARIABLE_REFERENCE )
@@ -641,8 +641,8 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$xml    = file_get_contents( $prefix . $path );
 
 		//unmarshal back to response
-		/* @var ThreeDSecureResponse $fromXmlResponse */
-		$fromXmlResponse = new ThreeDSecureResponse();
+		/* @var ThreeDSecureRequest $fromXmlResponse */
+		$fromXmlResponse = new ThreeDSecureRequest();
 		$fromXmlResponse = $fromXmlResponse->fromXml( $xml );
 		SampleXmlValidationUtils::checkUnmarshalledVerifySigRequest( $fromXmlResponse, $this );
 	}
