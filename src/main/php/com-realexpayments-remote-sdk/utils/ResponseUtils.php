@@ -6,6 +6,7 @@ namespace com\realexpayments\remote\sdk\utils;
 
 use com\realexpayments\remote\sdk\domain\iResponse;
 use com\realexpayments\remote\sdk\RealexException;
+use com\realexpayments\remote\sdk\RPXLogger;
 use Logger;
 
 /**
@@ -78,7 +79,7 @@ class ResponseUtils {
 			return;
 		}
 
-		self::$logger = Logger::getLogger( "ResponseUtils" );
+		self::$logger = RPXLogger::getLogger( __CLASS__ );
 
 		self::$initialised = true;
 	}
