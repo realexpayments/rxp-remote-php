@@ -580,4 +580,22 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		SampleXmlValidationUtils::checkUnmarshalledThreeDSecureEnrolledResponse( $fromXmlResponse, $this );
 
 	}
+
+	/**
+	 * Tests conversion of {@link ThreeDSecureResponse} from XML file for verify sig
+	 */
+	public function testThreeDSecureSigResponseXmlFromFile()
+	{
+
+		$path   = SampleXmlValidationUtils::THREE_D_SECURE_VERIFY_SIG_RESPONSE_XML_PATH;
+		$prefix = __DIR__ . '/../../../resources';
+		$xml    = file_get_contents( $prefix . $path );
+
+		//unmarshal back to response
+		/* @var ThreeDSecureResponse $fromXmlResponse */
+		$fromXmlResponse = new ThreeDSecureResponse();
+		$fromXmlResponse = $fromXmlResponse->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledThreeDSecureSigResponse( $fromXmlResponse, $this );
+
+	}
 }

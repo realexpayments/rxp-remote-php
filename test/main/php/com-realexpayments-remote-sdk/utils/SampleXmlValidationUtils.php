@@ -386,6 +386,29 @@ class SampleXmlValidationUtils {
 		$testCase->assertTrue( $fromXmlResponse->isSuccess() );
 	}
 
+	/**
+	 * Check all fields match expected values.
+	 *
+	 * @param ThreeDSecureResponse $fromXmlResponse
+	 * @param PHPUnit_Framework_TestCase $testCase
+	 */
+	public static function checkUnmarshalledThreeDSecureSigResponse( ThreeDSecureResponse $fromXmlResponse, PHPUnit_Framework_TestCase $testCase ) {
+
+		$testCase->assertEquals( self::ACCOUNT, $fromXmlResponse->getAccount() );
+		$testCase->assertEquals( self::MERCHANT_ID, $fromXmlResponse->getMerchantId() );
+		$testCase->assertEquals( self::THREE_D_SECURE_SIG_MESSAGE, $fromXmlResponse->getMessage() );
+		$testCase->assertEquals( self::ORDER_ID, $fromXmlResponse->getOrderId() );
+		$testCase->assertEquals( self::THREE_D_SECURE_SIG_RESULT, $fromXmlResponse->getResult() );
+		$testCase->assertEquals( self::THREE_D_SECURE_SIG_RESPONSE_HASH, $fromXmlResponse->getHash() );
+		$testCase->assertEquals( self::TIMESTAMP, $fromXmlResponse->getTimeStamp() );
+		$testCase->assertEquals( self::THREE_D_SECURE_STATUS, $fromXmlResponse->getThreeDSecure()->getStatus() );
+		$testCase->assertEquals( self::THREE_D_SECURE_ECI, $fromXmlResponse->getThreeDSecure()->getEci() );
+		$testCase->assertEquals( self::THREE_D_SECURE_XID, $fromXmlResponse->getThreeDSecure()->getXid() );
+		$testCase->assertEquals( self::THREE_D_SECURE_CAVV, $fromXmlResponse->getThreeDSecure()->getCavv() );
+		$testCase->assertEquals( self::THREE_D_SECURE_ALGORITHM, $fromXmlResponse->getThreeDSecure()->getAlgorithm() );
+		$testCase->assertTrue( $fromXmlResponse->isSuccess() );
+	}
+
 
 }
 
