@@ -111,7 +111,7 @@ class ThreeDSecureRequest implements iRequest {
 	 * @var string Hash constructed from the time stamp, merchand ID, order ID, amount, currency, card number
 	 * and secret values.
 	 *
-	 * @Dom\XmlAttribute(type="string",name="sha1hash")
+	 * @Dom\XmlText(type="string",name="sha1hash")
 	 */
 	private $hash;
 
