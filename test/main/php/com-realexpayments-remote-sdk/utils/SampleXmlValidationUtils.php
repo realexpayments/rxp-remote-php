@@ -9,7 +9,13 @@ use com\realexpayments\remote\sdk\domain\payment\AutoSettleFlag;
 use com\realexpayments\remote\sdk\domain\payment\PaymentRequest;
 use com\realexpayments\remote\sdk\domain\payment\PaymentResponse;
 use com\realexpayments\remote\sdk\domain\payment\PaymentType;
+use com\realexpayments\remote\sdk\domain\payment\RecurringFlag;
+use com\realexpayments\remote\sdk\domain\payment\RecurringSequence;
+use com\realexpayments\remote\sdk\domain\payment\RecurringType;
 use com\realexpayments\remote\sdk\domain\PresenceIndicator;
+use com\realexpayments\remote\sdk\domain\threeDSecure\ThreeDSecureRequest;
+use com\realexpayments\remote\sdk\domain\threeDSecure\ThreeDSecureResponse;
+use com\realexpayments\remote\sdk\domain\threeDSecure\ThreeDSecureType;
 use com\realexpayments\remote\sdk\RealexServerException;
 use PHPUnit_Framework_TestCase;
 
@@ -70,9 +76,20 @@ class SampleXmlValidationUtils {
 	const CUSTOMER_IP = "127.0.0.1";
 
 	//Recurring
-//public static final RecurringType RECURRING_TYPE = RecurringType.FIXED;
-//public static final RecurringFlag RECURRING_FLAG = RecurringFlag.ONE;
-//public static final RecurringSequence RECURRING_SEQUENCE = RecurringSequence.FIRST;
+	/**
+	 * @var RecurringType
+	 */
+	public static $RECURRING_TYPE;
+
+	/**
+	 * @var RecurringFlag
+	 */
+	public static $RECURRING_FLAG;
+
+	/**
+	 * @var RecurringSequence
+	 */
+	public static $RECURRING_SEQUENCE;
 
 	//Address
 	/**
@@ -154,6 +171,9 @@ class SampleXmlValidationUtils {
 		self::$ADDRESS_TYPE_SHIPPING = new AddressType( AddressType::SHIPPING );
 		self::$AUTO_SETTLE_FLAG      = new AutoSettleFlag( AutoSettleFlag::MULTI );
 		self::$CARD_TYPE             = new CardType( CardType::VISA );
+		self::$RECURRING_TYPE        = new RecurringType( RecurringType::FIXED );
+		self::$RECURRING_FLAG        = new RecurringFlag( RecurringFlag::ONE );
+		self::$RECURRING_SEQUENCE    = new RecurringSequence( RecurringSequence::FIRST );
 	}
 
 	/**
@@ -230,10 +250,9 @@ class SampleXmlValidationUtils {
 		$testCase->assertEquals( self::REFUND_HASH, $fromXmlRequest->getRefundHash() );
 		$testCase->assertEquals( self::FRAUD_FILTER, $fromXmlRequest->getFraudFilter() );
 
-		// TODO: Next iteration
-		//$testCase->assertEquals( self::RECURRING_FLAG->getRecurringFlag(), $fromXmlRequest->getRecurring()->getFlag() );
-		//$testCase->assertEquals( self::RECURRING_TYPE->getType(), $fromXmlRequest->getRecurring()->getType() );
-		//$testCase->assertEquals( self::RECURRING_SEQUENCE->getSequence(), $fromXmlRequest->getRecurring()->getSequence() );
+		$testCase->assertEquals( self::$RECURRING_FLAG->getRecurringFlag(), $fromXmlRequest->getRecurring()->getFlag() );
+		$testCase->assertEquals( self::$RECURRING_TYPE->getType(), $fromXmlRequest->getRecurring()->getType() );
+		$testCase->assertEquals( self::$RECURRING_SEQUENCE->getSequence(), $fromXmlRequest->getRecurring()->getSequence() );
 
 		$testCase->assertEquals( self::CUSTOMER_NUMBER, $fromXmlRequest->getTssInfo()->getCustomerNumber() );
 		$testCase->assertEquals( self::PRODUCT_ID, $fromXmlRequest->getTssInfo()->getProductId() );
@@ -247,10 +266,9 @@ class SampleXmlValidationUtils {
 		$testCase->assertEquals( self::ADDRESS_CODE_SHIPPING, $addresses[1]->getCode() );
 		$testCase->assertEquals( self::ADDRESS_COUNTRY_SHIPPING, $addresses[1]->getCountry() );
 
-		// TODO: Next iteration
-		//$testCase->assertEquals( self::THREE_D_SECURE_CAVV, $fromXmlRequest->getMpi()->getCavv() );
-		//$testCase->assertEquals( self::THREE_D_SECURE_XID, $fromXmlRequest->getMpi()->getXid() );
-		//$testCase->assertEquals( self::THREE_D_SECURE_ECI, $fromXmlRequest->getMpi()->getEci() );
+		$testCase->assertEquals( self::THREE_D_SECURE_CAVV, $fromXmlRequest->getMpi()->getCavv() );
+		$testCase->assertEquals( self::THREE_D_SECURE_XID, $fromXmlRequest->getMpi()->getXid() );
+		$testCase->assertEquals( self::THREE_D_SECURE_ECI, $fromXmlRequest->getMpi()->getEci() );
 
 
 	}
@@ -302,8 +320,111 @@ class SampleXmlValidationUtils {
 		$testCase->assertEquals( self::TSS_RESULT_CHECK2_ID, $checks[1]->getId() );
 		$testCase->assertEquals( self::TSS_RESULT_CHECK2_VALUE, $checks[1]->getValue() );
 		$testCase->assertFalse( $response->isSuccess() );
-
 	}
+
+	/**
+	 * Check all fields match expected values.
+	 *
+	 * @param ThreeDSecureRequest $fromXmlRequest
+	 * @param PHPUnit_Framework_TestCase $testCase
+	 *
+	 */
+	public static function checkUnmarshalledVerifyEnrolledRequest( ThreeDSecureRequest $fromXmlRequest, PHPUnit_Framework_TestCase $testCase ) {
+
+		$testCase->assertNotNull( $fromXmlRequest );
+		$testCase->assertEquals( self::CARD_NUMBER, $fromXmlRequest->getCard()->getNumber() );
+		$testCase->assertEquals( self::$CARD_TYPE->getType(), $fromXmlRequest->getCard()->getType() );
+		$testCase->assertEquals( self::CARD_HOLDER_NAME, $fromXmlRequest->getCard()->getCardHolderName() );
+		$testCase->assertEquals( self::CARD_EXPIRY_DATE, $fromXmlRequest->getCard()->getExpiryDate() );
+
+		$testCase->assertEquals( self::ACCOUNT, $fromXmlRequest->getAccount() );
+		$testCase->assertEquals( self::MERCHANT_ID, $fromXmlRequest->getMerchantId() );
+		$testCase->assertEquals( ThreeDSecureType::VERIFY_ENROLLED, $fromXmlRequest->getType() );
+		$testCase->assertEquals( self::AMOUNT, $fromXmlRequest->getAmount()->getAmount() );
+		$testCase->assertEquals( self::CURRENCY, $fromXmlRequest->getAmount()->getCurrency() );
+		$testCase->assertEquals( self::TIMESTAMP, $fromXmlRequest->getTimeStamp() );
+		$testCase->assertEquals( self::ORDER_ID, $fromXmlRequest->getOrderId() );
+
+		$testCase->assertEquals( self::THREE_D_SECURE_VERIFY_ENROLLED_REQUEST_HASH, $fromXmlRequest->getHash() );
+	}
+
+	/**
+	 * Check all fields match expected values.
+	 *
+	 * @param ThreeDSecureRequest $fromXmlRequest
+	 * @param PHPUnit_Framework_TestCase $testCase
+	 *
+	 */
+	public static function checkUnmarshalledVerifySigRequest( ThreeDSecureRequest $fromXmlRequest, PHPUnit_Framework_TestCase $testCase ) {
+
+		$testCase->assertNotNull( $fromXmlRequest );
+		$testCase->assertEquals( self::CARD_NUMBER, $fromXmlRequest->getCard()->getNumber() );
+		$testCase->assertEquals( self::$CARD_TYPE->getType(), $fromXmlRequest->getCard()->getType() );
+		$testCase->assertEquals( self::CARD_HOLDER_NAME, $fromXmlRequest->getCard()->getCardHolderName() );
+		$testCase->assertEquals( self::CARD_EXPIRY_DATE, $fromXmlRequest->getCard()->getExpiryDate() );
+
+		$testCase->assertEquals( self::ACCOUNT, $fromXmlRequest->getAccount() );
+		$testCase->assertEquals( self::MERCHANT_ID, $fromXmlRequest->getMerchantId() );
+		$testCase->assertEquals( ThreeDSecureType::VERIFY_SIG, $fromXmlRequest->getType() );
+		$testCase->assertEquals( self::AMOUNT, $fromXmlRequest->getAmount()->getAmount() );
+		$testCase->assertEquals( self::CURRENCY, $fromXmlRequest->getAmount()->getCurrency() );
+		$testCase->assertEquals( self::TIMESTAMP, $fromXmlRequest->getTimeStamp() );
+		$testCase->assertEquals( self::ORDER_ID, $fromXmlRequest->getOrderId() );
+
+		$testCase->assertEquals( self::THREE_D_SECURE_PARES, $fromXmlRequest->getPares() );
+		$testCase->assertEquals( self::THREE_D_SECURE_VERIFY_SIG_REQUEST_HASH, $fromXmlRequest->getHash() );
+	}
+
+	/**
+	 * Check all fields match expected values.
+	 *
+	 * @param ThreeDSecureResponse $fromXmlResponse
+	 * @param PHPUnit_Framework_TestCase $testCase
+	 */
+	public static function checkUnmarshalledThreeDSecureEnrolledResponse( ThreeDSecureResponse $fromXmlResponse, PHPUnit_Framework_TestCase $testCase ) {
+
+		$testCase->assertEquals( self::ACCOUNT, $fromXmlResponse->getAccount() );
+		$testCase->assertEquals( self::AUTH_CODE, $fromXmlResponse->getAuthCode() );
+		$testCase->assertEquals( self::AUTH_TIME_TAKEN, $fromXmlResponse->getAuthTimeTaken() );
+		$testCase->assertEquals( self::MERCHANT_ID, $fromXmlResponse->getMerchantId() );
+		$testCase->assertEquals( self::THREE_D_SECURE_ENROLLED_MESSAGE, $fromXmlResponse->getMessage() );
+		$testCase->assertEquals( self::ORDER_ID, $fromXmlResponse->getOrderId() );
+		$testCase->assertEquals( self::PASREF, $fromXmlResponse->getPaymentsReference() );
+		$testCase->assertEquals( self::THREE_D_SECURE_ENROLLED_RESULT, $fromXmlResponse->getResult() );
+		$testCase->assertEquals( self::THREE_D_SECURE_ENROLLED_RESPONSE_HASH, $fromXmlResponse->getHash() );
+		$testCase->assertEquals( self::TIMESTAMP, $fromXmlResponse->getTimeStamp() );
+		$testCase->assertEquals( self::TIME_TAKEN, $fromXmlResponse->getTimeTaken() );
+		$testCase->assertEquals( self::THREE_D_SECURE_URL, $fromXmlResponse->getUrl() );
+		$testCase->assertEquals( self::THREE_D_SECURE_PAREQ, $fromXmlResponse->getPareq() );
+		$testCase->assertEquals( self::THREE_D_SECURE_ENROLLED_YES, $fromXmlResponse->getEnrolled() );
+		$testCase->assertEquals( self::THREE_D_SECURE_XID, $fromXmlResponse->getXid() );
+		$testCase->assertTrue( $fromXmlResponse->isSuccess() );
+	}
+
+	/**
+	 * Check all fields match expected values.
+	 *
+	 * @param ThreeDSecureResponse $fromXmlResponse
+	 * @param PHPUnit_Framework_TestCase $testCase
+	 */
+	public static function checkUnmarshalledThreeDSecureSigResponse( ThreeDSecureResponse $fromXmlResponse, PHPUnit_Framework_TestCase $testCase ) {
+
+		$testCase->assertEquals( self::ACCOUNT, $fromXmlResponse->getAccount() );
+		$testCase->assertEquals( self::MERCHANT_ID, $fromXmlResponse->getMerchantId() );
+		$testCase->assertEquals( self::THREE_D_SECURE_SIG_MESSAGE, $fromXmlResponse->getMessage() );
+		$testCase->assertEquals( self::ORDER_ID, $fromXmlResponse->getOrderId() );
+		$testCase->assertEquals( self::THREE_D_SECURE_SIG_RESULT, $fromXmlResponse->getResult() );
+		$testCase->assertEquals( self::THREE_D_SECURE_SIG_RESPONSE_HASH, $fromXmlResponse->getHash() );
+		$testCase->assertEquals( self::TIMESTAMP, $fromXmlResponse->getTimeStamp() );
+		$testCase->assertEquals( self::THREE_D_SECURE_STATUS, $fromXmlResponse->getThreeDSecure()->getStatus() );
+		$testCase->assertEquals( self::THREE_D_SECURE_ECI, $fromXmlResponse->getThreeDSecure()->getEci() );
+		$testCase->assertEquals( self::THREE_D_SECURE_XID, $fromXmlResponse->getThreeDSecure()->getXid() );
+		$testCase->assertEquals( self::THREE_D_SECURE_CAVV, $fromXmlResponse->getThreeDSecure()->getCavv() );
+		$testCase->assertEquals( self::THREE_D_SECURE_ALGORITHM, $fromXmlResponse->getThreeDSecure()->getAlgorithm() );
+		$testCase->assertTrue( $fromXmlResponse->isSuccess() );
+	}
+
+
 }
 
 SampleXmlValidationUtils::Init();

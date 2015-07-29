@@ -1,0 +1,16 @@
+<response timestamp="20120926112654">
+    <merchantid>thestore</merchantid>
+    <account>internet</account>
+    <orderid>ORD453-11</orderid>
+    <authcode>79347</authcode>
+    <result>00</result>
+    <message>Authentication Successful</message>
+    <threedsecure>
+        <status>Y</status>
+        <eci>5</eci>
+        <xid>e9dafe706f7142469c45d4877aaf5984</xid>
+        <cavv>AAABASY3QHgwUVdEBTdAAAAAAAA=</cavv>
+        <algorithm>1</algorithm>
+    </threedsecure>
+    <sha1hash>e5a7745da5dc32d234c3f52860132c482107e9ac</sha1hash>
+</response>

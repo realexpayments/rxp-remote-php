@@ -21,6 +21,9 @@ use com\realexpayments\remote\sdk\domain\payment\Recurring;
 use com\realexpayments\remote\sdk\domain\payment\TssInfo;
 use com\realexpayments\remote\sdk\domain\payment\TssResult;
 use com\realexpayments\remote\sdk\domain\payment\TssResultCheck;
+use com\realexpayments\remote\sdk\domain\threeDSecure\ThreeDSecureRequest;
+use com\realexpayments\remote\sdk\domain\threeDSecure\ThreeDSecureResponse;
+use com\realexpayments\remote\sdk\domain\threeDSecure\ThreeDSecureType;
 
 
 /**
@@ -41,7 +44,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 
 
 		$card = new Card();
-		$card = $card
+		$card
 			->addExpiryDate( SampleXmlValidationUtils::CARD_EXPIRY_DATE )
 			->addNumber( SampleXmlValidationUtils::CARD_NUMBER )
 			->addCardType( new CardType( CardType::VISA ) )
@@ -53,15 +56,15 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$tssInfo = new TssInfo();
 
 		$businessAddress = new Address();
-		$businessAddress = $businessAddress->addAddressType( SampleXmlValidationUtils::$ADDRESS_TYPE_BUSINESS )
+		$businessAddress ->addAddressType( SampleXmlValidationUtils::$ADDRESS_TYPE_BUSINESS )
 		                                   ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_BUSINESS )
 		                                   ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_BUSINESS );
 
 		$shippingAddress = new Address();
-		$shippingAddress = $shippingAddress->addAddressType( SampleXmlValidationUtils::$ADDRESS_TYPE_SHIPPING )
+		$shippingAddress ->addAddressType( SampleXmlValidationUtils::$ADDRESS_TYPE_SHIPPING )
 		                                   ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_SHIPPING )
 		                                   ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_SHIPPING );
-		$tssInfo         = $tssInfo
+		$tssInfo
 			->addCustomerNumber( SampleXmlValidationUtils::CUSTOMER_NUMBER )
 			->addProductId( SampleXmlValidationUtils::PRODUCT_ID )
 			->addVariableReference( SampleXmlValidationUtils::VARIABLE_REFERENCE )
@@ -73,8 +76,18 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$autoSettle = new AutoSettle();
 		$autoSettle = $autoSettle->addAutoSettleFlag( SampleXmlValidationUtils::$AUTO_SETTLE_FLAG );
 
+		$mpi = new Mpi();
+		$mpi->addCavv( SampleXmlValidationUtils::THREE_D_SECURE_CAVV )
+		    ->addXid( SampleXmlValidationUtils::THREE_D_SECURE_XID )
+		    ->addEci( SampleXmlValidationUtils::THREE_D_SECURE_ECI );
+
+		$recurring = new Recurring();
+		$recurring->addFlag( SampleXmlValidationUtils::$RECURRING_FLAG )
+		          ->addSequence( SampleXmlValidationUtils::$RECURRING_SEQUENCE )
+		          ->addType( SampleXmlValidationUtils::$RECURRING_TYPE );
+
 		$request = new PaymentRequest();
-		$request = $request
+		$request
 			->addAccount( SampleXmlValidationUtils::ACCOUNT )
 			->addMerchantId( SampleXmlValidationUtils::MERCHANT_ID )
 			->addPaymentType( new PaymentType( PaymentType::AUTH ) )
@@ -92,9 +105,9 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 			->addAuthCode( SampleXmlValidationUtils::AUTH_CODE )
 			->addRefundHash( SampleXmlValidationUtils::REFUND_HASH )
 			->addFraudFilter( SampleXmlValidationUtils::FRAUD_FILTER )
-			->addRecurring( new Recurring() )// TODO: Add recurring info
+			->addRecurring( $recurring )
 			->addTssInfo( $tssInfo )
-			->addMpi( new Mpi() ); // TODO: Add 3DS info
+			->addMpi( $mpi );
 
 		// convert to XML
 		$xml = $request->toXml();
@@ -112,29 +125,28 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function  testPaymentRequestXmlHelpersNoEnums() {
 		$card = new Card();
-		$card = $card
-			->addExpiryDate( SampleXmlValidationUtils::CARD_EXPIRY_DATE )
-			->addNumber( SampleXmlValidationUtils::CARD_NUMBER )
-			->addCardType( new CardType( CardType::VISA ) )
-			->addCardHolderName( SampleXmlValidationUtils::CARD_HOLDER_NAME )
-			->addCvn( SampleXmlValidationUtils::CARD_CVN_NUMBER )
-			->addCvnPresenceIndicator( SampleXmlValidationUtils::$CARD_CVN_PRESENCE->getIndicator() )
-			->addIssueNumber( SampleXmlValidationUtils::CARD_ISSUE_NUMBER );
+		$card->addExpiryDate( SampleXmlValidationUtils::CARD_EXPIRY_DATE )
+		     ->addNumber( SampleXmlValidationUtils::CARD_NUMBER )
+		     ->addCardType( new CardType( CardType::VISA ) )
+		     ->addCardHolderName( SampleXmlValidationUtils::CARD_HOLDER_NAME )
+		     ->addCvn( SampleXmlValidationUtils::CARD_CVN_NUMBER )
+		     ->addCvnPresenceIndicator( SampleXmlValidationUtils::$CARD_CVN_PRESENCE->getIndicator() )
+		     ->addIssueNumber( SampleXmlValidationUtils::CARD_ISSUE_NUMBER );
 
 
 		$tssInfo = new TssInfo();
 
 		$businessAddress = new Address();
-		$businessAddress = $businessAddress->addAddressType( SampleXmlValidationUtils::$ADDRESS_TYPE_BUSINESS )
-		                                   ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_BUSINESS )
-		                                   ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_BUSINESS );
+		$businessAddress->addAddressType( SampleXmlValidationUtils::$ADDRESS_TYPE_BUSINESS )
+		                ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_BUSINESS )
+		                ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_BUSINESS );
 
 		$shippingAddress = new Address();
-		$shippingAddress = $shippingAddress->addAddressType( SampleXmlValidationUtils::$ADDRESS_TYPE_SHIPPING )
-		                                   ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_SHIPPING )
-		                                   ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_SHIPPING );
+		$shippingAddress->addAddressType( SampleXmlValidationUtils::$ADDRESS_TYPE_SHIPPING )
+		                ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_SHIPPING )
+		                ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_SHIPPING );
 
-		$tssInfo = $tssInfo
+		$tssInfo
 			->addCustomerNumber( SampleXmlValidationUtils::CUSTOMER_NUMBER )
 			->addProductId( SampleXmlValidationUtils::PRODUCT_ID )
 			->addVariableReference( SampleXmlValidationUtils::VARIABLE_REFERENCE )
@@ -145,8 +157,18 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$autoSettle = new AutoSettle();
 		$autoSettle = $autoSettle->addAutoSettleFlag( SampleXmlValidationUtils::$AUTO_SETTLE_FLAG );
 
+		$mpi = new Mpi();
+		$mpi->addCavv( SampleXmlValidationUtils::THREE_D_SECURE_CAVV )
+		    ->addXid( SampleXmlValidationUtils::THREE_D_SECURE_XID )
+		    ->addEci( SampleXmlValidationUtils::THREE_D_SECURE_ECI );
+
+		$recurring = new Recurring();
+		$recurring->addFlag( SampleXmlValidationUtils::$RECURRING_FLAG->getRecurringFlag() )
+		          ->addSequence( SampleXmlValidationUtils::$RECURRING_SEQUENCE->getSequence() )
+		          ->addType( SampleXmlValidationUtils::$RECURRING_TYPE->getType() );
+
 		$request = new PaymentRequest();
-		$request = $request
+		$request
 			->addAccount( SampleXmlValidationUtils::ACCOUNT )
 			->addMerchantId( SampleXmlValidationUtils::MERCHANT_ID )
 			->addType( PaymentType::AUTH )
@@ -164,9 +186,9 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 			->addAuthCode( SampleXmlValidationUtils::AUTH_CODE )
 			->addRefundHash( SampleXmlValidationUtils::REFUND_HASH )
 			->addFraudFilter( SampleXmlValidationUtils::FRAUD_FILTER )
-			->addRecurring( new Recurring() )// TODO: Add recurring info
+			->addRecurring( $recurring )
 			->addTssInfo( $tssInfo )
-			->addMpi( new Mpi() ); // TODO: Add 3DS info
+			->addMpi( $mpi );
 
 
 		// convert to XML
@@ -233,10 +255,9 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$request->setFraudFilter( SampleXmlValidationUtils::FRAUD_FILTER );
 
 		$recurring = new Recurring();
-		// TODO: Next iteration
-		//$recurring->setFlag( SampleXmlValidationUtils::RECURRING_FLAG->getRecurringFlag());
-		//$recurring->setSequence( SampleXmlValidationUtils::RECURRING_SEQUENCE->getSequence());
-		//$recurring->setType( SampleXmlValidationUtils::RECURRING_TYPE->getType());
+		$recurring->setFlag( SampleXmlValidationUtils::$RECURRING_FLAG->getRecurringFlag() );
+		$recurring->setSequence( SampleXmlValidationUtils::$RECURRING_SEQUENCE->getSequence() );
+		$recurring->setType( SampleXmlValidationUtils::$RECURRING_TYPE->getType() );
 		$request->setRecurring( $recurring );
 
 		$tssInfo = new TssInfo();
@@ -262,10 +283,9 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$request->setTssInfo( $tssInfo );
 
 		$mpi = new Mpi();
-		// TODO: Next iteration
-		//$mpi->setCavv( SampleXmlValidationUtils::THREE_D_SECURE_CAVV );
-		//$mpi->setXid( SampleXmlValidationUtils::THREE_D_SECURE_XID );
-		//$mpi->setEci( SampleXmlValidationUtils::THREE_D_SECURE_ECI );
+		$mpi->setCavv( SampleXmlValidationUtils::THREE_D_SECURE_CAVV );
+		$mpi->setXid( SampleXmlValidationUtils::THREE_D_SECURE_XID );
+		$mpi->setEci( SampleXmlValidationUtils::THREE_D_SECURE_ECI );
 		$request->setMpi( $mpi );
 
 		//convert to XML
@@ -396,5 +416,245 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		XmlUtils::fromXml( "<xml>test</xml>xml>", new MessageType( MessageType::PAYMENT ) );
 	}
 
+	/**
+	 * Tests conversion of {@link ThreeDSecureRequest} to and from XML using the helper methods.
+	 */
+	public function testThreeDSecureRequestXmlHelpers() {
 
+		$card = new Card();
+		$card->addExpiryDate( SampleXmlValidationUtils::CARD_EXPIRY_DATE )
+		     ->addNumber( SampleXmlValidationUtils::CARD_NUMBER )
+		     ->addCardType( new CardType( CardType::VISA ) )
+		     ->addCardHolderName( SampleXmlValidationUtils::CARD_HOLDER_NAME )
+		     ->addCvn( SampleXmlValidationUtils::CARD_CVN_NUMBER )
+		     ->addCvnPresenceIndicatorType( SampleXmlValidationUtils::$CARD_CVN_PRESENCE )
+		     ->addIssueNumber( SampleXmlValidationUtils::CARD_ISSUE_NUMBER );
+
+
+		$request = new ThreeDSecureRequest();
+		$request
+			->addAccount( SampleXmlValidationUtils::ACCOUNT )
+			->addMerchantId( SampleXmlValidationUtils::MERCHANT_ID )
+			->addType( ThreeDSecureType::VERIFY_ENROLLED )
+			->addAmount( SampleXmlValidationUtils::AMOUNT )
+			->addCurrency( SampleXmlValidationUtils::CURRENCY )
+			->addCard( $card )
+			->addTimestamp( SampleXmlValidationUtils::TIMESTAMP )
+			->addOrderId( SampleXmlValidationUtils::ORDER_ID )
+			->addHash( SampleXmlValidationUtils::THREE_D_SECURE_VERIFY_ENROLLED_REQUEST_HASH );
+
+		// convert to XML
+		$xml = $request->toXml();
+
+		// Convert from XML back to PaymentRequest
+
+		/* @var ThreeDSecureRequest $fromXmlRequest */
+		$fromXmlRequest = new ThreeDSecureRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledVerifyEnrolledRequest( $fromXmlRequest, $this );
+	}
+
+	/**
+	 * Tests conversion of {@link ThreeDSecureRequest} to and from XML using the helper methods with no enums.
+	 */
+	public function testThreeDSecureRequestXmlHelpersNoEnums() {
+
+		$card = new Card();
+		$card->addExpiryDate( SampleXmlValidationUtils::CARD_EXPIRY_DATE )
+		     ->addNumber( SampleXmlValidationUtils::CARD_NUMBER )
+		     ->addType( CardType::VISA )
+		     ->addCardHolderName( SampleXmlValidationUtils::CARD_HOLDER_NAME )
+		     ->addCvn( SampleXmlValidationUtils::CARD_CVN_NUMBER )
+		     ->addCvnPresenceIndicator( SampleXmlValidationUtils::$CARD_CVN_PRESENCE->getIndicator() )
+		     ->addIssueNumber( SampleXmlValidationUtils::CARD_ISSUE_NUMBER );
+
+
+		$request = new ThreeDSecureRequest();
+		$request
+			->addAccount( SampleXmlValidationUtils::ACCOUNT )
+			->addMerchantId( SampleXmlValidationUtils::MERCHANT_ID )
+			->addType( ThreeDSecureType::VERIFY_ENROLLED )
+			->addAmount( SampleXmlValidationUtils::AMOUNT )
+			->addCurrency( SampleXmlValidationUtils::CURRENCY )
+			->addCard( $card )
+			->addTimestamp( SampleXmlValidationUtils::TIMESTAMP )
+			->addOrderId( SampleXmlValidationUtils::ORDER_ID )
+			->addHash( SampleXmlValidationUtils::THREE_D_SECURE_VERIFY_ENROLLED_REQUEST_HASH );
+
+
+		// convert to XML
+		$xml = $request->toXml();
+
+		// Convert from XML back to PaymentRequest
+
+		/* @var ThreeDSecureRequest $fromXmlRequest */
+		$fromXmlRequest = new ThreeDSecureRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledVerifyEnrolledRequest( $fromXmlRequest, $this );
+	}
+
+	/**
+	 * Tests conversion of {@link ThreeDSecureRequest} verify enrolled to and from XML using setters.
+	 */
+	public function testThreeDSecureEnrolledRequestXmlWithSetters() {
+
+		$card = new Card();
+		$card->setExpiryDate( SampleXmlValidationUtils::CARD_EXPIRY_DATE );
+		$card->setNumber( SampleXmlValidationUtils::CARD_NUMBER );
+		$card->setType( SampleXmlValidationUtils::$CARD_TYPE->getType() );
+		$card->setCardHolderName( SampleXmlValidationUtils::CARD_HOLDER_NAME );
+		$card->setIssueNumber( SampleXmlValidationUtils::CARD_ISSUE_NUMBER );
+
+		$cvn = new Cvn();
+		$cvn->setNumber( SampleXmlValidationUtils::CARD_CVN_NUMBER );
+		$cvn->setPresenceIndicator( SampleXmlValidationUtils::$CARD_CVN_PRESENCE->getIndicator() );
+		$card->setCvn( $cvn );
+
+		$request = new ThreeDSecureRequest();
+		$request->setAccount( SampleXmlValidationUtils::ACCOUNT );
+		$request->setMerchantId( SampleXmlValidationUtils::MERCHANT_ID );
+
+		$amount = new Amount();
+		$amount->setAmount( SampleXmlValidationUtils::AMOUNT );
+		$amount->setCurrency( SampleXmlValidationUtils::CURRENCY );
+		$request->setAmount( $amount );
+
+
+		$request->setCard( $card );
+		$request->setTimeStamp( SampleXmlValidationUtils::TIMESTAMP );
+		$request->setOrderId( SampleXmlValidationUtils::ORDER_ID );
+		$request->setHash( SampleXmlValidationUtils::THREE_D_SECURE_VERIFY_ENROLLED_REQUEST_HASH );
+		$request->setType( ThreeDSecureType::VERIFY_ENROLLED );
+
+		//convert to XML
+		$xml = $request->toXml();
+
+		// Convert from XML back to PaymentRequest
+
+		/* @var ThreeDSecureRequest $fromXmlRequest */
+		$fromXmlRequest = new ThreeDSecureRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledVerifyEnrolledRequest( $fromXmlRequest, $this );
+	}
+
+	/**
+	 * Tests conversion of {@link ThreeDSecureRequest} verify sig to and from XML using setters.
+	 */
+	public function testThreeDSecureSigRequestXmlWithSetters() {
+		$card = new Card();
+		$card->setExpiryDate( SampleXmlValidationUtils::CARD_EXPIRY_DATE );
+		$card->setNumber( SampleXmlValidationUtils::CARD_NUMBER );
+		$card->setType( SampleXmlValidationUtils::$CARD_TYPE->getType() );
+		$card->setCardHolderName( SampleXmlValidationUtils::CARD_HOLDER_NAME );
+		$card->setIssueNumber( SampleXmlValidationUtils::CARD_ISSUE_NUMBER );
+
+		$cvn = new Cvn();
+		$cvn->setNumber( SampleXmlValidationUtils::CARD_CVN_NUMBER );
+		$cvn->setPresenceIndicator( SampleXmlValidationUtils::$CARD_CVN_PRESENCE->getIndicator() );
+		$card->setCvn( $cvn );
+
+		$request = new ThreeDSecureRequest();
+		$request->setAccount( SampleXmlValidationUtils::ACCOUNT );
+		$request->setMerchantId( SampleXmlValidationUtils::MERCHANT_ID );
+
+		$amount = new Amount();
+		$amount->setAmount( SampleXmlValidationUtils::AMOUNT );
+		$amount->setCurrency( SampleXmlValidationUtils::CURRENCY );
+		$request->setAmount( $amount );
+
+
+		$request->setCard( $card );
+		$request->setTimeStamp( SampleXmlValidationUtils::TIMESTAMP );
+		$request->setOrderId( SampleXmlValidationUtils::ORDER_ID );
+		$request->setPares( SampleXmlValidationUtils::THREE_D_SECURE_PARES );
+		$request->setHash( SampleXmlValidationUtils::THREE_D_SECURE_VERIFY_SIG_REQUEST_HASH );
+		$request->setType( ThreeDSecureType::VERIFY_SIG );
+
+		//convert to XML
+		$xml = $request->toXml();
+
+		// Convert from XML back to PaymentRequest
+
+		/* @var ThreeDSecureRequest $fromXmlRequest */
+		$fromXmlRequest = new ThreeDSecureRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledVerifySigRequest( $fromXmlRequest, $this );
+	}
+
+	/**
+	 * Tests conversion of {@link ThreeDSecureResponse} from XML file for verify enrolled
+	 */
+	public function testThreeDSecureEnrolledResponseXmlFromFile() {
+		$path   = SampleXmlValidationUtils::THREE_D_SECURE_VERIFY_ENROLLED_RESPONSE_XML_PATH;
+		$prefix = __DIR__ . '/../../../resources';
+		$xml    = file_get_contents( $prefix . $path );
+
+		//unmarshal back to response
+		/* @var ThreeDSecureResponse $fromXmlResponse */
+		$fromXmlResponse = new ThreeDSecureResponse();
+		$fromXmlResponse = $fromXmlResponse->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledThreeDSecureEnrolledResponse( $fromXmlResponse, $this );
+
+	}
+
+	/**
+	 * Tests conversion of {@link ThreeDSecureResponse} from XML file for verify sig
+	 */
+	public function testThreeDSecureSigResponseXmlFromFile() {
+
+		$path   = SampleXmlValidationUtils::THREE_D_SECURE_VERIFY_SIG_RESPONSE_XML_PATH;
+		$prefix = __DIR__ . '/../../../resources';
+		$xml    = file_get_contents( $prefix . $path );
+
+		//unmarshal back to response
+		/* @var ThreeDSecureResponse $fromXmlResponse */
+		$fromXmlResponse = new ThreeDSecureResponse();
+		$fromXmlResponse = $fromXmlResponse->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledThreeDSecureSigResponse( $fromXmlResponse, $this );
+
+	}
+
+	/**
+	 * Tests conversion of {@link ThreeDSecureRequest} from XML file for verify enrolled.
+	 */
+	public function testThreeDSecureRequestEnrolledXmlFromFile() {
+
+		$path   = SampleXmlValidationUtils::THREE_D_SECURE_VERIFY_ENROLLED_REQUEST_XML_PATH;
+		$prefix = __DIR__ . '/../../../resources';
+		$xml    = file_get_contents( $prefix . $path );
+
+		//unmarshal back to response
+		/* @var ThreeDSecureResponse $fromXmlResponse */
+		$fromXmlResponse = new ThreeDSecureResponse();
+		$fromXmlResponse = $fromXmlResponse->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledVerifyEnrolledRequest( $fromXmlResponse, $this );
+
+	}
+
+	/**
+	 * Tests conversion of {@link ThreeDSecureRequest} from XML file for verify sig.
+	 */
+	public function testThreeDSecureRequestSigXmlFromFile() {
+
+		$path   = SampleXmlValidationUtils::THREE_D_SECURE_VERIFY_SIG_REQUEST_XML_PATH;
+		$prefix = __DIR__ . '/../../../resources';
+		$xml    = file_get_contents( $prefix . $path );
+
+		//unmarshal back to response
+		/* @var ThreeDSecureRequest $fromXmlResponse */
+		$fromXmlResponse = new ThreeDSecureRequest();
+		$fromXmlResponse = $fromXmlResponse->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledVerifySigRequest( $fromXmlResponse, $this );
+	}
+
+	/**
+	 * Test expected {@link RealexException} when unmarshalling invalid xml.
+	 *
+	 * @expectedException     com\realexpayments\remote\sdk\RealexException
+	 */
+	public function testThreeDSecureFromXmlError() {
+
+		//Try to unmarshal invalid XML
+		XmlUtils::fromXml( "<xml>test</xml>xml>", new MessageType( MessageType::THREE_D_SECURE ) );
+	}
 }

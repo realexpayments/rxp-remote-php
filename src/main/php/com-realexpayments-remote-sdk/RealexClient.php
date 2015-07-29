@@ -2,6 +2,8 @@
 
 namespace com\realexpayments\remote\sdk;
 
+use com\realexpayments\remote\sdk\domain\iRequest;
+use com\realexpayments\remote\sdk\domain\iResponse;
 use com\realexpayments\remote\sdk\domain\payment\PaymentRequest;
 use com\realexpayments\remote\sdk\domain\payment\PaymentResponse;
 use com\realexpayments\remote\sdk\http\HttpClient;
@@ -173,11 +175,11 @@ class RealexClient {
 	 * </ol>
 	 * </p>
 	 *
-	 * @param  PaymentRequest $request
+	 * @param iRequest $request
 	 *
-	 * @return PaymentResponse
+	 * @return iResponse
 	 */
-	public function send( PaymentRequest $request ) {
+	public function send( iRequest $request ) {
 
 		$this->logger->info( "Sending XML request to Realex." );
 
