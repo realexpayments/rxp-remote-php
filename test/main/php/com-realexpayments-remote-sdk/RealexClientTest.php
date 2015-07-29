@@ -279,7 +279,7 @@ class RealexClientTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * Test sending a ThreeDSecure Verify Enrolled request and receiving a ThreeDSecure Verify Enrolled response.
 	 *
-	 * @expectedException com\realexpayments\remote\sdk\RealexException I
+	 * @expectedException com\realexpayments\remote\sdk\RealexException
 	 */
 	public function testSendThreeDSecureInvalidResponseHash()
 	{

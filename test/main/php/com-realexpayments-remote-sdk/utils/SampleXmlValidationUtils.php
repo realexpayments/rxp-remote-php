@@ -9,6 +9,9 @@ use com\realexpayments\remote\sdk\domain\payment\AutoSettleFlag;
 use com\realexpayments\remote\sdk\domain\payment\PaymentRequest;
 use com\realexpayments\remote\sdk\domain\payment\PaymentResponse;
 use com\realexpayments\remote\sdk\domain\payment\PaymentType;
+use com\realexpayments\remote\sdk\domain\payment\RecurringFlag;
+use com\realexpayments\remote\sdk\domain\payment\RecurringSequence;
+use com\realexpayments\remote\sdk\domain\payment\RecurringType;
 use com\realexpayments\remote\sdk\domain\PresenceIndicator;
 use com\realexpayments\remote\sdk\domain\threeDSecure\ThreeDSecureRequest;
 use com\realexpayments\remote\sdk\domain\threeDSecure\ThreeDSecureResponse;
@@ -73,9 +76,20 @@ class SampleXmlValidationUtils {
 	const CUSTOMER_IP = "127.0.0.1";
 
 	//Recurring
-//public static final RecurringType RECURRING_TYPE = RecurringType.FIXED;
-//public static final RecurringFlag RECURRING_FLAG = RecurringFlag.ONE;
-//public static final RecurringSequence RECURRING_SEQUENCE = RecurringSequence.FIRST;
+	/**
+	 * @var RecurringType
+	 */
+	public static $RECURRING_TYPE;
+
+	/**
+	 * @var RecurringFlag
+	 */
+	public static $RECURRING_FLAG;
+
+	/**
+	 * @var RecurringSequence
+	 */
+	public static $RECURRING_SEQUENCE;
 
 	//Address
 	/**
@@ -157,6 +171,9 @@ class SampleXmlValidationUtils {
 		self::$ADDRESS_TYPE_SHIPPING = new AddressType( AddressType::SHIPPING );
 		self::$AUTO_SETTLE_FLAG      = new AutoSettleFlag( AutoSettleFlag::MULTI );
 		self::$CARD_TYPE             = new CardType( CardType::VISA );
+		self::$RECURRING_TYPE        = new RecurringType( RecurringType::FIXED );
+		self::$RECURRING_FLAG        = new RecurringFlag( RecurringFlag::ONE );
+		self::$RECURRING_SEQUENCE    = new RecurringSequence( RecurringSequence::FIRST );
 	}
 
 	/**
@@ -233,10 +250,9 @@ class SampleXmlValidationUtils {
 		$testCase->assertEquals( self::REFUND_HASH, $fromXmlRequest->getRefundHash() );
 		$testCase->assertEquals( self::FRAUD_FILTER, $fromXmlRequest->getFraudFilter() );
 
-		// TODO: Next iteration
-		//$testCase->assertEquals( self::RECURRING_FLAG->getRecurringFlag(), $fromXmlRequest->getRecurring()->getFlag() );
-		//$testCase->assertEquals( self::RECURRING_TYPE->getType(), $fromXmlRequest->getRecurring()->getType() );
-		//$testCase->assertEquals( self::RECURRING_SEQUENCE->getSequence(), $fromXmlRequest->getRecurring()->getSequence() );
+		$testCase->assertEquals( self::$RECURRING_FLAG->getRecurringFlag(), $fromXmlRequest->getRecurring()->getFlag() );
+		$testCase->assertEquals( self::$RECURRING_TYPE->getType(), $fromXmlRequest->getRecurring()->getType() );
+		$testCase->assertEquals( self::$RECURRING_SEQUENCE->getSequence(), $fromXmlRequest->getRecurring()->getSequence() );
 
 		$testCase->assertEquals( self::CUSTOMER_NUMBER, $fromXmlRequest->getTssInfo()->getCustomerNumber() );
 		$testCase->assertEquals( self::PRODUCT_ID, $fromXmlRequest->getTssInfo()->getProductId() );
@@ -250,10 +266,9 @@ class SampleXmlValidationUtils {
 		$testCase->assertEquals( self::ADDRESS_CODE_SHIPPING, $addresses[1]->getCode() );
 		$testCase->assertEquals( self::ADDRESS_COUNTRY_SHIPPING, $addresses[1]->getCountry() );
 
-		// TODO: Next iteration
-		//$testCase->assertEquals( self::THREE_D_SECURE_CAVV, $fromXmlRequest->getMpi()->getCavv() );
-		//$testCase->assertEquals( self::THREE_D_SECURE_XID, $fromXmlRequest->getMpi()->getXid() );
-		//$testCase->assertEquals( self::THREE_D_SECURE_ECI, $fromXmlRequest->getMpi()->getEci() );
+		$testCase->assertEquals( self::THREE_D_SECURE_CAVV, $fromXmlRequest->getMpi()->getCavv() );
+		$testCase->assertEquals( self::THREE_D_SECURE_XID, $fromXmlRequest->getMpi()->getXid() );
+		$testCase->assertEquals( self::THREE_D_SECURE_ECI, $fromXmlRequest->getMpi()->getEci() );
 
 
 	}

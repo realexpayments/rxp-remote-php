@@ -76,6 +76,16 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$autoSettle = new AutoSettle();
 		$autoSettle = $autoSettle->addAutoSettleFlag( SampleXmlValidationUtils::$AUTO_SETTLE_FLAG );
 
+		$mpi = new Mpi();
+		$mpi->addCavv( SampleXmlValidationUtils::THREE_D_SECURE_CAVV )
+		    ->addXid( SampleXmlValidationUtils::THREE_D_SECURE_XID )
+		    ->addEci( SampleXmlValidationUtils::THREE_D_SECURE_ECI );
+
+		$recurring = new Recurring();
+		$recurring->addFlag( SampleXmlValidationUtils::$RECURRING_FLAG )
+		          ->addSequence( SampleXmlValidationUtils::$RECURRING_SEQUENCE )
+		          ->addType( SampleXmlValidationUtils::$RECURRING_TYPE );
+
 		$request = new PaymentRequest();
 		$request = $request
 			->addAccount( SampleXmlValidationUtils::ACCOUNT )
@@ -95,9 +105,9 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 			->addAuthCode( SampleXmlValidationUtils::AUTH_CODE )
 			->addRefundHash( SampleXmlValidationUtils::REFUND_HASH )
 			->addFraudFilter( SampleXmlValidationUtils::FRAUD_FILTER )
-			->addRecurring( new Recurring() )// TODO: Add recurring info
+			->addRecurring( $recurring )
 			->addTssInfo( $tssInfo )
-			->addMpi( new Mpi() ); // TODO: Add 3DS info
+			->addMpi( $mpi );
 
 		// convert to XML
 		$xml = $request->toXml();
@@ -147,6 +157,16 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$autoSettle = new AutoSettle();
 		$autoSettle = $autoSettle->addAutoSettleFlag( SampleXmlValidationUtils::$AUTO_SETTLE_FLAG );
 
+		$mpi = new Mpi();
+		$mpi->addCavv( SampleXmlValidationUtils::THREE_D_SECURE_CAVV )
+		    ->addXid( SampleXmlValidationUtils::THREE_D_SECURE_XID )
+		    ->addEci( SampleXmlValidationUtils::THREE_D_SECURE_ECI );
+
+		$recurring = new Recurring();
+		$recurring->addFlag( SampleXmlValidationUtils::$RECURRING_FLAG->getRecurringFlag() )
+		          ->addSequence( SampleXmlValidationUtils::$RECURRING_SEQUENCE->getSequence() )
+		          ->addType( SampleXmlValidationUtils::$RECURRING_TYPE->getType() );
+
 		$request = new PaymentRequest();
 		$request
 			->addAccount( SampleXmlValidationUtils::ACCOUNT )
@@ -166,9 +186,9 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 			->addAuthCode( SampleXmlValidationUtils::AUTH_CODE )
 			->addRefundHash( SampleXmlValidationUtils::REFUND_HASH )
 			->addFraudFilter( SampleXmlValidationUtils::FRAUD_FILTER )
-			->addRecurring( new Recurring() )// TODO: Add recurring info
+			->addRecurring( $recurring )
 			->addTssInfo( $tssInfo )
-			->addMpi( new Mpi() ); // TODO: Add 3DS info
+			->addMpi( $mpi );
 
 
 		// convert to XML
@@ -235,10 +255,9 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$request->setFraudFilter( SampleXmlValidationUtils::FRAUD_FILTER );
 
 		$recurring = new Recurring();
-		// TODO: Next iteration
-		//$recurring->setFlag( SampleXmlValidationUtils::RECURRING_FLAG->getRecurringFlag());
-		//$recurring->setSequence( SampleXmlValidationUtils::RECURRING_SEQUENCE->getSequence());
-		//$recurring->setType( SampleXmlValidationUtils::RECURRING_TYPE->getType());
+		$recurring->setFlag( SampleXmlValidationUtils::$RECURRING_FLAG->getRecurringFlag() );
+		$recurring->setSequence( SampleXmlValidationUtils::$RECURRING_SEQUENCE->getSequence() );
+		$recurring->setType( SampleXmlValidationUtils::$RECURRING_TYPE->getType() );
 		$request->setRecurring( $recurring );
 
 		$tssInfo = new TssInfo();
@@ -264,10 +283,9 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$request->setTssInfo( $tssInfo );
 
 		$mpi = new Mpi();
-		// TODO: Next iteration
-		//$mpi->setCavv( SampleXmlValidationUtils::THREE_D_SECURE_CAVV );
-		//$mpi->setXid( SampleXmlValidationUtils::THREE_D_SECURE_XID );
-		//$mpi->setEci( SampleXmlValidationUtils::THREE_D_SECURE_ECI );
+		$mpi->setCavv( SampleXmlValidationUtils::THREE_D_SECURE_CAVV );
+		$mpi->setXid( SampleXmlValidationUtils::THREE_D_SECURE_XID );
+		$mpi->setEci( SampleXmlValidationUtils::THREE_D_SECURE_ECI );
 		$request->setMpi( $mpi );
 
 		//convert to XML
