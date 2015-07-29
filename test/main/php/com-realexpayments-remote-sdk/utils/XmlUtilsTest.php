@@ -506,7 +506,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$request->setTimeStamp( SampleXmlValidationUtils::TIMESTAMP );
 		$request->setOrderId( SampleXmlValidationUtils::ORDER_ID );
 		$request->setHash( SampleXmlValidationUtils::THREE_D_SECURE_VERIFY_ENROLLED_REQUEST_HASH );
-		$request->setType(ThreeDSecureType::VERIFY_ENROLLED);
+		$request->setType( ThreeDSecureType::VERIFY_ENROLLED );
 
 		//convert to XML
 		$xml = $request->toXml();
@@ -522,8 +522,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * Tests conversion of {@link ThreeDSecureRequest} verify sig to and from XML using setters.
 	 */
-	public function testThreeDSecureSigRequestXmlWithSetters()
-	{
+	public function testThreeDSecureSigRequestXmlWithSetters() {
 		$card = new Card();
 		$card->setExpiryDate( SampleXmlValidationUtils::CARD_EXPIRY_DATE );
 		$card->setNumber( SampleXmlValidationUtils::CARD_NUMBER );
@@ -551,7 +550,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$request->setOrderId( SampleXmlValidationUtils::ORDER_ID );
 		$request->setPares( SampleXmlValidationUtils::THREE_D_SECURE_PARES );
 		$request->setHash( SampleXmlValidationUtils::THREE_D_SECURE_VERIFY_SIG_REQUEST_HASH );
-		$request->setType(ThreeDSecureType::VERIFY_SIG);
+		$request->setType( ThreeDSecureType::VERIFY_SIG );
 
 		//convert to XML
 		$xml = $request->toXml();
@@ -567,8 +566,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * Tests conversion of {@link ThreeDSecureResponse} from XML file for verify enrolled
 	 */
-	public function testThreeDSecureEnrolledResponseXmlFromFile()
-	{
+	public function testThreeDSecureEnrolledResponseXmlFromFile() {
 		$path   = SampleXmlValidationUtils::THREE_D_SECURE_VERIFY_ENROLLED_RESPONSE_XML_PATH;
 		$prefix = __DIR__ . '/../../../resources';
 		$xml    = file_get_contents( $prefix . $path );
@@ -584,8 +582,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * Tests conversion of {@link ThreeDSecureResponse} from XML file for verify sig
 	 */
-	public function testThreeDSecureSigResponseXmlFromFile()
-	{
+	public function testThreeDSecureSigResponseXmlFromFile() {
 
 		$path   = SampleXmlValidationUtils::THREE_D_SECURE_VERIFY_SIG_RESPONSE_XML_PATH;
 		$prefix = __DIR__ . '/../../../resources';
@@ -602,8 +599,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * Tests conversion of {@link ThreeDSecureRequest} from XML file for verify enrolled.
 	 */
-	public function testThreeDSecureRequestEnrolledXmlFromFile()
-	{
+	public function testThreeDSecureRequestEnrolledXmlFromFile() {
 
 		$path   = SampleXmlValidationUtils::THREE_D_SECURE_VERIFY_ENROLLED_REQUEST_XML_PATH;
 		$prefix = __DIR__ . '/../../../resources';
@@ -620,8 +616,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * Tests conversion of {@link ThreeDSecureRequest} from XML file for verify sig.
 	 */
-	public function testThreeDSecureRequestSigXmlFromFile()
-	{
+	public function testThreeDSecureRequestSigXmlFromFile() {
 
 		$path   = SampleXmlValidationUtils::THREE_D_SECURE_VERIFY_SIG_REQUEST_XML_PATH;
 		$prefix = __DIR__ . '/../../../resources';
@@ -632,6 +627,16 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$fromXmlResponse = new ThreeDSecureResponse();
 		$fromXmlResponse = $fromXmlResponse->fromXml( $xml );
 		SampleXmlValidationUtils::checkUnmarshalledVerifySigRequest( $fromXmlResponse, $this );
+	}
 
+	/**
+	 * Test expected {@link RealexException} when unmarshalling invalid xml.
+	 *
+	 * @expectedException     com\realexpayments\remote\sdk\RealexException
+	 */
+	public function testThreeDSecureFromXmlError() {
+
+		//Try to unmarshal invalid XML
+		XmlUtils::fromXml( "<xml>test</xml>xml>", new MessageType( MessageType::THREE_D_SECURE ) );
 	}
 }
