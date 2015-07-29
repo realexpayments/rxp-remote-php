@@ -274,7 +274,47 @@ class RealexClientTest extends \PHPUnit_Framework_TestCase {
 
 		// validate response
 		SampleXmlValidationUtils::checkUnmarshalledThreeDSecureEnrolledResponse( $response, $this );
+	}
 
+	/**
+	 * Test sending a ThreeDSecure Verify Enrolled request and receiving a ThreeDSecure Verify Enrolled response.
+	 *
+	 * @expectedException com\realexpayments\remote\sdk\RealexException I
+	 */
+	public function testSendThreeDSecureInvalidResponseHash()
+	{
+		//get sample response XML
+		$path            = SampleXmlValidationUtils::THREE_D_SECURE_VERIFY_ENROLLED_RESPONSE_XML_PATH;
+		$prefix          = __DIR__ . '/../../resources';
+		$xml             = file_get_contents( $prefix . $path );
+		$fromXMLResponse = new ThreeDSecureResponse();
+		$fromXMLResponse = $fromXMLResponse->fromXml( $xml );
+
+		// add invalid hash
+		$fromXMLResponse->setHash("invalid hash");
+
+		//mock HttpResponse
+		/** @var HttpResponse $httpResponseMock */
+		$httpResponseMock = Phockito::mock( "com\\realexpayments\\remote\\sdk\\http\\HttpResponse" );
+		\Phockito::when( $httpResponseMock->getBody() )->return( $fromXMLResponse->toXML() );
+		\Phockito::when( $httpResponseMock->getResponseCode() )->return( 200 );
+
+
+		// create empty request
+		$request = new ThreeDSecureRequest();
+
+		$httpConfiguration = new HttpConfiguration();
+		$httpConfiguration->setOnlyAllowHttps( false );
+
+		// mock HttpClient instance
+		$httpClientMock = Phockito::mock( "com\\realexpayments\\remote\\sdk\\http\\HttpClient" );
+		\Phockito::when( $httpClientMock->execute( \Hamcrest_Core_IsAnything::anything() ) )->return( $httpResponseMock );
+
+		// execute and send on client
+		$realexClient = new RealexClient( SampleXmlValidationUtils::SECRET, $httpConfiguration, $httpClientMock );
+		$realexClient->send( $request );
+
+		$this->fail("RealexException should have been thrown before this point.");
 	}
 
 
