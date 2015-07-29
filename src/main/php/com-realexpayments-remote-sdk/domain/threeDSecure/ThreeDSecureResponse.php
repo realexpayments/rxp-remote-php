@@ -5,6 +5,7 @@ namespace com\realexpayments\remote\sdk\domain\threeDSecure;
 
 
 use com\realexpayments\remote\sdk\domain\iResponse;
+use com\realexpayments\remote\sdk\utils\GenerationUtils;
 use com\realexpayments\remote\sdk\utils\MessageType;
 use com\realexpayments\remote\sdk\utils\ResponseUtils;
 use com\realexpayments\remote\sdk\utils\XmlUtils;
@@ -664,7 +665,40 @@ class ThreeDSecureResponse implements iResponse {
 	 * @{@inheritdoc}
 	 */
 	public function isHashValid( $secret ) {
-		// TODO: Implement isHashValid() method.
+
+		$hashValid = false;
+
+		//check for any null values and set them to empty $for hashing
+		$timeStamp         = null == $this->timeStamp ? "" : $this->timeStamp;
+		$merchantId        = null == $this->merchantId ? "" : $this->merchantId;
+		$orderId           = null == $this->orderId ? "" : $this->orderId;
+		$result            = null == $this->result ? "" : $this->result;
+		$message           = null == $this->message ? "" : $this->message;
+		$paymentsReference = null == $this->paymentsReference ? "" : $this->paymentsReference;
+		$authCode          = null == $this->authCode ? "" : $this->authCode;
+
+		//create $to hash
+		$toHash = $timeStamp
+		          . "."
+		          . $merchantId
+		          . "."
+		          . $orderId
+		          . "."
+		          . $result
+		          . "."
+		          . $message
+		          . "."
+		          . $paymentsReference
+		          . "."
+		          . $authCode;
+
+		//check if calculated hash matches returned value
+		$expectedHash = GenerationUtils::generateHash( $toHash, $secret );
+		if ( $expectedHash == $this->hash ) {
+			$hashValid = true;
+		}
+
+		return $hashValid;
 	}
 
 	/**

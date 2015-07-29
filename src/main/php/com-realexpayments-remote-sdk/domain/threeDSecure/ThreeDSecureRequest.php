@@ -9,6 +9,7 @@ use com\realexpayments\remote\sdk\domain\Card;
 use com\realexpayments\remote\sdk\domain\iRequest;
 use com\realexpayments\remote\sdk\domain\payment\Comment;
 use com\realexpayments\remote\sdk\domain\payment\CommentCollection;
+use com\realexpayments\remote\sdk\utils\GenerationUtils;
 use com\realexpayments\remote\sdk\utils\MessageType;
 use com\realexpayments\remote\sdk\utils\XmlUtils;
 use Doctrine\OXM\Mapping as DOM;
@@ -506,7 +507,21 @@ class ThreeDSecureRequest implements iRequest {
 	 * {@inheritDoc}
 	 */
 	public function generateDefaults( $secret ) {
-		// TODO: Implement generateDefaults() method.
+
+		//generate timestamp if not set
+		if ( is_null( $this->timeStamp) ) {
+			$this->timeStamp = GenerationUtils::generateTimestamp();
+		}
+
+		//generate order ID if not set
+		if ( is_null( $this->orderId ) ) {
+			$this->orderId = GenerationUtils::generateOrderId();
+		}
+
+		//generate hash
+		$this->hash( $secret );
+
+		return $this;
 	}
 
 	/**
@@ -517,5 +532,51 @@ class ThreeDSecureRequest implements iRequest {
 		$response = new ThreeDSecureResponse();
 
 		return $response->fromXml( $xml );
+	}
+
+	/**
+	 * Creates the security hash from a number of fields and the shared secret.
+	 *
+	 * @param string $secret
+	 *
+	 * @return $this
+	 */
+	public function hash( $secret ) {
+
+		//check for any null values and set them to empty string for hashing
+		$timeStamp  = null == $this->timeStamp ? "" : $this->timeStamp;
+		$merchantId = null == $this->merchantId ? "" : $this->merchantId;
+		$orderId    = null == $this->orderId ? "" : $this->orderId;
+		$amount     = "";
+		$currency   = "";
+
+		if ( $this->amount != null ) {
+			$amount   = null == $this->amount->getAmount() ? "" : $this->amount->getAmount();
+			$currency = null == $this->amount->getCurrency() ? "" : $this->amount->getCurrency();
+		}
+
+		$cardNumber = "";
+
+		if ( $this->card != null ) {
+			$cardNumber = null == $this->card->getNumber() ? "" : $this->card->getNumber();
+		}
+
+		//create String to hash
+		$toHash = $timeStamp
+		          . "."
+		          . $merchantId
+		          . "."
+		          . $orderId
+		          . "."
+		          . $amount
+		          . "."
+		          . $currency
+		          . "."
+		          . $cardNumber;
+
+		$this->hash = GenerationUtils::generateHash( $toHash, $secret );
+
+		return $this;
+
 	}
 }
