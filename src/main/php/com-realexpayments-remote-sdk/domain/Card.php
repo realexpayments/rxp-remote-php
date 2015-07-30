@@ -20,7 +20,7 @@ use Doctrine\OXM\Mapping as DOM;
  *        ->addNumber("420000000000000000")
  *        ->addType(CardType.VISA)
  *        ->addCardHolderName("Joe Smith")
- *        ->addCvn(123)
+ *        ->addCvn("123")
  *        ->addCvnPresenceIndicator(PresenceIndicator.CVN_PRESENT);
  * </pre></code></p>
  *
@@ -203,7 +203,7 @@ class Card {
 	/**
 	 * Helper method to add CVN. If the {@link Cvn} field is null then one is created.
 	 *
-	 * @param integer $cvn
+	 * @param string $cvn
 	 *
 	 * @return $this
 	 */

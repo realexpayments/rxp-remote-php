@@ -30,7 +30,7 @@ use Doctrine\OXM\Mapping as DOM;
  *    ->addNumber("420000000000000000")
  *    ->addType(CardType::VISA)
  *    ->addCardHolderName("Joe Smith")
- *    ->addCvn(123)
+ *    ->addCvn("123")
  *    ->addCvnPresenceIndicator(PresenceIndicator::CVN_PRESENT);
  *
  * $request = (new ThreeDSecureRequest())
