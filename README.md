@@ -51,7 +51,8 @@ $card = ( new Card() )
         ->addNumber( "4263971921001307" )                                         
         ->addCardHolderName( "JoeBloggs" )                                        
         ->addType( CardType::VISA )                                               
-        ->addExpiryDate( "1220" );                                                
+        ->addExpiryDate( "1220" )
+        ->addCvn( "123" );
                                                                                   
 $request = ( new PaymentRequest )                                                 
         ->addType( PaymentType::AUTH )                                            
