@@ -30,9 +30,9 @@ class CVN {
 	 * A three-digit number on the reverse of the card. It is called the CVC for VISA and the CVV2 for MasterCard.
 	 * For an AMEX card, it is a four digit number.
 	 *
-	 * @var integer The number
+	 * @var string The number
 	 *
-	 * @Dom\XmlText(type="integer",name="number")
+	 * @Dom\XmlText(type="string",name="number")
 	 */
 	private $number;
 
@@ -66,7 +66,7 @@ class CVN {
 	/**
 	 * Getter for the verification number.
 	 *
-	 * @return int
+	 * @return string
 	 */
 	public function getNumber() {
 		return $this->number;
@@ -75,7 +75,7 @@ class CVN {
 	/**
 	 * Setter for the verification number
 	 *
-	 * @param int $number
+	 * @param string $number
 	 */
 	public function setNumber( $number ) {
 		$this->number = $number;
@@ -102,7 +102,7 @@ class CVN {
 	/**
 	 * Helper method to add a verification number.
 	 *
-	 * @param int $number
+	 * @param string $number
 	 *
 	 * @return $this
 	 */

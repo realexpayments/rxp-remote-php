@@ -45,7 +45,7 @@ class SampleXmlValidationUtils {
 	static $CARD_TYPE;
 
 	const CARD_HOLDER_NAME = "Joe Smith";
-	const  CARD_CVN_NUMBER = 123;
+	const  CARD_CVN_NUMBER = "123";
 	/**
 	 * @var PresenceIndicator
 	 */
