@@ -1,7 +1,7 @@
 {
   "repositories" :[
     {
-      "url" : "https://github.com/bragento/oxm.git",
+      "url" : "https://github.com/vicpada/oxm.git",
       "type":"git"
     }
   ],

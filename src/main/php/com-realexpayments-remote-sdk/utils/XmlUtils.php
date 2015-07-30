@@ -31,9 +31,9 @@ class XmlUtils {
 
 
 	/**
-	 * @var XmlMarshaller marshaller
+	 * @var XmlMarshaller[] marshallers
 	 */
-	private static $marshaller;
+	private static $marshallers;
 
 
 	/**
@@ -54,7 +54,7 @@ class XmlUtils {
 
 		try {
 
-			$xml = self::$marshaller->marshalToString( $object );
+			$xml = self::$marshallers[$messageType->getType()]->marshalToString( $object );
 
 		} catch ( Exception $e ) {
 
@@ -68,11 +68,11 @@ class XmlUtils {
 
 	/**
 	 * @param string $xml
-	 * @param MessageType $messageType
 	 *
+	 * @param MessageType $messageType
 	 * @return object
 	 */
-	public static function  fromXml( $xml, MessageType $messageType ) {
+	public static function  fromXml( $xml,MessageType $messageType ) {
 		self::Initialise();
 
 		self::$logger->debug( "Unmarshalling XML to domain object" );
@@ -80,7 +80,7 @@ class XmlUtils {
 
 		try {
 
-			$object = self::$marshaller->unmarshalFromString( $xml );
+			$object = self::$marshallers[$messageType->getType()]->unmarshalFromString( $xml );
 
 		} catch ( Exception $e ) {
 			self::$logger->error( "Error unmarshalling from XML", $e );
@@ -104,14 +104,25 @@ class XmlUtils {
 
 	private static function InitialiseMarshaller() {
 
+		self::$marshallers = array();
+
 		$config = new Configuration();
 		$config->setMetadataDriverImpl( $config->newDefaultAnnotationDriver( array(
-			__DIR__ . "/../domain/payment/"
+			__DIR__ . "/../domain/payment/",
 		) ) );
 
 		$config->setMetadataCacheImpl( new ArrayCache() );
 		$metadataFactory  = new ClassMetadataFactory( $config );
-		self::$marshaller = new XmlMarshaller( $metadataFactory );
+		self::$marshallers[MessageType::PAYMENT] = new XmlMarshaller( $metadataFactory );
+
+		$config = new Configuration();
+		$config->setMetadataDriverImpl( $config->newDefaultAnnotationDriver( array(
+			__DIR__ . "/../domain/threeDSecure/",
+		) ) );
+
+		$config->setMetadataCacheImpl( new ArrayCache() );
+		$metadataFactory  = new ClassMetadataFactory( $config );
+		self::$marshallers[MessageType::THREE_D_SECURE] = new XmlMarshaller( $metadataFactory );
 
 	}
 
