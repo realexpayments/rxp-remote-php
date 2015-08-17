@@ -190,7 +190,7 @@ class Card {
 	/**
 	 * Helper method to add a card number.
 	 *
-	 * @param integer $number
+	 * @param string $number
 	 *
 	 * @return Card
 	 */
