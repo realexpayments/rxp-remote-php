@@ -44,7 +44,6 @@ class HttpConfiguration {
 		$this->timeout  = $this::DEFAULT_TIMEOUT;
 	}
 
-
 	/**
 	 * Get the endpoint/destination for the request.
 	 *
@@ -97,5 +96,44 @@ class HttpConfiguration {
 	 */
 	public function setOnlyAllowHttps( $onlyAllowHttps ) {
 		$this->onlyAllowHttps = $onlyAllowHttps;
+	}
+
+	/**
+	 * Helper method for adding a endpoint
+	 *
+	 * @param string $endpoint
+	 *
+	 * @return HttpConfiguration
+	 */
+	public function addEndpoint( $endpoint ) {
+		$this->endpoint = $endpoint;
+
+		return $this;
+	}
+
+	/**
+	 * Helper method for adding a timeout
+	 *
+	 * @param int $timeout
+	 *
+	 * @return HttpConfiguration
+	 */
+	public function addTimeout( $timeout ) {
+		$this->timeout = $timeout;
+
+		return $this;
+	}
+
+	/**
+	 * Helper method for adding a onlyAllowHttps
+	 *
+	 * @param bool $onlyAllowHttps
+	 *
+	 * @return HttpConfiguration
+	 */
+	public function addOnlyAllowHttps( $onlyAllowHttps ) {
+		$this->onlyAllowHttps = $onlyAllowHttps;
+
+		return $this;
 	}
 }
