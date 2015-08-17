@@ -51,7 +51,6 @@ class HttpClient {
 		curl_setopt( $ch, CURLOPT_USERAGENT, "realex sdk version 0.1" );
 		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
 		curl_setopt( $ch, CURLOPT_POSTFIELDS, $xml );
-		/*curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false ); // this line makes it work under https*/
 		curl_setopt( $ch, CURLOPT_HTTPHEADER, array( 'Content-Type: text/plain' ) );
 		curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT_MS, $this->connectTimeout );
 		curl_setopt( $ch, CURLOPT_TIMEOUT_MS, $this->socketTimeout );
