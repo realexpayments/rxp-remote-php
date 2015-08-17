@@ -181,10 +181,10 @@ class Card {
 	/**
 	 * Setter for the CVN
 	 *
-	 * @param CVN $cnv
+	 * @param CVN $cvn
 	 */
-	public function setCvn( $cnv ) {
-		$this->cvn = $cnv;
+	public function setCvn( $cvn ) {
+		$this->cvn = $cvn;
 	}
 
 	/**

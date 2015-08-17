@@ -1,16 +1,12 @@
 {
-  "repositories" :[
-    {
-      "url" : "https://github.com/vicpada/oxm.git",
-      "type":"git"
-    }
-  ],
-
   "require": {
     "hafriedlander/phockito": "1.0.0",
     "apache/log4php": "2.3.0",
-    "doctrine/common": "2.5.0",
-    "doctrine/oxm": "dev-master"
+    "symfony/serializer": "2.7.3",
+    "symfony/property-access": "2.7.3",
+    "doctrine/annotations": "1.2.6",
+    "doctrine/cache": "1.4.1"
+
   },
   "autoload": {
     "psr-4": {
