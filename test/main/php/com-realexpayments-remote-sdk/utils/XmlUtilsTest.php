@@ -59,12 +59,12 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$tssInfo = new TssInfo();
 
 		$businessAddress = new Address();
-		$businessAddress ->addAddressType( SampleXmlValidationUtils::$ADDRESS_TYPE_BUSINESS )
+		$businessAddress ->addType( SampleXmlValidationUtils::$ADDRESS_TYPE_BUSINESS )
 		                                   ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_BUSINESS )
 		                                   ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_BUSINESS );
 
 		$shippingAddress = new Address();
-		$shippingAddress ->addAddressType( SampleXmlValidationUtils::$ADDRESS_TYPE_SHIPPING )
+		$shippingAddress ->addType( SampleXmlValidationUtils::$ADDRESS_TYPE_SHIPPING )
 		                                   ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_SHIPPING )
 		                                   ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_SHIPPING );
 		$tssInfo
@@ -77,7 +77,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 
 
 		$autoSettle = new AutoSettle();
-		$autoSettle = $autoSettle->addAutoSettleFlag( SampleXmlValidationUtils::$AUTO_SETTLE_FLAG );
+		$autoSettle = $autoSettle->addFlag( SampleXmlValidationUtils::$AUTO_SETTLE_FLAG );
 
 		$mpi = new Mpi();
 		$mpi->addCavv( SampleXmlValidationUtils::THREE_D_SECURE_CAVV )
@@ -140,12 +140,12 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$tssInfo = new TssInfo();
 
 		$businessAddress = new Address();
-		$businessAddress->addAddressType( SampleXmlValidationUtils::$ADDRESS_TYPE_BUSINESS )
+		$businessAddress->addType( SampleXmlValidationUtils::$ADDRESS_TYPE_BUSINESS )
 		                ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_BUSINESS )
 		                ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_BUSINESS );
 
 		$shippingAddress = new Address();
-		$shippingAddress->addAddressType( SampleXmlValidationUtils::$ADDRESS_TYPE_SHIPPING )
+		$shippingAddress->addType( SampleXmlValidationUtils::$ADDRESS_TYPE_SHIPPING )
 		                ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_SHIPPING )
 		                ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_SHIPPING );
 
@@ -158,7 +158,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 			->addAddress( $shippingAddress );
 
 		$autoSettle = new AutoSettle();
-		$autoSettle = $autoSettle->addAutoSettleFlag( SampleXmlValidationUtils::$AUTO_SETTLE_FLAG );
+		$autoSettle = $autoSettle->addFlag( SampleXmlValidationUtils::$AUTO_SETTLE_FLAG );
 
 		$mpi = new Mpi();
 		$mpi->addCavv( SampleXmlValidationUtils::THREE_D_SECURE_CAVV )
@@ -680,12 +680,12 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$tssInfo = new TssInfo();
 
 		$businessAddress = new Address();
-		$businessAddress->addAddressType( SampleXmlValidationUtils::$ADDRESS_TYPE_BUSINESS )
+		$businessAddress->addType( SampleXmlValidationUtils::$ADDRESS_TYPE_BUSINESS )
 		                ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_BUSINESS )
 		                ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_BUSINESS );
 
 		$shippingAddress = new Address();
-		$shippingAddress->addAddressType( SampleXmlValidationUtils::$ADDRESS_TYPE_SHIPPING )
+		$shippingAddress->addType( SampleXmlValidationUtils::$ADDRESS_TYPE_SHIPPING )
 		                ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_SHIPPING )
 		                ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_SHIPPING );
 
@@ -698,7 +698,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 			->addAddress( $shippingAddress );
 
 		$autoSettle = new AutoSettle();
-		$autoSettle = $autoSettle->addAutoSettleFlag( SampleXmlValidationUtils::$AUTO_SETTLE_FLAG );
+		$autoSettle = $autoSettle->addFlag( SampleXmlValidationUtils::$AUTO_SETTLE_FLAG );
 
 		$mpi = new Mpi();
 		$mpi->addCavv( SampleXmlValidationUtils::THREE_D_SECURE_CAVV )
@@ -766,12 +766,12 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$tssInfo = new TssInfo();
 
 		$businessAddress = new Address();
-		$businessAddress->addAddressType( SampleXmlValidationUtils::$ADDRESS_TYPE_BUSINESS )
+		$businessAddress->addType( SampleXmlValidationUtils::$ADDRESS_TYPE_BUSINESS )
 		                ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_BUSINESS )
 		                ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_BUSINESS );
 
 		$shippingAddress = new Address();
-		$shippingAddress->addAddressType( SampleXmlValidationUtils::$ADDRESS_TYPE_SHIPPING )
+		$shippingAddress->addType( SampleXmlValidationUtils::$ADDRESS_TYPE_SHIPPING )
 		                ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_SHIPPING )
 		                ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_SHIPPING );
 
@@ -784,7 +784,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 			->addAddress( $shippingAddress );
 
 		$autoSettle = new AutoSettle();
-		$autoSettle = $autoSettle->addAutoSettleFlag( SampleXmlValidationUtils::$AUTO_SETTLE_FLAG );
+		$autoSettle = $autoSettle->addFlag( SampleXmlValidationUtils::$AUTO_SETTLE_FLAG );
 
 		$mpi = new Mpi();
 		$mpi->addCavv( SampleXmlValidationUtils::THREE_D_SECURE_CAVV )
@@ -855,12 +855,12 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$tssInfo = new TssInfo();
 
 		$businessAddress = new Address();
-		$businessAddress->addAddressType( SampleXmlValidationUtils::$ADDRESS_TYPE_BUSINESS )
+		$businessAddress->addType( SampleXmlValidationUtils::$ADDRESS_TYPE_BUSINESS )
 		                ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_BUSINESS )
 		                ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_BUSINESS );
 
 		$shippingAddress = new Address();
-		$shippingAddress->addAddressType( SampleXmlValidationUtils::$ADDRESS_TYPE_SHIPPING )
+		$shippingAddress->addType( SampleXmlValidationUtils::$ADDRESS_TYPE_SHIPPING )
 		                ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_SHIPPING )
 		                ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_SHIPPING );
 
@@ -873,7 +873,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 			->addAddress( $shippingAddress );
 
 		$autoSettle = new AutoSettle();
-		$autoSettle = $autoSettle->addAutoSettleFlag( SampleXmlValidationUtils::$AUTO_SETTLE_FLAG );
+		$autoSettle = $autoSettle->addFlag( SampleXmlValidationUtils::$AUTO_SETTLE_FLAG );
 
 		$mpi = new Mpi();
 		$mpi->addCavv( SampleXmlValidationUtils::THREE_D_SECURE_CAVV )
@@ -948,12 +948,12 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$tssInfo = new TssInfo();
 
 		$businessAddress = new Address();
-		$businessAddress ->addAddressType( SampleXmlValidationUtils::$ADDRESS_TYPE_BUSINESS )
+		$businessAddress ->addType( SampleXmlValidationUtils::$ADDRESS_TYPE_BUSINESS )
 		                 ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_BUSINESS )
 		                 ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_BUSINESS );
 
 		$shippingAddress = new Address();
-		$shippingAddress ->addAddressType( SampleXmlValidationUtils::$ADDRESS_TYPE_SHIPPING )
+		$shippingAddress ->addType( SampleXmlValidationUtils::$ADDRESS_TYPE_SHIPPING )
 		                 ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_SHIPPING )
 		                 ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_SHIPPING );
 		$tssInfo
@@ -966,7 +966,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 
 
 		$autoSettle = new AutoSettle();
-		$autoSettle = $autoSettle->addAutoSettleFlag( SampleXmlValidationUtils::$AUTO_SETTLE_FLAG );
+		$autoSettle = $autoSettle->addFlag( SampleXmlValidationUtils::$AUTO_SETTLE_FLAG );
 
 		$mpi = new Mpi();
 		$mpi->addCavv( SampleXmlValidationUtils::THREE_D_SECURE_CAVV )

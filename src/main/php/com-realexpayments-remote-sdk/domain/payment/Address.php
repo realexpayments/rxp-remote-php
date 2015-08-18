@@ -2,8 +2,6 @@
 
 
 namespace com\realexpayments\remote\sdk\domain\payment;
-use Doctrine\OXM\Mapping as DOM;
-
 
 /**
  * Class Address
@@ -20,8 +18,6 @@ use Doctrine\OXM\Mapping as DOM;
  *  *
  * @package com\realexpayments\remote\sdk\domain\payment
  * @author vicpada
- *
- * @Dom\XmlEntity
  */
 class Address {
 
@@ -29,7 +25,6 @@ class Address {
 	/**
 	 * @var string The address type. Can be shipping or billing.
 	 *
-	 * @Dom\XmlAttribute(type="string",name="type")
 	 */
 	private $type;
 
@@ -37,14 +32,12 @@ class Address {
 	 * @var string The ZIP|Postal code of the address. This can be checked (in conjunction with the country)
 	 * against a table of high-risk area codes. This field is used address verification with certain acquirers.
 	 *
-	 * @Dom\XmlText(type="string",name="code")
 	 */
 	private $code;
 
 	/**
 	 * @var string The country of the address. This can be checked against a table of high-risk countries.
 	 *
-	 * @Dom\XmlText(type="string",name="country")
 	 */
 	private $country;
 
@@ -93,6 +86,7 @@ class Address {
 
 	/**
 	 * Setter for the country
+	 *
 	 * @param string $country
 	 */
 	public function setCountry( $country ) {
@@ -103,7 +97,7 @@ class Address {
 	/**
 	 * Helper method for setting the code
 	 *
-	 * @param $code
+	 * @param string $code
 	 *
 	 * @return $this
 	 */
@@ -117,7 +111,7 @@ class Address {
 	/**
 	 * Helper method for setting the country
 	 *
-	 * @param $country
+	 * @param string $country
 	 *
 	 * @return $this
 	 */
@@ -131,27 +125,17 @@ class Address {
 	/**
 	 * Helper method for setting the type
 	 *
-	 * @param $type
+	 * @param AddressType|string $type
 	 *
 	 * @return $this
 	 */
 	public function addType( $type ) {
-		$this->type = $type;
+		if ( $type instanceof AddressType ) {
+			$this->type = $type->getAddressType();
+		} else {
+			$this->type = $type;
+		}
 
 		return $this;
 	}
-
-	/**
-	 * Helper method for setting the type
-	 *
-	 * @param $addressType
-	 *
-	 * @return $this
-	 */
-	public function addAddressType( AddressType $addressType ) {
-		$this->type = $addressType->getAddressType();
-
-		return $this;
-	}
-
 }

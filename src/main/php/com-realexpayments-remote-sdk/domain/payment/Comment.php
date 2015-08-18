@@ -2,7 +2,7 @@
 
 
 namespace com\realexpayments\remote\sdk\domain\payment;
-use Doctrine\OXM\Mapping as DOM;
+
 
 
 /**
@@ -21,21 +21,18 @@ use Doctrine\OXM\Mapping as DOM;
  *
  * @author vicpada
  *
- * @Dom\XmlEntity
  */
 class Comment {
 
 	/**
 	 * @var string A free text comment
 	 *
-	 * @Dom\XmlValue(type="string")
 	 */
 	private $comment;
 
 	/**
 	 * @var int The comment ID (1 or 2)
 	 *
-	 * @Dom\XmlAttribute(type="integer",name="id")
 	 */
 	private $id;
 
