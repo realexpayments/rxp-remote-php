@@ -16,9 +16,9 @@ use Doctrine\OXM\Mapping as DOM;
  * </p>
  * <p><code>
  * $recurring = (new Recurring())
- * ->addFlag(RecurringFlag.ONE)
- * ->addSequence(RecurringSequence.FIRST)
- * ->addType(RecurringType.FIXED);
+ * ->addFlag(RecurringFlag::ONE)
+ * ->addSequence(RecurringSequence::FIRST)
+ * ->addType(RecurringType::FIXED);
  * </code></p>
  *
  * @author vicpada

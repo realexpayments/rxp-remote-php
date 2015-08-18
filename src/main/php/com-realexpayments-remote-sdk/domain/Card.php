@@ -222,12 +222,19 @@ class Card {
 
 	/**
 	 * Helper method to add CVN presence indicator. If the {@link Cvn} is null then one is created.
+	 * <p>
+	 * <code><pre>
+	 * $card = new Card();
+	 * $card->addCvnPresenceIndicator(PresenceIndicator::CVN_PRESENT);
+	 * </code></pre>
+	 * </p>
 	 *
-	 * @param string $presenceIndicator
+	 * @param PresenceIndicator|string $presenceIndicator
 	 *
 	 * @return $this
 	 */
 	public function  addCvnPresenceIndicator( $presenceIndicator ) {
+
 		if ( is_null( $this->cvn ) ) {
 			$this->cvn = new CVN();
 			$this->cvn->addPresenceIndicator( $presenceIndicator );
@@ -235,23 +242,6 @@ class Card {
 			$this->cvn->addPresenceIndicator( $presenceIndicator );
 		}
 
-		return $this;
-	}
-
-	/**
-	 * Helper method to add CVN presence indicator. If the {@link Cvn} is null then one is created.
-	 *
-	 * @param PresenceIndicator $presenceIndicator
-	 *
-	 * @return $this
-	 */
-	public function  addCvnPresenceIndicatorType( PresenceIndicator $presenceIndicator ) {
-		if ( null == $this->cvn ) {
-			$this->cvn = new CVN();
-			$this->cvn->addPresenceIndicatorType( $presenceIndicator );
-		} else {
-			$this->cvn->addPresenceIndicatorType( $presenceIndicator );
-		}
 
 		return $this;
 	}
