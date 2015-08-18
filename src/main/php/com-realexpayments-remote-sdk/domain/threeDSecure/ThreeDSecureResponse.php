@@ -149,6 +149,10 @@ class ThreeDSecureResponse implements iResponse {
 	public function __construct() {
 	}
 
+	public static function GetClassName() {
+		return __CLASS__;
+	}
+
 	/**
 	 * Getter for timeStamp
 	 *

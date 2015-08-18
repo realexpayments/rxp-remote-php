@@ -243,7 +243,7 @@ class PaymentRequestNormalizer extends AbstractNormalizer {
 	 * @return bool
 	 */
 	public function supportsDenormalization( $data, $type, $format = null ) {
-		if ( $format == "xml" && $type == 'com\realexpayments\remote\sdk\domain\payment\PaymentRequest' ) {
+		if ( $format == "xml" && $type == PaymentRequest::GetClassName() ) {
 			return true;
 		}
 

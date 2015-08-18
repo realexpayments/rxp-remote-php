@@ -8,8 +8,13 @@ use com\realexpayments\remote\sdk\domain\payment\normaliser\AddressNormaliser;
 use com\realexpayments\remote\sdk\domain\payment\normaliser\CommentsNormalizer;
 use com\realexpayments\remote\sdk\domain\payment\normaliser\PaymentRequestNormalizer;
 use com\realexpayments\remote\sdk\domain\payment\normaliser\PaymentResponseNormalizer;
+use com\realexpayments\remote\sdk\domain\payment\normaliser\TssCheckNormaliser;
+use com\realexpayments\remote\sdk\domain\payment\PaymentRequest;
+use com\realexpayments\remote\sdk\domain\payment\PaymentResponse;
 use com\realexpayments\remote\sdk\domain\threeDSecure\normaliser\ThreeDSecureRequestNormalizer;
 use com\realexpayments\remote\sdk\domain\threeDSecure\normaliser\ThreeDSecureResponseNormalizer;
+use com\realexpayments\remote\sdk\domain\threeDSecure\ThreeDSecureRequest;
+use com\realexpayments\remote\sdk\domain\threeDSecure\ThreeDSecureResponse;
 use com\realexpayments\remote\sdk\RealexException;
 use com\realexpayments\remote\sdk\RXPLogger;
 use Exception;
@@ -59,7 +64,11 @@ class XmlUtils {
 
 		try {
 
-			$xml = self::$marshallers[ $messageType->getType() ]->serialize( $object, 'xml' );
+			$rootName = self::getRootName( $object );
+			$xml      = self::$marshallers[ $messageType->getType() ]->serialize( $object, 'xml', array(
+				'xml_root_node_name',
+				$rootName
+			) );
 
 		} catch ( Exception $e ) {
 
@@ -88,7 +97,7 @@ class XmlUtils {
 
 			// TODO: Obtain type
 			$object = self::$marshallers[ $messageType->getType() ]
-				->deserialize( $xml, 'com\realexpayments\remote\sdk\domain\payment\PaymentRequest', 'xml' );
+				->deserialize( $xml, self::getClassName( $xml, $messageType ), 'xml' );
 
 		} catch ( Exception $e ) {
 			self::$logger->error( "Error unmarshalling from XML", $e );
@@ -120,6 +129,7 @@ class XmlUtils {
 			new PaymentResponseNormalizer(),
 			new AddressNormaliser(),
 			new CommentsNormalizer(),
+			new TssCheckNormaliser(),
 			new ObjectNormalizer()
 		);
 		self::$marshallers[ MessageType::PAYMENT ] = new Serializer( $normalizers, $encoders );
@@ -132,6 +142,45 @@ class XmlUtils {
 		);
 		self::$marshallers[ MessageType::THREE_D_SECURE ] = new Serializer( $normalizers, $encoders );
 
+	}
+
+	private static function getRootName( $object ) {
+		if ( $object instanceof PaymentRequest ||
+		     $object instanceof ThreeDSecureRequest
+		) {
+			return "request";
+		}
+
+
+		return "response";
+	}
+
+	private static function getClassName( $xml, MessageType $messageType ) {
+
+		switch ( $messageType ) {
+			case MessageType::PAYMENT: {
+				if ( self::IsRequest( $xml ) ) {
+					return PaymentRequest::GetClassName();
+				}
+
+				return PaymentResponse::GetClassName();
+			}
+
+			case MessageType::THREE_D_SECURE: {
+				if ( self::IsRequest( $xml ) ) {
+					return ThreeDSecureRequest::GetClassName();
+
+				}
+
+				return ThreeDSecureResponse::GetClassName();
+			}
+
+		}
+	}
+
+	private static function IsRequest( $xml ) {
+
+		return strpos( $xml, "<request" ) !== false;
 	}
 
 

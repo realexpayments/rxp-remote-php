@@ -4,7 +4,11 @@
 namespace com\realexpayments\remote\sdk\domain\payment\normaliser;
 
 
+use com\realexpayments\remote\sdk\domain\payment\CardIssuer;
 use com\realexpayments\remote\sdk\domain\payment\PaymentResponse;
+use com\realexpayments\remote\sdk\domain\payment\TssResult;
+use com\realexpayments\remote\sdk\domain\payment\TssResultCheck;
+use com\realexpayments\remote\sdk\SafeArrayAccess;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 class PaymentResponseNormalizer extends AbstractNormalizer {
@@ -20,7 +24,78 @@ class PaymentResponseNormalizer extends AbstractNormalizer {
 	 * @return object
 	 */
 	public function denormalize( $data, $class, $format = null, array $context = array() ) {
-		return new PaymentResponse();
+		$response = new PaymentResponse();
+		$array    = new SafeArrayAccess( $data );
+
+		$response->setTimeStamp( $array['@timestamp'] );
+		$response->setMerchantId( $array['merchantid'] );
+		$response->setAccount( $array['account'] );
+		$response->setOrderId( $array['orderid'] );
+		$response->setResult( $array['result'] );
+		$response->setAuthCode( $array['authcode'] );
+		$response->setMessage( $array['message'] );
+		$response->setPaymentsReference( $array['pasref'] );
+		$response->setCvnResult( $array['cvnresult'] );
+		$response->setTimeTaken( $array['timetaken'] );
+		$response->setAuthTimeTaken( $array['authtimetaken'] );
+		$response->setAcquirerResponse( $array['acquirerResponse'] );
+		$response->setBatchId( $array['batchid'] );
+		$response->setHash( $array['sha1hash'] );
+		$response->setAvsPostcodeResponse( $array['avspostcoderesponse'] );
+		$response->setAvsAddressResponse( $array['avsaddressresponse'] );
+		$response->setTssResult( $this->denormaliseTss( $array ) );
+		$response->setCardIssuer( $this->denormaliseCardIssuer( $array ) );
+
+
+		return $response;
+	}
+
+	private function denormaliseCardIssuer( \ArrayAccess $array ) {
+		$cardData = $array['cardissuer'];
+
+		if ( is_null( $cardData ) ) {
+			return null;
+		}
+
+		$data = new SafeArrayAccess( $cardData );
+
+		$cardIssuer = new CardIssuer();
+		$cardIssuer->setBank( $data['bank'] );
+		$cardIssuer->setCountry( $data['country'] );
+		$cardIssuer->setCountryCode( $data['countryCode'] );
+		$cardIssuer->setRegion( $data['region'] );
+
+		return $cardIssuer;
+	}
+
+	private function denormaliseTss( \ArrayAccess $array ) {
+
+		$tssData = $array['tss'];
+
+		if ( is_null( $tssData ) ) {
+			return null;
+		}
+
+		$data = new SafeArrayAccess( $tssData );
+
+		$tss = new TssResult();
+		$tss->setResult( $data['result'] );
+
+		$checks    = $data['check'];
+		$tssChecks = array();
+		foreach ( $checks as $check ) {
+			$check = new SafeArrayAccess( $check );
+
+			$tssCheck = new TssResultCheck();
+			$tssCheck->setId( $check['@id'] );
+			$tssCheck->setValue( $check['#'] );
+
+			$tssChecks[] = $tssCheck;
+		}
+
+		$tss->setChecks( $tssChecks );
+
+		return $tss;
 	}
 
 	/**
@@ -33,7 +108,7 @@ class PaymentResponseNormalizer extends AbstractNormalizer {
 	 * @return bool
 	 */
 	public function supportsDenormalization( $data, $type, $format = null ) {
-		if ( $format == "xml" && $type == 'com\realexpayments\remote\sdk\domain\payment\PaymentResponse' ) {
+		if ( $format == "xml" && $type == PaymentResponse::GetClassName() ) {
 			return true;
 		}
 
@@ -50,7 +125,29 @@ class PaymentResponseNormalizer extends AbstractNormalizer {
 	 * @return array|string|bool|int|float|null
 	 */
 	public function normalize( $object, $format = null, array $context = array() ) {
-		return array();
+		/** @var PaymentResponse $object */
+
+		return array(
+			'@timestamp'          => $object->getTimestamp(),
+			'merchantid'          => $object->getMerchantId(),
+			'account'             => $object->getAccount(),
+			'orderid'             => $object->getOrderId(),
+			'result'              => $object->getResult(),
+			'authcode'            => $object->getAuthCode(),
+			'message'             => $object->getMessage(),
+			'pasref'              => $object->getPaymentsReference(),
+			'cvnresult'           => $object->getCvnResult(),
+			'timetaken'           => $object->getTimeTaken(),
+			'authtimetaken'       => $object->getAuthTimeTaken(),
+			'acquirerResponse'    => $object->getAcquirerResponse(),
+			'batchid'             => $object->getBatchId(),
+			'cardissuer'          => $this->normaliseCardIssuer( $object ),
+			'sha1hash'            => $object->getHash(),
+			'tss'                 => $this->normaliseTss( $object ),
+			'avspostcoderesponse' => $object->getAvsPostcodeResponse(),
+			'avsaddressresponse'  => $object->getAvsAddressResponse()
+
+		);
 	}
 
 	/**
@@ -68,4 +165,31 @@ class PaymentResponseNormalizer extends AbstractNormalizer {
 
 		return false;
 	}
+
+	private function normaliseCardIssuer( PaymentResponse $response ) {
+		$cardIssuer = $response->getCardIssuer();
+		if ( is_null( $cardIssuer ) ) {
+			return array();
+		}
+
+		return array(
+			'bank'        => $cardIssuer->getBank(),
+			'country'     => $cardIssuer->getCountry(),
+			'countryCode' => $cardIssuer->getCountryCode(),
+			'region'      => $cardIssuer->getRegion()
+		);
+	}
+
+	private function normaliseTss( PaymentResponse $response ) {
+		$tss = $response->getTssResult();
+		if ( is_null( $tss ) ) {
+			return array();
+		}
+
+		return array(
+			'result' => $tss->getResult(),
+			'check'  => $tss->getChecks()
+		);
+	}
+
 }

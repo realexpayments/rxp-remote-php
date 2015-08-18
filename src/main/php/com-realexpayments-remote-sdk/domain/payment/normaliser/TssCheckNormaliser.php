@@ -3,10 +3,11 @@
 
 namespace com\realexpayments\remote\sdk\domain\payment\normaliser;
 
-use com\realexpayments\remote\sdk\domain\payment\Comment;
+
+use com\realexpayments\remote\sdk\domain\payment\TssResultCheck;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class CommentsNormalizer implements  NormalizerInterface {
+class TssCheckNormaliser implements NormalizerInterface {
 
 	/**
 	 * Normalizes an object into a set of arrays/scalars.
@@ -18,11 +19,11 @@ class CommentsNormalizer implements  NormalizerInterface {
 	 * @return array|string|bool|int|float|null
 	 */
 	public function normalize( $object, $format = null, array $context = array() ) {
-		/** @var Comment $object */
 
+		/** @var TssResultCheck $object */
 		return array(
-			'@id'   => $object->getId(),
-			'#'    => $object->getComment()
+			'@id' => $object->getId(),
+			'#'   => $object->getValue()
 		);
 	}
 
@@ -35,7 +36,7 @@ class CommentsNormalizer implements  NormalizerInterface {
 	 * @return bool
 	 */
 	public function supportsNormalization( $data, $format = null ) {
-		if ( $format == "xml" && $data instanceof Comment ) {
+		if ( $format == "xml" && $data instanceof TssResultCheck ) {
 			return true;
 		}
 

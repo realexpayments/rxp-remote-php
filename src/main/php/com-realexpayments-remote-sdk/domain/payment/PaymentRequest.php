@@ -230,6 +230,10 @@ class PaymentRequest implements iRequest {
 
 	}
 
+	public static function GetClassName() {
+		return __CLASS__;
+	}
+
 
 	/**
 	 * Getter for TSS info
