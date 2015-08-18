@@ -163,17 +163,4 @@ class Recurring {
 
 		return $this;
 	}
-
-	/**
-	 * Helper method for adding a flag
-	 *
-	 * @param RecurringFlag $flag
-	 *
-	 * @return Recurring
-	 */
-	public function addFlagType( RecurringFlag $flag ) {
-		$this->flag = $flag->getRecurringFlag();
-
-		return $this;
-	}
 }

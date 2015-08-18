@@ -27,9 +27,9 @@ class EnumBase {
 			$value = $this::__default;
 		}
 
-		if ( ! $this->isValidValue( $value ) ) {
+		/*if ( ! $this->isValidValue( $value ) ) {
 			throw new \InvalidArgumentException();
-		}
+		}*/
 		$this->value = $value;
 	}
 

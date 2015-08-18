@@ -18,6 +18,7 @@ use com\realexpayments\remote\sdk\domain\payment\PaymentRequest;
 use com\realexpayments\remote\sdk\domain\payment\PaymentResponse;
 use com\realexpayments\remote\sdk\domain\payment\PaymentType;
 use com\realexpayments\remote\sdk\domain\payment\Recurring;
+use com\realexpayments\remote\sdk\domain\payment\RecurringFlag;
 use com\realexpayments\remote\sdk\domain\payment\TssInfo;
 use com\realexpayments\remote\sdk\domain\payment\TssResult;
 use com\realexpayments\remote\sdk\domain\payment\TssResultCheck;
@@ -742,5 +743,94 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 
 
 		$this->assertEquals( $expectedCVN, $fromXmlRequest->getCard()->getCvn()->getPresenceIndicator() );
+	}
+
+	/**
+	 * Tests and invaluid recurring type value
+	 */
+	public function  testInvalidRecurringType() {
+
+
+		$card = new Card();
+		$card->addExpiryDate( SampleXmlValidationUtils::CARD_EXPIRY_DATE )
+		     ->addNumber( SampleXmlValidationUtils::CARD_NUMBER )
+		     ->addCardType( new CardType( CardType::VISA ) )
+		     ->addCardHolderName( SampleXmlValidationUtils::CARD_HOLDER_NAME )
+		     ->addCvn( SampleXmlValidationUtils::CARD_CVN_NUMBER )
+		     ->addCvnPresenceIndicator( SampleXmlValidationUtils::$CARD_CVN_PRESENCE )
+		     ->addIssueNumber( SampleXmlValidationUtils::CARD_ISSUE_NUMBER );
+
+
+		$tssInfo = new TssInfo();
+
+		$businessAddress = new Address();
+		$businessAddress->addAddressType( SampleXmlValidationUtils::$ADDRESS_TYPE_BUSINESS )
+		                ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_BUSINESS )
+		                ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_BUSINESS );
+
+		$shippingAddress = new Address();
+		$shippingAddress->addAddressType( SampleXmlValidationUtils::$ADDRESS_TYPE_SHIPPING )
+		                ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_SHIPPING )
+		                ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_SHIPPING );
+
+		$tssInfo
+			->addCustomerNumber( SampleXmlValidationUtils::CUSTOMER_NUMBER )
+			->addProductId( SampleXmlValidationUtils::PRODUCT_ID )
+			->addVariableReference( SampleXmlValidationUtils::VARIABLE_REFERENCE )
+			->addCustomerIpAddress( SampleXmlValidationUtils::CUSTOMER_IP )
+			->addAddress( $businessAddress )
+			->addAddress( $shippingAddress );
+
+		$autoSettle = new AutoSettle();
+		$autoSettle = $autoSettle->addAutoSettleFlag( SampleXmlValidationUtils::$AUTO_SETTLE_FLAG );
+
+		$mpi = new Mpi();
+		$mpi->addCavv( SampleXmlValidationUtils::THREE_D_SECURE_CAVV )
+		    ->addXid( SampleXmlValidationUtils::THREE_D_SECURE_XID )
+		    ->addEci( SampleXmlValidationUtils::THREE_D_SECURE_ECI );
+
+		$expectedFlag = "3";
+		$recurringFlag = new RecurringFlag($expectedFlag);
+
+		$recurring = new Recurring();
+		$recurring->addFlag( $recurringFlag )
+		          ->addSequence( SampleXmlValidationUtils::$RECURRING_SEQUENCE->getSequence() )
+		          ->addType( SampleXmlValidationUtils::$RECURRING_TYPE->getType() );
+
+		$request = new PaymentRequest();
+		$request
+			->addAccount( SampleXmlValidationUtils::ACCOUNT )
+			->addMerchantId( SampleXmlValidationUtils::MERCHANT_ID )
+			->addType( PaymentType::AUTH )
+			->addAmount( SampleXmlValidationUtils::AMOUNT )
+			->addCurrency( SampleXmlValidationUtils::CURRENCY )
+			->addCard( $card )
+			->addAutoSettle( $autoSettle )
+			->addTimestamp( SampleXmlValidationUtils::TIMESTAMP )
+			->addChannel( SampleXmlValidationUtils::CHANNEL )
+			->addOrderId( SampleXmlValidationUtils::ORDER_ID )
+			->addHash( SampleXmlValidationUtils::REQUEST_HASH )
+			->addComment( SampleXmlValidationUtils::COMMENT1 )
+			->addComment( SampleXmlValidationUtils::COMMENT2 )
+			->addPaymentsReference( SampleXmlValidationUtils::PASREF )
+			->addAuthCode( SampleXmlValidationUtils::AUTH_CODE )
+			->addRefundHash( SampleXmlValidationUtils::REFUND_HASH )
+			->addFraudFilter( SampleXmlValidationUtils::FRAUD_FILTER )
+			->addRecurring( $recurring )
+			->addTssInfo( $tssInfo )
+			->addMpi( $mpi );
+
+
+		// convert to XML
+		$xml = $request->toXml();
+
+		// Convert from XML back to PaymentRequest
+
+		/* @var PaymentRequest $fromXmlRequest */
+		$fromXmlRequest = new PaymentRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+
+
+		$this->assertEquals( $expectedFlag, $fromXmlRequest->getRecurring()->getFlag());
 	}
 }
