@@ -38,7 +38,7 @@ class PaymentResponseNormalizer extends AbstractNormalizer {
 		$response->setCvnResult( $array['cvnresult'] );
 		$response->setTimeTaken( $array['timetaken'] );
 		$response->setAuthTimeTaken( $array['authtimetaken'] );
-		$response->setAcquirerResponse( $array['acquirerResponse'] );
+		$response->setAcquirerResponse( $array['acquirerresponse'] );
 		$response->setBatchId( $array['batchid'] );
 		$response->setHash( $array['sha1hash'] );
 		$response->setAvsPostcodeResponse( $array['avspostcoderesponse'] );
@@ -62,7 +62,7 @@ class PaymentResponseNormalizer extends AbstractNormalizer {
 		$cardIssuer = new CardIssuer();
 		$cardIssuer->setBank( $data['bank'] );
 		$cardIssuer->setCountry( $data['country'] );
-		$cardIssuer->setCountryCode( $data['countryCode'] );
+		$cardIssuer->setCountryCode( $data['countrycode'] );
 		$cardIssuer->setRegion( $data['region'] );
 
 		return $cardIssuer;
@@ -139,13 +139,13 @@ class PaymentResponseNormalizer extends AbstractNormalizer {
 			'cvnresult'           => $object->getCvnResult(),
 			'timetaken'           => $object->getTimeTaken(),
 			'authtimetaken'       => $object->getAuthTimeTaken(),
-			'acquirerResponse'    => $object->getAcquirerResponse(),
+			'acquirerresponse'    => $object->getAcquirerResponse(),
 			'batchid'             => $object->getBatchId(),
 			'cardissuer'          => $this->normaliseCardIssuer( $object ),
 			'sha1hash'            => $object->getHash(),
 			'tss'                 => $this->normaliseTss( $object ),
 			'avspostcoderesponse' => $object->getAvsPostcodeResponse(),
-			'avsaddressresponse'  => $object->getAvsAddressResponse()
+			'avsaddressresponse'  => $object->getAvsAddressResponse(),
 
 		);
 	}
@@ -175,7 +175,7 @@ class PaymentResponseNormalizer extends AbstractNormalizer {
 		return array(
 			'bank'        => $cardIssuer->getBank(),
 			'country'     => $cardIssuer->getCountry(),
-			'countryCode' => $cardIssuer->getCountryCode(),
+			'countrycode' => $cardIssuer->getCountryCode(),
 			'region'      => $cardIssuer->getRegion()
 		);
 	}

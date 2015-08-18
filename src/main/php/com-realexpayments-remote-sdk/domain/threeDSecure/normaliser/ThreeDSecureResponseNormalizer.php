@@ -4,9 +4,12 @@
 namespace com\realexpayments\remote\sdk\domain\threeDSecure\normaliser;
 
 
+use com\realexpayments\remote\sdk\domain\threeDSecure\ThreeDSecure;
+use com\realexpayments\remote\sdk\domain\threeDSecure\ThreeDSecureResponse;
+use com\realexpayments\remote\sdk\SafeArrayAccess;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
-class ThreeDSecureResponseNormalizer extends AbstractNormalizer{
+class ThreeDSecureResponseNormalizer extends AbstractNormalizer {
 
 	/**
 	 * Denormalizes data back into an object of the given class.
@@ -19,7 +22,48 @@ class ThreeDSecureResponseNormalizer extends AbstractNormalizer{
 	 * @return object
 	 */
 	public function denormalize( $data, $class, $format = null, array $context = array() ) {
-		// TODO: Implement denormalize() method.
+		$response = new ThreeDSecureResponse();
+		$array    = new SafeArrayAccess( $data );
+
+		$response->setTimeStamp( $array['@timestamp'] );
+		$response->setMerchantId( $array['merchantid'] );
+		$response->setAccount( $array['account'] );
+		$response->setOrderId( $array['orderid'] );
+		$response->setResult( $array['result'] );
+		$response->setAuthCode( $array['authcode'] );
+		$response->setMessage( $array['message'] );
+		$response->setPaymentsReference( $array['pasref'] );
+		$response->setTimeTaken( $array['timetaken'] );
+		$response->setAuthTimeTaken( $array['authtimetaken'] );
+		$response->setPareq( $array['pareq'] );
+		$response->setUrl( $array['url'] );
+		$response->setEnrolled( $array['enrolled'] );
+		$response->setXid( $array['xid'] );
+		$response->setThreeDSecure( $this->denormaliseThreeDSecure( $array ) );
+		$response->setHash( $array['sha1hash'] );
+
+
+		return $response;
+	}
+
+	private function denormaliseThreeDSecure( $array ) {
+		$threedsecureData = $array['threedsecure'];
+
+		if ( is_null( $threedsecureData ) ) {
+			return null;
+		}
+
+		$data = new SafeArrayAccess( $threedsecureData );
+
+		$threeDSecure = new ThreeDSecure();
+
+		$threeDSecure->addStatus( $data['status'] )
+		             ->addEci( $data['eci'] )
+		             ->addXid( $data['xid'] )
+		             ->addCavv( $data['cavv'] )
+		             ->addAlgorithm( $data['algorithm'] );
+
+		return $threeDSecure;
 	}
 
 	/**
@@ -32,7 +76,11 @@ class ThreeDSecureResponseNormalizer extends AbstractNormalizer{
 	 * @return bool
 	 */
 	public function supportsDenormalization( $data, $type, $format = null ) {
-		// TODO: Implement supportsDenormalization() method.
+		if ( $format == "xml" && $type == ThreeDSecureResponse::GetClassName() ) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -45,7 +93,41 @@ class ThreeDSecureResponseNormalizer extends AbstractNormalizer{
 	 * @return array|string|bool|int|float|null
 	 */
 	public function normalize( $object, $format = null, array $context = array() ) {
-		// TODO: Implement normalize() method.
+		/** @var ThreeDSecureResponse $object */
+
+		return array(
+			'@timestamp'    => $object->getTimestamp(),
+			'merchantid'    => $object->getMerchantId(),
+			'account'       => $object->getAccount(),
+			'orderid'       => $object->getOrderId(),
+			'result'        => $object->getResult(),
+			'authcode'      => $object->getAuthCode(),
+			'message'       => $object->getMessage(),
+			'pasref'        => $object->getPaymentsReference(),
+			'timetaken'     => $object->getTimeTaken(),
+			'authtimetaken' => $object->getAuthTimeTaken(),
+			'pareq'         => $object->getPareq(),
+			'url'           => $object->getUrl(),
+			'enrolled'      => $object->getEnrolled(),
+			'xid'           => $object->getXid(),
+			'threedsecure'  => $this->normaliseThreedsecure( $object ),
+			'sha1hash'      => $object->getHash()
+		);
+	}
+
+	private function normaliseThreedsecure( ThreeDSecureResponse $response ) {
+		$threeDSecure = $response->getThreeDSecure();
+		if ( is_null( $threeDSecure ) ) {
+			return array();
+		}
+
+		return array(
+			'status'    => $threeDSecure->getStatus(),
+			'eci'       => $threeDSecure->getEci(),
+			'xid'       => $threeDSecure->getXid(),
+			'cavv'      => $threeDSecure->getCavv(),
+			'algorithm' => $threeDSecure->getAlgorithm()
+		);
 	}
 
 	/**
@@ -57,6 +139,12 @@ class ThreeDSecureResponseNormalizer extends AbstractNormalizer{
 	 * @return bool
 	 */
 	public function supportsNormalization( $data, $format = null ) {
-		// TODO: Implement supportsNormalization() method.
+		if ( $format == "xml" && $data instanceof ThreeDSecureResponse ) {
+			return true;
+		}
+
+		return false;
 	}
+
+
 }

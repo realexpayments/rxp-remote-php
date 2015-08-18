@@ -4,6 +4,13 @@
 namespace com\realexpayments\remote\sdk\domain\threeDSecure\normaliser;
 
 
+use com\realexpayments\remote\sdk\domain\Amount;
+use com\realexpayments\remote\sdk\domain\Card;
+use com\realexpayments\remote\sdk\domain\CVN;
+use com\realexpayments\remote\sdk\domain\payment\Comment;
+use com\realexpayments\remote\sdk\domain\payment\CommentCollection;
+use com\realexpayments\remote\sdk\domain\threeDSecure\ThreeDSecureRequest;
+use com\realexpayments\remote\sdk\SafeArrayAccess;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 class ThreeDSecureRequestNormalizer extends AbstractNormalizer {
@@ -19,8 +26,102 @@ class ThreeDSecureRequestNormalizer extends AbstractNormalizer {
 	 * @return object
 	 */
 	public function denormalize( $data, $class, $format = null, array $context = array() ) {
-		// TODO: Implement denormalize() method.
+
+		$request = new ThreeDSecureRequest();
+		$array   = new SafeArrayAccess( $data );
+
+		$request->addTimestamp( $array['@timestamp'] )
+		        ->addType( $array['@type'] )
+		        ->addMerchantId( $array['merchantid'] )
+		        ->addAccount( $array['account'] )
+		        ->addOrderId( $array['orderid'] )
+		        ->addCard( $this->denormaliseCard( $array ) )
+		        ->addHash( $array['sha1hash'] )
+		        ->addPares( $array['pares'] );
+
+
+		$request->setAmount( $this->denormaliseAmount( $array ) );
+		$request->setComments( $this->denormaliseComments( $array ) );
+
+		return $request;
 	}
+
+	private function denormaliseAmount( \ArrayAccess $array ) {
+		$amountData = $array['amount'];
+
+		if ( is_null( $amountData ) ) {
+			return null;
+		}
+
+		$data = new SafeArrayAccess( $amountData );
+
+		$amount = new Amount();
+		$amount->addAmount( $data['#'] );
+		$amount->addCurrency( $data['@currency'] );
+
+		return $amount;
+	}
+
+	private function denormaliseComments( \ArrayAccess $array ) {
+		$comments = $array['comments'];
+
+		if ( ! isset( $comments ) ) {
+			return null;
+		}
+
+		$comments = $comments['comments'];
+
+		$commentCollection = new CommentCollection();
+		foreach ( $comments as $comment ) {
+			$commentObject = new Comment();
+			$commentObject->addId( $comment["@id"] )
+			              ->addComment( $comment["#"] );
+
+			$commentCollection->add( $commentObject );
+		}
+
+		return $commentCollection;
+	}
+
+	private function denormaliseCard( \ArrayAccess $array ) {
+
+		$cardData = $array['card'];
+
+		if ( is_null( $cardData ) ) {
+			return null;
+		}
+
+		$data = new SafeArrayAccess( $cardData );
+
+		$card = new Card();
+		$card->addNumber( $data['number'] )
+		     ->addExpiryDate( $data['expdate'] )
+		     ->addCardHolderName( $data['chname'] )
+		     ->addType( $data['type'] )
+		     ->addIssueNumber( $data['issueno'] );
+
+		$cvn = $this->denormaliseCVN( $data );
+		$card->setCvn( $cvn );
+
+		return $card;
+	}
+
+	private function denormaliseCVN( \ArrayAccess $array ) {
+		$cvnData = $array['cvn'];
+
+		if ( is_null( $cvnData ) ) {
+			return null;
+		}
+
+		$data = new SafeArrayAccess( $cvnData );
+
+		$cvn = new CVN();
+		$cvn->addNumber( $data['number'] )
+		    ->addPresenceIndicator( $data['presind'] );
+
+		return $cvn;
+	}
+
 
 	/**
 	 * Checks whether the given class is supported for denormalization by this normalizer.
@@ -32,7 +133,11 @@ class ThreeDSecureRequestNormalizer extends AbstractNormalizer {
 	 * @return bool
 	 */
 	public function supportsDenormalization( $data, $type, $format = null ) {
-		// TODO: Implement supportsDenormalization() method.
+		if ( $format == "xml" && $type == ThreeDSecureRequest::GetClassName() ) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -45,7 +150,68 @@ class ThreeDSecureRequestNormalizer extends AbstractNormalizer {
 	 * @return array|string|bool|int|float|null
 	 */
 	public function normalize( $object, $format = null, array $context = array() ) {
-		// TODO: Implement normalize() method.
+		/** @var ThreeDSecureRequest $object */
+
+		$comments = $object->getComments();
+		if ( is_null( $comments ) ) {
+			$comments = array();
+		} else {
+			$comments = $comments->getComments();
+		}
+
+
+		return array(
+			'@timestamp' => $object->getTimestamp(),
+			'@type'      => $object->getType(),
+			'merchantid' => $object->getMerchantId(),
+			'account'    => $object->getAccount(),
+			'orderid'    => $object->getOrderId(),
+			'amount'     => $this->normaliseAmount( $object ),
+			'card'       => $this->normaliseCard( $object ),
+			'pares'      => $object->getPares(),
+			'sha1hash'   => $object->getHash(),
+			'comments'   => array( 'comments' => $comments )
+		);
+	}
+
+	private function normaliseAmount( ThreeDSecureRequest $request ) {
+		$amount = $request->getAmount();
+		if ( is_null( $amount ) ) {
+			return array();
+		}
+
+		return array(
+			'@currency' => $amount->getCurrency(),
+			'#'         => $amount->getAmount()
+		);
+	}
+
+	private function normaliseCard( ThreeDSecureRequest $request ) {
+		$card = $request->getCard();
+		if ( is_null( $card ) ) {
+			return array();
+		}
+
+		return array(
+			'number'  => $card->getNumber(),
+			'expdate' => $card->getExpiryDate(),
+			'chname'  => $card->getCardHolderName(),
+			'type'    => $card->getType(),
+			'issueno' => $card->getIssueNumber(),
+			'cvn'     => $this->normaliseCVN( $card )
+		);
+	}
+
+	private function normaliseCVN( Card $card ) {
+		$cvn = $card->getCvn();
+		if ( is_null( $cvn ) ) {
+			return array();
+		}
+
+		return array(
+			'number'  => $cvn->getNumber(),
+			'presind' => $cvn->getPresenceIndicator()
+		);
 	}
 
 	/**
@@ -57,6 +223,10 @@ class ThreeDSecureRequestNormalizer extends AbstractNormalizer {
 	 * @return bool
 	 */
 	public function supportsNormalization( $data, $format = null ) {
-		// TODO: Implement supportsNormalization() method.
+		if ( $format == "xml" && $data instanceof ThreeDSecureRequest ) {
+			return true;
+		}
+
+		return false;
 	}
 }

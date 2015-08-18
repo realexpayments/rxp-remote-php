@@ -136,7 +136,7 @@ class PaymentRequestNormalizer extends AbstractNormalizer {
 
 	private function denormaliseAutoSettle( \ArrayAccess $array ) {
 
-		$autoSettleData = $array['autoSettle'];
+		$autoSettleData = $array['autosettle'];
 
 		if ( is_null( $autoSettleData ) ) {
 			return null;
@@ -280,7 +280,7 @@ class PaymentRequestNormalizer extends AbstractNormalizer {
 			'orderid'     => $object->getOrderId(),
 			'amount'      => $this->normaliseAmount( $object ),
 			'card'        => $this->normaliseCard( $object ),
-			'autoSettle'  => $this->normaliseAutoSettle( $object ),
+			'autosettle'  => $this->normaliseAutoSettle( $object ),
 			'sha1hash'    => $object->getHash(),
 			'comments'    => array( 'comments' => $comments ),
 			'pasref'      => $object->getPaymentsReference(),

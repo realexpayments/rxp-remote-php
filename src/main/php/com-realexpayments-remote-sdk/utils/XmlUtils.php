@@ -4,6 +4,7 @@
 namespace com\realexpayments\remote\sdk\utils;
 
 
+use com\realexpayments\remote\sdk\domain\iRequest;
 use com\realexpayments\remote\sdk\domain\payment\normaliser\AddressNormaliser;
 use com\realexpayments\remote\sdk\domain\payment\normaliser\CommentsNormalizer;
 use com\realexpayments\remote\sdk\domain\payment\normaliser\PaymentRequestNormalizer;
@@ -66,8 +67,7 @@ class XmlUtils {
 
 			$rootName = self::getRootName( $object );
 			$xml      = self::$marshallers[ $messageType->getType() ]->serialize( $object, 'xml', array(
-				'xml_root_node_name',
-				$rootName
+				'xml_root_node_name' => $rootName
 			) );
 
 		} catch ( Exception $e ) {
@@ -100,7 +100,10 @@ class XmlUtils {
 				->deserialize( $xml, self::getClassName( $xml, $messageType ), 'xml' );
 
 		} catch ( Exception $e ) {
-			self::$logger->error( "Error unmarshalling from XML", $e );
+			self::$logger->error( "Error unmarshalling from XML: " . $e->getMessage(), $e );
+			if ( ! is_null( $e->getPrevious() ) ) {
+				self::$logger->error( "Error unmarshalling from XML: " . $e->getPrevious()->getMessage(), $e->getPrevious() );
+			}
 			throw new RealexException( "Error unmarshalling from XML", $e );
 		}
 
@@ -145,14 +148,11 @@ class XmlUtils {
 	}
 
 	private static function getRootName( $object ) {
-		if ( $object instanceof PaymentRequest ||
-		     $object instanceof ThreeDSecureRequest
-		) {
+		if ( $object instanceof iRequest ) {
 			return "request";
+		} else {
+			return "response";
 		}
-
-
-		return "response";
 	}
 
 	private static function getClassName( $xml, MessageType $messageType ) {
@@ -185,4 +185,5 @@ class XmlUtils {
 
 
 }
+
 
