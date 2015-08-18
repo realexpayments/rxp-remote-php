@@ -2,6 +2,7 @@
 
 
 namespace com\realexpayments\remote\sdk\domain\payment;
+
 use Doctrine\OXM\Mapping as DOM;
 
 /**
@@ -63,23 +64,17 @@ class AutoSettle {
 	/**
 	 * Helper method for adding the flag value
 	 *
-	 * @param string $flag
+	 * @param string|AutoSettleFlag $flag
+	 *
 	 * @return AutoSettle
 	 */
 	public function addFlag( $flag ) {
-		$this->flag = $flag;
+		if ( $flag instanceof AutoSettleFlag ) {
+			$this->flag = $flag->getFlag();
+		} else {
+			$this->flag = $flag;
+		}
 
-		return $this;
-	}
-
-	/**
-	 * Helper method for adding the {@link AutoSettle} value.
-	 *
-	 * @param AutoSettleFlag $flag
-	 * @return AutoSettle
-	 */
-	public function addAutoSettleFlag( AutoSettleFlag $flag ) {
-		$this->flag = $flag->getFlag();
 		return $this;
 	}
 }

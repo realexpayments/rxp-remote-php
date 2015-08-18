@@ -60,8 +60,6 @@ class XmlUtils {
 		try {
 
 			$xml = self::$marshallers[ $messageType->getType() ]->serialize( $object, 'xml' );
-			self::$logger->debug("XML: ");
-			self::$logger->debug($xml);
 
 		} catch ( Exception $e ) {
 

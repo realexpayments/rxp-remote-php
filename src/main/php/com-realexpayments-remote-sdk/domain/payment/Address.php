@@ -2,6 +2,7 @@
 
 
 namespace com\realexpayments\remote\sdk\domain\payment;
+
 use Doctrine\OXM\Mapping as DOM;
 
 
@@ -93,6 +94,7 @@ class Address {
 
 	/**
 	 * Setter for the country
+	 *
 	 * @param string $country
 	 */
 	public function setCountry( $country ) {
@@ -103,7 +105,7 @@ class Address {
 	/**
 	 * Helper method for setting the code
 	 *
-	 * @param $code
+	 * @param string $code
 	 *
 	 * @return $this
 	 */
@@ -117,7 +119,7 @@ class Address {
 	/**
 	 * Helper method for setting the country
 	 *
-	 * @param $country
+	 * @param string $country
 	 *
 	 * @return $this
 	 */
@@ -131,27 +133,17 @@ class Address {
 	/**
 	 * Helper method for setting the type
 	 *
-	 * @param $type
+	 * @param AddressType|string $type
 	 *
 	 * @return $this
 	 */
 	public function addType( $type ) {
-		$this->type = $type;
+		if ( $type instanceof AddressType ) {
+			$this->type = $type->getAddressType();
+		} else {
+			$this->type = $type;
+		}
 
 		return $this;
 	}
-
-	/**
-	 * Helper method for setting the type
-	 *
-	 * @param $addressType
-	 *
-	 * @return $this
-	 */
-	public function addAddressType( AddressType $addressType ) {
-		$this->type = $addressType->getAddressType();
-
-		return $this;
-	}
-
 }
