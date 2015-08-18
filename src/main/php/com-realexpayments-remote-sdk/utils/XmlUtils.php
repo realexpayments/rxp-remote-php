@@ -4,14 +4,19 @@
 namespace com\realexpayments\remote\sdk\utils;
 
 
+use com\realexpayments\remote\sdk\domain\payment\normaliser\AddressNormaliser;
+use com\realexpayments\remote\sdk\domain\payment\normaliser\CommentsNormalizer;
+use com\realexpayments\remote\sdk\domain\payment\normaliser\PaymentRequestNormalizer;
+use com\realexpayments\remote\sdk\domain\payment\normaliser\PaymentResponseNormalizer;
+use com\realexpayments\remote\sdk\domain\threeDSecure\normaliser\ThreeDSecureRequestNormalizer;
+use com\realexpayments\remote\sdk\domain\threeDSecure\normaliser\ThreeDSecureResponseNormalizer;
 use com\realexpayments\remote\sdk\RealexException;
 use com\realexpayments\remote\sdk\RXPLogger;
-use Doctrine\Common\Cache\ArrayCache;
-use Doctrine\OXM\Configuration;
-use Doctrine\OXM\Mapping\ClassMetadataFactory;
-use Doctrine\OXM\Marshaller\XmlMarshaller;
 use Exception;
 use Logger;
+use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 
 /**
@@ -31,7 +36,7 @@ class XmlUtils {
 
 
 	/**
-	 * @var XmlMarshaller[] marshallers
+	 * @var Serializer[] marshallers
 	 */
 	private static $marshallers;
 
@@ -54,7 +59,9 @@ class XmlUtils {
 
 		try {
 
-			$xml = self::$marshallers[$messageType->getType()]->marshalToString( $object );
+			$xml = self::$marshallers[ $messageType->getType() ]->serialize( $object, 'xml' );
+			self::$logger->debug("XML: ");
+			self::$logger->debug($xml);
 
 		} catch ( Exception $e ) {
 
@@ -70,9 +77,10 @@ class XmlUtils {
 	 * @param string $xml
 	 *
 	 * @param MessageType $messageType
+	 *
 	 * @return object
 	 */
-	public static function  fromXml( $xml,MessageType $messageType ) {
+	public static function  fromXml( $xml, MessageType $messageType ) {
 		self::Initialise();
 
 		self::$logger->debug( "Unmarshalling XML to domain object" );
@@ -80,7 +88,9 @@ class XmlUtils {
 
 		try {
 
-			$object = self::$marshallers[$messageType->getType()]->unmarshalFromString( $xml );
+			// TODO: Obtain type
+			$object = self::$marshallers[ $messageType->getType() ]
+				->deserialize( $xml, 'com\realexpayments\remote\sdk\domain\payment\PaymentRequest', 'xml' );
 
 		} catch ( Exception $e ) {
 			self::$logger->error( "Error unmarshalling from XML", $e );
@@ -106,23 +116,23 @@ class XmlUtils {
 
 		self::$marshallers = array();
 
-		$config = new Configuration();
-		$config->setMetadataDriverImpl( $config->newDefaultAnnotationDriver( array(
-			__DIR__ . "/../domain/payment/",
-		) ) );
+		$encoders                                  = array( new XmlEncoder() );
+		$normalizers                               = array(
+			new PaymentRequestNormalizer(),
+			new PaymentResponseNormalizer(),
+			new AddressNormaliser(),
+			new CommentsNormalizer(),
+			new ObjectNormalizer()
+		);
+		self::$marshallers[ MessageType::PAYMENT ] = new Serializer( $normalizers, $encoders );
 
-		$config->setMetadataCacheImpl( new ArrayCache() );
-		$metadataFactory  = new ClassMetadataFactory( $config );
-		self::$marshallers[MessageType::PAYMENT] = new XmlMarshaller( $metadataFactory );
-
-		$config = new Configuration();
-		$config->setMetadataDriverImpl( $config->newDefaultAnnotationDriver( array(
-			__DIR__ . "/../domain/threeDSecure/",
-		) ) );
-
-		$config->setMetadataCacheImpl( new ArrayCache() );
-		$metadataFactory  = new ClassMetadataFactory( $config );
-		self::$marshallers[MessageType::THREE_D_SECURE] = new XmlMarshaller( $metadataFactory );
+		$encoders                                         = array( new XmlEncoder() );
+		$normalizers                                      = array(
+			new ThreeDSecureRequestNormalizer(),
+			new ThreeDSecureResponseNormalizer(),
+			new  ObjectNormalizer()
+		);
+		self::$marshallers[ MessageType::THREE_D_SECURE ] = new Serializer( $normalizers, $encoders );
 
 	}
 
