@@ -67,7 +67,8 @@ class XmlUtils {
 
 			$rootName = self::getRootName( $object );
 			$xml      = self::$marshallers[ $messageType->getType() ]->serialize( $object, 'xml', array(
-				'xml_root_node_name' => $rootName
+				'xml_root_node_name' => $rootName,
+				'xml_format_output'  => true
 			) );
 
 		} catch ( Exception $e ) {
@@ -100,10 +101,7 @@ class XmlUtils {
 				->deserialize( $xml, self::getClassName( $xml, $messageType ), 'xml' );
 
 		} catch ( Exception $e ) {
-			self::$logger->error( "Error unmarshalling from XML: " . $e->getMessage(), $e );
-			if ( ! is_null( $e->getPrevious() ) ) {
-				self::$logger->error( "Error unmarshalling from XML: " . $e->getPrevious()->getMessage(), $e->getPrevious() );
-			}
+			self::$logger->error( "Error unmarshalling from XML", $e );
 			throw new RealexException( "Error unmarshalling from XML", $e );
 		}
 

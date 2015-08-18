@@ -96,24 +96,25 @@ class ThreeDSecureResponseNormalizer extends AbstractNormalizer {
 	public function normalize( $object, $format = null, array $context = array() ) {
 		/** @var ThreeDSecureResponse $object */
 
-		return array(
-			'@timestamp'    => $object->getTimestamp(),
-			'merchantid'    => $object->getMerchantId(),
-			'account'       => $object->getAccount(),
-			'orderid'       => $object->getOrderId(),
-			'result'        => $object->getResult(),
-			'authcode'      => $object->getAuthCode(),
-			'message'       => $object->getMessage(),
-			'pasref'        => $object->getPaymentsReference(),
-			'timetaken'     => $object->getTimeTaken(),
-			'authtimetaken' => $object->getAuthTimeTaken(),
-			'pareq'         => $object->getPareq(),
-			'url'           => $object->getUrl(),
-			'enrolled'      => $object->getEnrolled(),
-			'xid'           => $object->getXid(),
-			'threedsecure'  => $this->normaliseThreedsecure( $object ),
-			'sha1hash'      => $object->getHash()
-		);
+		return array_filter(
+			array(
+				'@timestamp'    => $object->getTimestamp(),
+				'merchantid'    => $object->getMerchantId(),
+				'account'       => $object->getAccount(),
+				'orderid'       => $object->getOrderId(),
+				'result'        => $object->getResult(),
+				'authcode'      => $object->getAuthCode(),
+				'message'       => $object->getMessage(),
+				'pasref'        => $object->getPaymentsReference(),
+				'timetaken'     => $object->getTimeTaken(),
+				'authtimetaken' => $object->getAuthTimeTaken(),
+				'pareq'         => $object->getPareq(),
+				'url'           => $object->getUrl(),
+				'enrolled'      => $object->getEnrolled(),
+				'xid'           => $object->getXid(),
+				'threedsecure'  => $this->normaliseThreedsecure( $object ),
+				'sha1hash'      => $object->getHash()
+			) );
 	}
 
 	private function normaliseThreedsecure( ThreeDSecureResponse $response ) {

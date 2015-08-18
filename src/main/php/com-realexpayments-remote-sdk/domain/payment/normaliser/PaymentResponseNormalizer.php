@@ -128,27 +128,28 @@ class PaymentResponseNormalizer extends AbstractNormalizer {
 	public function normalize( $object, $format = null, array $context = array() ) {
 		/** @var PaymentResponse $object */
 
-		return array(
-			'@timestamp'          => $object->getTimestamp(),
-			'merchantid'          => $object->getMerchantId(),
-			'account'             => $object->getAccount(),
-			'orderid'             => $object->getOrderId(),
-			'result'              => $object->getResult(),
-			'authcode'            => $object->getAuthCode(),
-			'message'             => $object->getMessage(),
-			'pasref'              => $object->getPaymentsReference(),
-			'cvnresult'           => $object->getCvnResult(),
-			'timetaken'           => $object->getTimeTaken(),
-			'authtimetaken'       => $object->getAuthTimeTaken(),
-			'acquirerresponse'    => $object->getAcquirerResponse(),
-			'batchid'             => $object->getBatchId(),
-			'cardissuer'          => $this->normaliseCardIssuer( $object ),
-			'sha1hash'            => $object->getHash(),
-			'tss'                 => $this->normaliseTss( $object ),
-			'avspostcoderesponse' => $object->getAvsPostcodeResponse(),
-			'avsaddressresponse'  => $object->getAvsAddressResponse(),
+		return array_filter(
+			array(
+				'@timestamp'          => $object->getTimestamp(),
+				'merchantid'          => $object->getMerchantId(),
+				'account'             => $object->getAccount(),
+				'orderid'             => $object->getOrderId(),
+				'result'              => $object->getResult(),
+				'authcode'            => $object->getAuthCode(),
+				'message'             => $object->getMessage(),
+				'pasref'              => $object->getPaymentsReference(),
+				'cvnresult'           => $object->getCvnResult(),
+				'timetaken'           => $object->getTimeTaken(),
+				'authtimetaken'       => $object->getAuthTimeTaken(),
+				'acquirerresponse'    => $object->getAcquirerResponse(),
+				'batchid'             => $object->getBatchId(),
+				'cardissuer'          => $this->normaliseCardIssuer( $object ),
+				'sha1hash'            => $object->getHash(),
+				'tss'                 => $this->normaliseTss( $object ),
+				'avspostcoderesponse' => $object->getAvsPostcodeResponse(),
+				'avsaddressresponse'  => $object->getAvsAddressResponse(),
 
-		);
+			) );
 	}
 
 	/**

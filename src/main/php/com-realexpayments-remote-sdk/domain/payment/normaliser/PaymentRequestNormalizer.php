@@ -269,36 +269,38 @@ class PaymentRequestNormalizer extends AbstractNormalizer {
 
 		/** @var PaymentRequest $object */
 
-		$comments = $object->getComments();
-		if ( is_null( $comments ) ) {
-			$comments = array();
+		$hasComments = true;
+		$comments    = $object->getComments();
+		if ( is_null( $comments ) || $comments->getSize() == 0 ) {
+			$hasComments = false;
 		} else {
 			$comments = $comments->getComments();
 		}
 
 
-		return array(
-			'@timestamp'  => $object->getTimestamp(),
-			'@type'       => $object->getType(),
-			'merchantid'  => $object->getMerchantId(),
-			'account'     => $object->getAccount(),
-			'channel'     => $object->getChannel(),
-			'orderid'     => $object->getOrderId(),
-			'amount'      => $this->normaliseAmount( $object ),
-			'card'        => $this->normaliseCard( $object ),
-			'autosettle'  => $this->normaliseAutoSettle( $object ),
-			'sha1hash'    => $object->getHash(),
-			'comments'    => array( 'comment' => $comments ),
-			'pasref'      => $object->getPaymentsReference(),
-			'authcode'    => $object->getAuthCode(),
-			'refundhash'  => $object->getRefundHash(),
-			'fraudfilter' => $object->getFraudFilter(),
-			'recurring'   => $this->normaliseRecurring( $object ),
-			'tssinfo'     => $this->normaliseTssInfo( $object ),
-			'mpi'         => $this->normaliseMpi( $object ),
-		);
+		return
+			array_filter(
+				array(
+					'@timestamp'  => $object->getTimestamp(),
+					'@type'       => $object->getType(),
+					'merchantid'  => $object->getMerchantId(),
+					'account'     => $object->getAccount(),
+					'channel'     => $object->getChannel(),
+					'orderid'     => $object->getOrderId(),
+					'amount'      => $this->normaliseAmount( $object ),
+					'card'        => $this->normaliseCard( $object ),
+					'autosettle'  => $this->normaliseAutoSettle( $object ),
+					'sha1hash'    => $object->getHash(),
+					'comments'    => $hasComments ? array( 'comment' => $comments ) : array(),
+					'pasref'      => $object->getPaymentsReference(),
+					'authcode'    => $object->getAuthCode(),
+					'refundhash'  => $object->getRefundHash(),
+					'fraudfilter' => $object->getFraudFilter(),
+					'recurring'   => $this->normaliseRecurring( $object ),
+					'tssinfo'     => $this->normaliseTssInfo( $object ),
+					'mpi'         => $this->normaliseMpi( $object ),
+				) );
 	}
-
 
 	private function normaliseAmount( PaymentRequest $request ) {
 		$amount = $request->getAmount();

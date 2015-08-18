@@ -2,6 +2,8 @@
 
 
 namespace com\realexpayments\remote\sdk\http;
+
+use com\realexpayments\remote\sdk\RealexException;
 use com\realexpayments\remote\sdk\RXPLogger;
 use Logger;
 
@@ -56,14 +58,21 @@ class HttpClient {
 		curl_setopt( $ch, CURLOPT_TIMEOUT_MS, $this->socketTimeout );
 
 		$responseXml = curl_exec( $ch );
-		$statusCode = curl_getinfo($ch,CURLINFO_HTTP_CODE);
+		$statusCode  = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
 
+
+		$errorNumber = curl_errno( $ch );
+		if ( $errorNumber ) {
+			$this->logger->error( "Exception communicating with Realex. Error number: " . $errorNumber . ". Description: " . curl_error( $ch ) );
+			curl_close( $ch );
+			throw new RealexException("Exception communicating with Realex");
+		}
 
 		curl_close( $ch );
 
 		$response = new HttpResponse();
 		$response->setResponseCode( $statusCode );
-		$response->setBody($responseXml);
+		$response->setBody( $responseXml );
 
 		return $response;
 	}

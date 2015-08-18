@@ -159,15 +159,16 @@ class ThreeDSecureRequestNormalizer extends AbstractNormalizer {
 	public function normalize( $object, $format = null, array $context = array() ) {
 		/** @var ThreeDSecureRequest $object */
 
+		$hasComments = true;
 		$comments = $object->getComments();
-		if ( is_null( $comments ) ) {
-			$comments = array();
+		if ( is_null( $comments ) || $comments->getSize() == 0 ) {
+			$hasComments = false;
 		} else {
 			$comments = $comments->getComments();
 		}
 
 
-		return array(
+		return array_filter( array(
 			'@timestamp' => $object->getTimestamp(),
 			'@type'      => $object->getType(),
 			'merchantid' => $object->getMerchantId(),
@@ -177,8 +178,8 @@ class ThreeDSecureRequestNormalizer extends AbstractNormalizer {
 			'card'       => $this->normaliseCard( $object ),
 			'pares'      => $object->getPares(),
 			'sha1hash'   => $object->getHash(),
-			'comments'   => array( 'comment' => $comments )
-		);
+			'comments'    => $hasComments ? array( 'comment' => $comments ) : array()
+		) );
 	}
 
 	private function normaliseAmount( ThreeDSecureRequest $request ) {
