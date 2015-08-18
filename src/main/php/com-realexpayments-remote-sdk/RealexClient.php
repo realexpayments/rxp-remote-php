@@ -89,7 +89,7 @@ class RealexClient {
 	 * @param HttpConfiguration $httpConfiguration
 	 */
 	public function __construct( $secret, HttpConfiguration $httpConfiguration = null, HttpClient $httpClient = null ) {
-		$this->logger = RPXLogger::getLogger( __CLASS__ );
+		$this->logger = RXPLogger::getLogger( __CLASS__ );
 
 		$this->secret = $secret;
 

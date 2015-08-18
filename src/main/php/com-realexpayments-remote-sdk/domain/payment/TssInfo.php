@@ -2,7 +2,7 @@
 
 
 namespace com\realexpayments\remote\sdk\domain\payment;
-use Doctrine\OXM\Mapping as DOM;
+
 
 
 /**
@@ -31,7 +31,6 @@ use Doctrine\OXM\Mapping as DOM;
  *
  * @author vicpada
  *
- * @Dom\XmlEntity(xml="tssinfo")
  */
 class TssInfo {
 
@@ -39,14 +38,12 @@ class TssInfo {
 	 * @var string  The number you assign to the customer. This can allow checking of previous transactions
 	 * by this customer.
 	 *
-	 * @Dom\XmlText(type="string",name="custnum")
 	 */
 	private $customerNumber;
 
 	/**
 	 * @var string The product code you assign to the product.
 	 *
-	 * @Dom\XmlText(type="string",name="prodid")
 	 */
 	private $productId;
 
@@ -54,21 +51,18 @@ class TssInfo {
 	 * @var string Any reference you also would like to assign to the customer. This can allow checking,
 	 * using realscore, of previous transactions by this customer.
 	 *
-	 * @Dom\XmlText(type="string",name="varref")
 	 */
 	private $variableReference;
 
 	/**
 	 * @var string  The IP address of the customer.
 	 *
-	 * @Dom\XmlText(type="string",name="custipaddress")
 	 */
 	private $customerIpAddress;
 
 	/**
 	 * @var Address[] The address of the customer.
 	 *
-	 * @Dom\XmlElement(type="com\realexpayments\remote\sdk\domain\payment\Address", collection=true, direct=true, name="address")
 	 */
 	private $addresses;
 

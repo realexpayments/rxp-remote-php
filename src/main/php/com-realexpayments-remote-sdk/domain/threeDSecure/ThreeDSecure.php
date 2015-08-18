@@ -2,7 +2,7 @@
 
 
 namespace com\realexpayments\remote\sdk\domain\threeDSecure;
-use Doctrine\OXM\Mapping as DOM;
+
 
 
 /**
@@ -15,42 +15,36 @@ use Doctrine\OXM\Mapping as DOM;
  * @author vicpada
  * @package com\realexpayments\remote\sdk\domain\threeDSecure
  *
- * @Dom\XmlEntity(xml="threedsecure")
  */
 class ThreeDSecure {
 
 	/**
 	 * @var string The outcome of the authentication, required for the authorisation request.
 	 *
-	 * @Dom\XmlText(type="string",name="status")
 	 */
 	private $status;
 
 	/**
 	 * @var string The e-commerce indicator, required for the authorisation request.
 	 *
-	 * @Dom\XmlText(type="string",name="eci")
 	 */
 	private $eci;
 
 	/**
 	 * @var string The XID field, required for the authorisation request.
 	 *
-	 * @Dom\XmlText(type="string",name="xid")
 	 */
 	private $xid;
 
 	/**
 	 * @var string The CAVV or UCAF, required for the authorisation request.
 	 *
-	 * @Dom\XmlText(type="string",name="cavv")
 	 */
 	private $cavv;
 
 	/**
 	 * @var string The address of the customer.
 	 *
-	 * @Dom\XmlText(type="string",name="algorithm")
 	 */
 	private $algorithm;
 

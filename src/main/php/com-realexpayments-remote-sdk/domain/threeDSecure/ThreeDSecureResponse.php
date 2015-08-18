@@ -9,7 +9,7 @@ use com\realexpayments\remote\sdk\utils\GenerationUtils;
 use com\realexpayments\remote\sdk\utils\MessageType;
 use com\realexpayments\remote\sdk\utils\ResponseUtils;
 use com\realexpayments\remote\sdk\utils\XmlUtils;
-use Doctrine\OXM\Mapping as DOM;
+
 
 /**
  * <p>
@@ -18,7 +18,6 @@ use Doctrine\OXM\Mapping as DOM;
  *
  * @author vicpada
  * @package com\realexpayments\remote\sdk\domain\threeDSecure
- * @Dom\XmlRootEntity(xml="response")
  */
 class ThreeDSecureResponse implements iResponse {
 
@@ -26,14 +25,12 @@ class ThreeDSecureResponse implements iResponse {
 	 * @var string Time stamp in the format YYYYMMDDHHMMSS, which represents the time in the format year
 	 * month date hour minute second.
 	 *
-	 * @Dom\XmlAttribute(type="string",name="timestamp")
 	 */
 	private $timeStamp;
 
 	/**
 	 * @var string Represents Realex Payments assigned merchant id.
 	 *
-	 * @Dom\XmlText(type="string",name="merchantid")
 	 */
 	private $merchantId;
 
@@ -41,21 +38,18 @@ class ThreeDSecureResponse implements iResponse {
 	 * @var string Represents the Realex Payments subaccount to use. If you omit this element then
 	 * we will use your default account.
 	 *
-	 * @Dom\XmlText(type="string",name="account")
 	 */
 	private $account;
 
 	/**
 	 * @var string Represents the unique order id of this transaction. Must be unique across all of your accounts.
 	 *
-	 * @Dom\XmlText(type="string",name="orderid")
 	 */
 	private $orderId;
 
 	/**
 	 * @var string The result codes returned by the Realex Payments system.
 	 *
-	 * @Dom\XmlText(type="string",name="result")
 	 */
 	private $result;
 
@@ -63,14 +57,12 @@ class ThreeDSecureResponse implements iResponse {
 	 * @var string If successful an authcode is returned from the bank. Used when referencing
 	 * this transaction in refund and void requests.
 	 *
-	 * @Dom\XmlText(type="string",name="authcode")
 	 */
 	private $authCode;
 
 	/**
 	 * @var string The text of the response.
 	 *
-	 * @Dom\XmlText(type="string",name="message")
 	 */
 	private $message;
 
@@ -78,7 +70,6 @@ class ThreeDSecureResponse implements iResponse {
 	 * @var string The Realex payments reference (pasref) for the transaction. Used when referencing
 	 * this transaction in refund and void requests.
 	 *
-	 * @Dom\XmlText(type="string",name="pasref")
 	 */
 	private $paymentsReference;
 
@@ -86,14 +77,12 @@ class ThreeDSecureResponse implements iResponse {
 	/**
 	 * @var int The time taken
 	 *
-	 * @Dom\XmlText(type="integer",name="timetaken")
 	 */
 	private $timeTaken;
 
 	/**
 	 * @var int The AUTH time taken.
 	 *
-	 * @Dom\XmlText(type="integer",name="authtimetaken")
 	 */
 	private $authTimeTaken;
 
@@ -101,7 +90,6 @@ class ThreeDSecureResponse implements iResponse {
 	/**
 	 * @var string The pre-encoded PaReq that you must post to the Issuer's ACS url.
 	 *
-	 * @Dom\XmlText(type="string",name="pareq")
 	 */
 	private $pareq;
 
@@ -109,28 +97,24 @@ class ThreeDSecureResponse implements iResponse {
 	/**
 	 * @var string The pre-encoded PaReq that you must post to the Issuer's ACS url.
 	 *
-	 * @Dom\XmlText(type="string",name="url")
 	 */
 	private $url;
 
 	/**
 	 * @var string Enrolment response from ACS.
 	 *
-	 * @Dom\XmlText(type="string",name="enrolled")
 	 */
 	private $enrolled;
 
 	/**
 	 * @var string XID from ACS.
 	 *
-	 * @Dom\XmlText(type="string",name="xid")
 	 */
 	private $xid;
 
 	/**
 	 * @var ThreeDSecure The 3D Secure details.
 	 *
-	 * @Dom\XmlElement(type="com\realexpayments\remote\sdk\domain\threeDSecure\ThreeDSecure",name="threedsecure")
 	 */
 	private $threeDSecure;
 
@@ -139,7 +123,6 @@ class ThreeDSecureResponse implements iResponse {
 	 * @var string The SHA-1 hash of certain elements of the response. The details of this are to be found
 	 * in the realauth developer's guide.
 	 *
-	 * @Dom\XmlText(type="string",name="sha1hash")
 	 */
 	private $hash;
 
@@ -147,6 +130,10 @@ class ThreeDSecureResponse implements iResponse {
 	 * ThreeDSecureResponse constructor.
 	 */
 	public function __construct() {
+	}
+
+	public static function GetClassName() {
+		return __CLASS__;
 	}
 
 	/**

@@ -6,10 +6,10 @@ namespace com\realexpayments\remote\sdk;
 use Logger;
 
 /**
- * Class RPXLogger. Wraps initialisation of the logging framework
+ * Class RXPLogger. Wraps initialisation of the logging framework
  * @package com\realexpayments\remote\sdk
  */
-class RPXLogger {
+class RXPLogger {
 
 	/**
 	 * @var bool

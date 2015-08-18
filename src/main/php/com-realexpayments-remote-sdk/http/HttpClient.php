@@ -2,7 +2,9 @@
 
 
 namespace com\realexpayments\remote\sdk\http;
-use com\realexpayments\remote\sdk\RPXLogger;
+
+use com\realexpayments\remote\sdk\RealexException;
+use com\realexpayments\remote\sdk\RXPLogger;
 use Logger;
 
 
@@ -31,7 +33,7 @@ class HttpClient {
 	 * HttpClient constructor.
 	 */
 	public function __construct() {
-		$this->logger = RPXLogger::getLogger( __CLASS__ );
+		$this->logger = RXPLogger::getLogger( __CLASS__ );
 	}
 
 	/**
@@ -51,20 +53,26 @@ class HttpClient {
 		curl_setopt( $ch, CURLOPT_USERAGENT, "realex sdk version 0.1" );
 		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
 		curl_setopt( $ch, CURLOPT_POSTFIELDS, $xml );
-		/*curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false ); // this line makes it work under https*/
 		curl_setopt( $ch, CURLOPT_HTTPHEADER, array( 'Content-Type: text/plain' ) );
 		curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT_MS, $this->connectTimeout );
 		curl_setopt( $ch, CURLOPT_TIMEOUT_MS, $this->socketTimeout );
 
 		$responseXml = curl_exec( $ch );
-		$statusCode = curl_getinfo($ch,CURLINFO_HTTP_CODE);
+		$statusCode  = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
 
+
+		$errorNumber = curl_errno( $ch );
+		if ( $errorNumber ) {
+			$this->logger->error( "Exception communicating with Realex. Error number: " . $errorNumber . ". Description: " . curl_error( $ch ) );
+			curl_close( $ch );
+			throw new RealexException("Exception communicating with Realex");
+		}
 
 		curl_close( $ch );
 
 		$response = new HttpResponse();
 		$response->setResponseCode( $statusCode );
-		$response->setBody($responseXml);
+		$response->setBody( $responseXml );
 
 		return $response;
 	}

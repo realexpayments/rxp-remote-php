@@ -29,6 +29,7 @@ class SampleXmlValidationUtils {
 	const PAYMENT_RESPONSE_BASIC_ERROR_XML_PATH = "/sample-xml/payment-response-basic-error-sample.xml";
 	const PAYMENT_RESPONSE_FULL_ERROR_XML_PATH = "/sample-xml/payment-response-full-error-sample.xml";
 	const PAYMENT_RESPONSE_XML_PATH_UNKNOWN_ELEMENT = "/sample-xml/payment-response-sample-unknown-element.xml";
+	const PAYMENT_REQUEST_WITH_SYMBOLS_XML_PATH = "/sample-xml/payment-request-sample-with-symbols.xml";
 
 	//3DSecure sample XML
 	const THREE_D_SECURE_VERIFY_ENROLLED_REQUEST_XML_PATH = "/sample-xml/3ds-verify-enrolled-request-sample.xml";
@@ -68,11 +69,15 @@ class SampleXmlValidationUtils {
 	const REQUEST_HASH = "581b84c1dbfd0a6c9c7d4e2d0a620157e879dac5";
 	const COMMENT1 = "comment 1";
 	const COMMENT2 = "comment 2";
+	const COMMENT1_WITH_SYMBOLS = "a-z A-Z 0-9 ' \", + “” ._ - & \\ / @ ! ? % ( )* : £ $ & € # [ ] | = ;ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷ø¤ùúûüýþÿŒŽšœžŸ¥";
+	const COMMENT2_WITH_SYMBOLS = "comment 2 £";
 	const REFUND_HASH = "hjfdg78h34tyvklasjr89t";
 	const FRAUD_FILTER = "fraud filter";
 	const CUSTOMER_NUMBER = "cust num";
+	const CUSTOMER_NUMBER_WITH_SYMBOLS = "cust num $ £";
 	const PRODUCT_ID = "prod ID";
 	const VARIABLE_REFERENCE = "variable ref 1234";
+	const VARIABLE_REFERENCE_WITH_SYMBOLS = "variable ref 1234 $$ ££";
 	const CUSTOMER_IP = "127.0.0.1";
 
 	//Recurring
@@ -257,6 +262,64 @@ class SampleXmlValidationUtils {
 		$testCase->assertEquals( self::CUSTOMER_NUMBER, $fromXmlRequest->getTssInfo()->getCustomerNumber() );
 		$testCase->assertEquals( self::PRODUCT_ID, $fromXmlRequest->getTssInfo()->getProductId() );
 		$testCase->assertEquals( self::VARIABLE_REFERENCE, $fromXmlRequest->getTssInfo()->getVariableReference() );
+		$testCase->assertEquals( self::CUSTOMER_IP, $fromXmlRequest->getTssInfo()->getCustomerIpAddress() );
+		$addresses = $fromXmlRequest->getTssInfo()->getAddresses();
+		$testCase->assertEquals( self::$ADDRESS_TYPE_BUSINESS->getAddressType(), $addresses[0]->getType() );
+		$testCase->assertEquals( self::ADDRESS_CODE_BUSINESS, $addresses[0]->getCode() );
+		$testCase->assertEquals( self::ADDRESS_COUNTRY_BUSINESS, $addresses[0]->getCountry() );
+		$testCase->assertEquals( self::$ADDRESS_TYPE_SHIPPING->getAddressType(), $addresses[1]->getType() );
+		$testCase->assertEquals( self::ADDRESS_CODE_SHIPPING, $addresses[1]->getCode() );
+		$testCase->assertEquals( self::ADDRESS_COUNTRY_SHIPPING, $addresses[1]->getCountry() );
+
+		$testCase->assertEquals( self::THREE_D_SECURE_CAVV, $fromXmlRequest->getMpi()->getCavv() );
+		$testCase->assertEquals( self::THREE_D_SECURE_XID, $fromXmlRequest->getMpi()->getXid() );
+		$testCase->assertEquals( self::THREE_D_SECURE_ECI, $fromXmlRequest->getMpi()->getEci() );
+	}
+
+	/**
+	 * Check all fields match expected values.
+	 *
+	 * @param PaymentRequest $fromXmlRequest
+	 * @param PHPUnit_Framework_TestCase $testCase
+	 */
+	public static function checkUnmarshalledPaymentRequestWithSymbols( PaymentRequest $fromXmlRequest, PHPUnit_Framework_TestCase $testCase ) {
+
+		$testCase->assertNotNull( $fromXmlRequest );
+		$testCase->assertEquals( self::CARD_NUMBER, $fromXmlRequest->getCard()->getNumber() );
+
+		$testCase->assertEquals( self::$CARD_TYPE->getType(), $fromXmlRequest->getCard()->getType() );
+		$testCase->assertEquals( self::CARD_HOLDER_NAME, $fromXmlRequest->getCard()->getCardHolderName() );
+		$testCase->assertEquals( self::CARD_CVN_NUMBER, $fromXmlRequest->getCard()->getCvn()->getNumber() );
+		$testCase->assertEquals( self::$CARD_CVN_PRESENCE->getIndicator(), $fromXmlRequest->getCard()->getCvn()->getPresenceIndicator() );
+		$testCase->assertEquals( self::CARD_ISSUE_NUMBER, $fromXmlRequest->getCard()->getIssueNumber() );
+		$testCase->assertEquals( self::CARD_EXPIRY_DATE, $fromXmlRequest->getCard()->getExpiryDate() );
+
+		$testCase->assertEquals( self::ACCOUNT, $fromXmlRequest->getAccount() );
+		$testCase->assertEquals( self::MERCHANT_ID, $fromXmlRequest->getMerchantId() );
+		$testCase->assertEquals( PaymentType::AUTH, $fromXmlRequest->getType() );
+		$testCase->assertEquals( self:: AMOUNT, $fromXmlRequest->getAmount()->getAmount() );
+		$testCase->assertEquals( self::CURRENCY, $fromXmlRequest->getAmount()->getCurrency() );
+		$testCase->assertEquals( self::$AUTO_SETTLE_FLAG->getFlag(), $fromXmlRequest->getAutoSettle()->getFlag() );
+		$testCase->assertEquals( self::TIMESTAMP, $fromXmlRequest->getTimeStamp() );
+		$testCase->assertEquals( self::CHANNEL, $fromXmlRequest->getChannel() );
+		$testCase->assertEquals( self::ORDER_ID, $fromXmlRequest->getOrderId() );
+		$testCase->assertEquals( self::REQUEST_HASH, $fromXmlRequest->getHash() );
+		$testCase->assertEquals( self::COMMENT1_WITH_SYMBOLS, $fromXmlRequest->getComments()->get( 0 )->getComment() );
+		$testCase->assertEquals( "1", $fromXmlRequest->getComments()->get( 0 )->getId() );
+		$testCase->assertEquals( self::COMMENT2_WITH_SYMBOLS, $fromXmlRequest->getComments()->get( 1 )->getComment() );
+		$testCase->assertEquals( "2", $fromXmlRequest->getComments()->get( 1 )->getId() );
+		$testCase->assertEquals( self::PASREF, $fromXmlRequest->getPaymentsReference() );
+		$testCase->assertEquals( self::AUTH_CODE, $fromXmlRequest->getAuthCode() );
+		$testCase->assertEquals( self::REFUND_HASH, $fromXmlRequest->getRefundHash() );
+		$testCase->assertEquals( self::FRAUD_FILTER, $fromXmlRequest->getFraudFilter() );
+
+		$testCase->assertEquals( self::$RECURRING_FLAG->getRecurringFlag(), $fromXmlRequest->getRecurring()->getFlag() );
+		$testCase->assertEquals( self::$RECURRING_TYPE->getType(), $fromXmlRequest->getRecurring()->getType() );
+		$testCase->assertEquals( self::$RECURRING_SEQUENCE->getSequence(), $fromXmlRequest->getRecurring()->getSequence() );
+
+		$testCase->assertEquals( self::CUSTOMER_NUMBER_WITH_SYMBOLS, $fromXmlRequest->getTssInfo()->getCustomerNumber() );
+		$testCase->assertEquals( self::PRODUCT_ID, $fromXmlRequest->getTssInfo()->getProductId() );
+		$testCase->assertEquals( self::VARIABLE_REFERENCE_WITH_SYMBOLS, $fromXmlRequest->getTssInfo()->getVariableReference() );
 		$testCase->assertEquals( self::CUSTOMER_IP, $fromXmlRequest->getTssInfo()->getCustomerIpAddress() );
 		$addresses = $fromXmlRequest->getTssInfo()->getAddresses();
 		$testCase->assertEquals( self::$ADDRESS_TYPE_BUSINESS->getAddressType(), $addresses[0]->getType() );
