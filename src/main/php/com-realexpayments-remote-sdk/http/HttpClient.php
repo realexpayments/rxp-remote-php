@@ -2,7 +2,7 @@
 
 
 namespace com\realexpayments\remote\sdk\http;
-use com\realexpayments\remote\sdk\RPXLogger;
+use com\realexpayments\remote\sdk\RXPLogger;
 use Logger;
 
 
@@ -31,7 +31,7 @@ class HttpClient {
 	 * HttpClient constructor.
 	 */
 	public function __construct() {
-		$this->logger = RPXLogger::getLogger( __CLASS__ );
+		$this->logger = RXPLogger::getLogger( __CLASS__ );
 	}
 
 	/**
