@@ -3,7 +3,7 @@
 
 namespace com\realexpayments\remote\sdk\domain\payment;
 
-use Doctrine\OXM\Mapping as DOM;
+
 
 
 /**
@@ -24,14 +24,12 @@ use Doctrine\OXM\Mapping as DOM;
  * @author vicpada
  * @package com\realexpayments\remote\sdk\domain\payment
  *
- * @Dom\XmlEntity(xml="recurring")
  */
 class Recurring {
 
 	/**
 	 * @var string Type can be either fixed or variable depending on whether you will be changing the amounts or not.
 	 *
-	 * @Dom\XmlAttribute(type="string",name="type")
 	 */
 	private $type;
 
@@ -40,14 +38,12 @@ class Recurring {
 	 * subsequent for transactions after that, and last for the final transaction of the set.
 	 * Only supported by some acquirers.
 	 *
-	 * @Dom\XmlAttribute(type="string",name="sequence")
 	 */
 	private $sequence;
 
 	/**
 	 * @var string The recurring flag. Optional field taking values 0, 1 or 2.
 	 *
-	 * @Dom\XmlAttribute(type="string",name="flag")
 	 */
 	private $flag;
 

@@ -3,7 +3,7 @@
 
 namespace com\realexpayments\remote\sdk\domain;
 
-use Doctrine\OXM\Mapping as DOM;
+
 
 
 /**
@@ -22,7 +22,6 @@ use Doctrine\OXM\Mapping as DOM;
  *
  * @author vicpada
  *
- * @Dom\XmlEntity
  */
 class CVN {
 
@@ -33,7 +32,6 @@ class CVN {
 	 *
 	 * @var string The number
 	 *
-	 * @Dom\XmlText(type="string",name="number")
 	 */
 	private $number;
 
@@ -51,7 +49,6 @@ class CVN {
 	 *
 	 * @var string Presence Indicator
 	 *
-	 * @Dom\XmlText(type="string",name="presind")
 	 */
 	private $presenceIndicator;
 

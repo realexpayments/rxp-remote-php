@@ -2,7 +2,7 @@
 
 namespace com\realexpayments\remote\sdk\domain;
 
-use Doctrine\OXM\Mapping as DOM;
+
 
 
 /**
@@ -26,7 +26,6 @@ use Doctrine\OXM\Mapping as DOM;
  *
  * @author vicpada
  *
- * @Dom\XmlEntity
  */
 class Card {
 
@@ -36,28 +35,24 @@ class Card {
 	/**
 	 * @var string  The card number used for the transaction.
 	 *
-	 * @Dom\XmlText(type="string",name="number")
 	 */
 	private $number;
 
 	/**
 	 * @var string The card expiry date, in the format MMYY, which must be a date in the future.
 	 *
-	 * @Dom\XmlText(type="string",name="expdate")
 	 */
 	private $expiryDate;
 
 	/**
 	 * @var string The card holder's name
 	 *
-	 * @Dom\XmlText(type="string",name="chname")
 	 */
 	private $cardHolderName;
 
 	/**
 	 * @var string The card type used in the transaction.
 	 *
-	 * @Dom\XmlText(type="string",name="type")
 	 */
 	private $type;
 
@@ -65,7 +60,6 @@ class Card {
 	/**
 	 * @var int The card issue number.
 	 *
-	 * @Dom\XmlText(type="string",name="issueno")
 	 */
 	private $issueNumber;
 
@@ -73,7 +67,6 @@ class Card {
 	/**
 	 * @var CVN The card verification number.
 	 *
-	 * @Dom\XmlElement(type="com\realexpayments\remote\sdk\domain\CVN",name="cvn")
 	 */
 	private $cvn;
 

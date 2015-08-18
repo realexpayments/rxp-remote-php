@@ -2,7 +2,7 @@
 
 
 namespace com\realexpayments\remote\sdk\domain\payment;
-use Doctrine\OXM\Mapping as DOM;
+
 
 /**
  * <p>
@@ -21,21 +21,18 @@ use Doctrine\OXM\Mapping as DOM;
  * @author vicpada
  * @package com\realexpayments\remote\sdk\domain\payment
  *
- * @Dom\XmlEntity
  */
 class Mpi {
 
 	/**
 	 * @var string The CAVV(Visa)/UCAF(Mastercard) if present.
 	 *
-	 * @Dom\XmlText(type="string",name="cavv")
 	 */
 	private $cavv;
 
 	/**
 	 * @var string The XID.
 	 *
-	 * @Dom\XmlText(type="string",name="xid")
 	 */
 	private $xid;
 
@@ -57,7 +54,6 @@ class Mpi {
 	 *
 	 * @var string The e-commerce indicator.
 	 *
-	 * @Dom\XmlText(type="string",name="eci")
 	 */
 	private $eci;
 

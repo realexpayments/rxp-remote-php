@@ -2,7 +2,7 @@
 
 
 namespace com\realexpayments\remote\sdk\domain\payment;
-use Doctrine\OXM\Mapping as DOM;
+
 
 
 /**
@@ -13,28 +13,24 @@ use Doctrine\OXM\Mapping as DOM;
  * @package com\realexpayments\remote\sdk\domain\payment
  * @author vicpada
  *
- * @Dom\XmlEntity(xml="cardissuer")
  */
 class CardIssuer {
 
 	/**
 	 * @var string The Bank Name (e.g. First Data Bank).
 	 *
-	 * @Dom\XmlText(type="string",name="bank")
 	 */
 	private $bank;
 
 	/**
 	 * @var string The Bank Country in English (e.g. UNITED STATES).
 	 *
-	 * @Dom\XmlText(type="string",name="country")
 	 */
 	private $country;
 
 	/**
 	 * @var string The country code of the issuing bank (e.g. US).
 	 *
-	 * @Dom\XmlText(type="string",name="countrycode")
 	 */
 	private $countryCode;
 
@@ -42,7 +38,6 @@ class CardIssuer {
 	 * @var string The region the card was issued (e.g. US) Can be MEA (Middle East/Asia), LAT (Latin America), US (United States),
 	 * EUR (Europe), CAN (Canada), A/P (Asia/Pacific).
 	 *
-	 * @Dom\XmlText(type="string",name="region")
 	 */
 	private $region;
 

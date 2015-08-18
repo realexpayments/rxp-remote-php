@@ -3,7 +3,7 @@
 
 namespace com\realexpayments\remote\sdk\domain\payment;
 
-use Doctrine\OXM\Mapping as DOM;
+
 
 /**
  * <p>
@@ -26,14 +26,12 @@ use Doctrine\OXM\Mapping as DOM;
  *
  * @package com\realexpayments\remote\sdk\domain\payment
  *
- * @Dom\XmlEntity(xml="autosettle")
  */
 class AutoSettle {
 
 	/**
 	 * @var string The AutoSettle flag value.
 	 *
-	 * @Dom\XmlAttribute(type="string",name="flag")
 	 */
 	private $flag;
 
