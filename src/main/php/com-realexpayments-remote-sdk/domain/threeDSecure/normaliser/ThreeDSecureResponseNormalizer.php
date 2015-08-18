@@ -49,7 +49,8 @@ class ThreeDSecureResponseNormalizer extends AbstractNormalizer {
 	private function denormaliseThreeDSecure( $array ) {
 		$threedsecureData = $array['threedsecure'];
 
-		if ( is_null( $threedsecureData ) ) {
+
+		if ( ! isset( $threedsecureData ) || ! is_array( $threedsecureData ) ) {
 			return null;
 		}
 

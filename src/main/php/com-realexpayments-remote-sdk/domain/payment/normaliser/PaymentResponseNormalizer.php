@@ -53,7 +53,8 @@ class PaymentResponseNormalizer extends AbstractNormalizer {
 	private function denormaliseCardIssuer( \ArrayAccess $array ) {
 		$cardData = $array['cardissuer'];
 
-		if ( is_null( $cardData ) ) {
+
+		if ( ! isset( $cardData ) || ! is_array( $cardData ) ) {
 			return null;
 		}
 
@@ -72,7 +73,7 @@ class PaymentResponseNormalizer extends AbstractNormalizer {
 
 		$tssData = $array['tss'];
 
-		if ( is_null( $tssData ) ) {
+		if ( ! isset( $tssData ) || ! is_array( $tssData ) ) {
 			return null;
 		}
 

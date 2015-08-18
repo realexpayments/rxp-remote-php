@@ -69,9 +69,16 @@ class ThreeDSecureRequestNormalizer extends AbstractNormalizer {
 			return null;
 		}
 
-		$comments = $comments['comments'];
+		$comments = new SafeArrayAccess( $comments );
+
+		$comments = $comments['comment'];
+
+		if ( ! isset( $comments ) || ! is_array( $comments ) ) {
+			return null;
+		}
 
 		$commentCollection = new CommentCollection();
+
 		foreach ( $comments as $comment ) {
 			$commentObject = new Comment();
 			$commentObject->addId( $comment["@id"] )
@@ -170,7 +177,7 @@ class ThreeDSecureRequestNormalizer extends AbstractNormalizer {
 			'card'       => $this->normaliseCard( $object ),
 			'pares'      => $object->getPares(),
 			'sha1hash'   => $object->getHash(),
-			'comments'   => array( 'comments' => $comments )
+			'comments'   => array( 'comment' => $comments )
 		);
 	}
 

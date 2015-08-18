@@ -81,7 +81,13 @@ class PaymentRequestNormalizer extends AbstractNormalizer {
 			return null;
 		}
 
-		$comments = $comments['comments'];
+		$comments = new SafeArrayAccess( $comments );
+
+		$comments = $comments['comment'];
+
+		if ( ! isset( $comments ) ) {
+			return null;
+		}
 
 		$commentCollection = new CommentCollection();
 		foreach ( $comments as $comment ) {
@@ -282,7 +288,7 @@ class PaymentRequestNormalizer extends AbstractNormalizer {
 			'card'        => $this->normaliseCard( $object ),
 			'autosettle'  => $this->normaliseAutoSettle( $object ),
 			'sha1hash'    => $object->getHash(),
-			'comments'    => array( 'comments' => $comments ),
+			'comments'    => array( 'comment' => $comments ),
 			'pasref'      => $object->getPaymentsReference(),
 			'authcode'    => $object->getAuthCode(),
 			'refundhash'  => $object->getRefundHash(),
