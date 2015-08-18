@@ -78,7 +78,7 @@ class CardValidationUtils {
 	public static function performCvvCheck( $cvvNumber, $cardType ) {
 
 		/* If string has alpha characters it is not a CVV number */
-		if ( preg_match( "/\\d*/", $cvvNumber ) == 0 ) {
+		if ( preg_match( "/\\d+/", $cvvNumber ) == 0 ) {
 			return false;
 		}
 
