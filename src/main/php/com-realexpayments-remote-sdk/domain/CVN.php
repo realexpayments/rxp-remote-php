@@ -2,7 +2,8 @@
 
 
 namespace com\realexpayments\remote\sdk\domain;
-use Doctrine\OXM\Mapping as DOM;
+
+
 
 
 /**
@@ -21,7 +22,6 @@ use Doctrine\OXM\Mapping as DOM;
  *
  * @author vicpada
  *
- * @Dom\XmlEntity
  */
 class CVN {
 
@@ -32,7 +32,6 @@ class CVN {
 	 *
 	 * @var string The number
 	 *
-	 * @Dom\XmlText(type="string",name="number")
 	 */
 	private $number;
 
@@ -50,10 +49,8 @@ class CVN {
 	 *
 	 * @var string Presence Indicator
 	 *
-	 * @Dom\XmlText(type="string",name="presind")
 	 */
 	private $presenceIndicator;
-
 
 
 	/**
@@ -115,28 +112,18 @@ class CVN {
 	/**
 	 * Helper method to add a presence indicator.
 	 *
-	 * @param string $presenceIndicator
+	 * @param PresenceIndicator|string $presenceIndicator
 	 *
 	 * @return $this
 	 */
 	public function addPresenceIndicator( $presenceIndicator ) {
-		$this->presenceIndicator = $presenceIndicator;
-
+		if ( $presenceIndicator instanceof PresenceIndicator ) {
+			$this->presenceIndicator = $presenceIndicator->getIndicator();
+		} else {
+			$this->presenceIndicator = $presenceIndicator;
+		}
 		return $this;
 	}
 
-
-	/**
-	 * Helper method to add a presence indicator.
-	 *
-	 * @param PresenceIndicator $presenceIndicator
-	 *
-	 * @return $this
-	 */
-	public function addPresenceIndicatorType( PresenceIndicator $presenceIndicator ) {
-		$this->presenceIndicator = $presenceIndicator;
-
-		return $this;
-	}
 
 }

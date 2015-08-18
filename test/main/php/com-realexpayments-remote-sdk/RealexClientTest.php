@@ -242,8 +242,7 @@ class RealexClientTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * Test sending a ThreeDSecure Verify Enrolled request and receiving a ThreeDSecure Verify Enrolled response.
 	 */
-	public function testSendThreeDSecureVerifyEnrolled()
-	{
+	public function testSendThreeDSecureVerifyEnrolled() {
 		//get sample response XML
 		$path            = SampleXmlValidationUtils::THREE_D_SECURE_VERIFY_ENROLLED_RESPONSE_XML_PATH;
 		$prefix          = __DIR__ . '/../../resources';
@@ -281,8 +280,7 @@ class RealexClientTest extends \PHPUnit_Framework_TestCase {
 	 *
 	 * @expectedException com\realexpayments\remote\sdk\RealexException
 	 */
-	public function testSendThreeDSecureInvalidResponseHash()
-	{
+	public function testSendThreeDSecureInvalidResponseHash() {
 		//get sample response XML
 		$path            = SampleXmlValidationUtils::THREE_D_SECURE_VERIFY_ENROLLED_RESPONSE_XML_PATH;
 		$prefix          = __DIR__ . '/../../resources';
@@ -291,7 +289,7 @@ class RealexClientTest extends \PHPUnit_Framework_TestCase {
 		$fromXMLResponse = $fromXMLResponse->fromXml( $xml );
 
 		// add invalid hash
-		$fromXMLResponse->setHash("invalid hash");
+		$fromXMLResponse->setHash( "invalid hash" );
 
 		//mock HttpResponse
 		/** @var HttpResponse $httpResponseMock */
@@ -304,7 +302,9 @@ class RealexClientTest extends \PHPUnit_Framework_TestCase {
 		$request = new ThreeDSecureRequest();
 
 		$httpConfiguration = new HttpConfiguration();
-		$httpConfiguration->setOnlyAllowHttps( false );
+		$httpConfiguration->addOnlyAllowHttps( false )
+		                  ->addEndpoint( "https://epage.payandshop.com/epage-remote.cgi" );
+
 
 		// mock HttpClient instance
 		$httpClientMock = Phockito::mock( "com\\realexpayments\\remote\\sdk\\http\\HttpClient" );
@@ -314,7 +314,7 @@ class RealexClientTest extends \PHPUnit_Framework_TestCase {
 		$realexClient = new RealexClient( SampleXmlValidationUtils::SECRET, $httpConfiguration, $httpClientMock );
 		$realexClient->send( $request );
 
-		$this->fail("RealexException should have been thrown before this point.");
+		$this->fail( "RealexException should have been thrown before this point." );
 	}
 
 

@@ -150,5 +150,21 @@ class CardValidationUtilsTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals( $expectedResult, $result, $message . " : " . $expiryDate );
 	}
 
+	public function testLetterOnCVV() {
+		$cvvNumber = "aaa";
+		$cardType  = "VISA";
+
+		$cvvIsValid = CardValidationUtils::performCvvCheck( $cvvNumber, $cardType );
+		$this->assertFalse( $cvvIsValid, "Testing valid " . $cardType . " card type with invalid CVV number " . $cvvNumber . self::EMPTY_STRING );
+	}
+
+	public function testOneLetterOnCVV() {
+		$cvvNumber = "a";
+		$cardType  = "VISA";
+
+		$cvvIsValid = CardValidationUtils::performCvvCheck( $cvvNumber, $cardType );
+		$this->assertFalse( $cvvIsValid, "Testing valid " . $cardType . " card type with invalid CVV number " . $cvvNumber . self::EMPTY_STRING );
+	}
+
 
 }

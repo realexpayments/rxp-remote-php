@@ -2,7 +2,7 @@
 
 namespace com\realexpayments\remote\sdk\domain;
 
-use Doctrine\OXM\Mapping as DOM;
+
 
 
 /**
@@ -26,7 +26,6 @@ use Doctrine\OXM\Mapping as DOM;
  *
  * @author vicpada
  *
- * @Dom\XmlEntity
  */
 class Card {
 
@@ -36,28 +35,24 @@ class Card {
 	/**
 	 * @var string  The card number used for the transaction.
 	 *
-	 * @Dom\XmlText(type="string",name="number")
 	 */
 	private $number;
 
 	/**
 	 * @var string The card expiry date, in the format MMYY, which must be a date in the future.
 	 *
-	 * @Dom\XmlText(type="string",name="expdate")
 	 */
 	private $expiryDate;
 
 	/**
 	 * @var string The card holder's name
 	 *
-	 * @Dom\XmlText(type="string",name="chname")
 	 */
 	private $cardHolderName;
 
 	/**
 	 * @var string The card type used in the transaction.
 	 *
-	 * @Dom\XmlText(type="string",name="type")
 	 */
 	private $type;
 
@@ -65,7 +60,6 @@ class Card {
 	/**
 	 * @var int The card issue number.
 	 *
-	 * @Dom\XmlText(type="string",name="issueno")
 	 */
 	private $issueNumber;
 
@@ -73,7 +67,6 @@ class Card {
 	/**
 	 * @var CVN The card verification number.
 	 *
-	 * @Dom\XmlElement(type="com\realexpayments\remote\sdk\domain\CVN",name="cvn")
 	 */
 	private $cvn;
 
@@ -181,16 +174,16 @@ class Card {
 	/**
 	 * Setter for the CVN
 	 *
-	 * @param CVN $cnv
+	 * @param CVN $cvn
 	 */
-	public function setCvn( $cnv ) {
-		$this->cvn = $cnv;
+	public function setCvn( $cvn ) {
+		$this->cvn = $cvn;
 	}
 
 	/**
 	 * Helper method to add a card number.
 	 *
-	 * @param integer $number
+	 * @param string $number
 	 *
 	 * @return Card
 	 */
@@ -222,12 +215,19 @@ class Card {
 
 	/**
 	 * Helper method to add CVN presence indicator. If the {@link Cvn} is null then one is created.
+	 * <p>
+	 * <code><pre>
+	 * $card = new Card();
+	 * $card->addCvnPresenceIndicator(PresenceIndicator::CVN_PRESENT);
+	 * </code></pre>
+	 * </p>
 	 *
-	 * @param string $presenceIndicator
+	 * @param PresenceIndicator|string $presenceIndicator
 	 *
 	 * @return $this
 	 */
 	public function  addCvnPresenceIndicator( $presenceIndicator ) {
+
 		if ( is_null( $this->cvn ) ) {
 			$this->cvn = new CVN();
 			$this->cvn->addPresenceIndicator( $presenceIndicator );
@@ -235,23 +235,6 @@ class Card {
 			$this->cvn->addPresenceIndicator( $presenceIndicator );
 		}
 
-		return $this;
-	}
-
-	/**
-	 * Helper method to add CVN presence indicator. If the {@link Cvn} is null then one is created.
-	 *
-	 * @param PresenceIndicator $presenceIndicator
-	 *
-	 * @return $this
-	 */
-	public function  addCvnPresenceIndicatorType( PresenceIndicator $presenceIndicator ) {
-		if ( null == $this->cvn ) {
-			$this->cvn = new CVN();
-			$this->cvn->addPresenceIndicatorType( $presenceIndicator );
-		} else {
-			$this->cvn->addPresenceIndicatorType( $presenceIndicator );
-		}
 
 		return $this;
 	}

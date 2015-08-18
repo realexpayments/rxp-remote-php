@@ -9,7 +9,7 @@ use com\realexpayments\remote\sdk\domain\iRequest;
 use com\realexpayments\remote\sdk\utils\GenerationUtils;
 use com\realexpayments\remote\sdk\utils\MessageType;
 use com\realexpayments\remote\sdk\utils\XmlUtils;
-use Doctrine\OXM\Mapping as DOM;
+
 
 
 /**
@@ -68,7 +68,6 @@ use Doctrine\OXM\Mapping as DOM;
  *
  * @author vicpada
  * @package com\realexpayments\remote\sdk\domain\payment
- * @Dom\XmlRootEntity(xml="request")
  */
 class PaymentRequest implements iRequest {
 
@@ -77,21 +76,18 @@ class PaymentRequest implements iRequest {
 	 * @var string Format of timestamp is yyyyMMddhhmmss  e.g. 20150131094559 for 31/01/2015 09:45:59.
 	 * If the timestamp is more than a day (86400 seconds) away from the server time, then the request is rejected.
 	 *
-	 * @Dom\XmlAttribute(type="string",name="timestamp")
 	 */
 	private $timestamp;
 
 	/**
 	 * @var string The payment type
 	 *
-	 * @Dom\XmlAttribute(type="string",name="type")
 	 */
 	private $type;
 
 	/**
 	 * @var string Represents Realex Payments assigned merchant id.
 	 *
-	 * @Dom\XmlText(type="string",name="merchantid")
 	 */
 	private $merchantId;
 
@@ -99,7 +95,6 @@ class PaymentRequest implements iRequest {
 	 * @var string Represents the Realex Payments subaccount to use. If this element is omitted, then the
 	 * default account is used.
 	 *
-	 * @Dom\XmlText(type="string",name="account")
 	 */
 	private $account;
 
@@ -108,35 +103,30 @@ class PaymentRequest implements iRequest {
 	 * Mail Order/Telephone Order or Ecommerce transaction. For other banks, this is configured on the
 	 * Merchant ID level.
 	 *
-	 * @Dom\XmlText(type="string",name="channel")
 	 */
 	private $channel;
 
 	/**
 	 * @var string Represents the unique order id of this transaction. Must be unique across all of the sub-accounts.
 	 *
-	 * @Dom\XmlText(type="string",name="orderid")
 	 */
 	private $orderId;
 
 	/**
 	 * @var Amount Object containing the amount value and the currency type.
 	 *
-	 * @Dom\XmlElement(type="com\realexpayments\remote\sdk\domain\Amount",name="amount")
 	 */
 	private $amount;
 
 	/**
 	 * @var Card Object containing the card details to be passed in request.
 	 *
-	 * @Dom\XmlElement(type="com\realexpayments\remote\sdk\domain\Card", name="card")
 	 */
 	private $card;
 
 	/**
 	 * @var AutoSettle Object containing the auto settle flag.
 	 *
-	 * @Dom\XmlElement(type="com\realexpayments\remote\sdk\domain\payment\AutoSettle",name="autoSettle")
 	 */
 	private $autoSettle;
 
@@ -144,7 +134,6 @@ class PaymentRequest implements iRequest {
 	 * @var string Hash constructed from the time stamp, merchand ID, order ID, amount, currency, card number
 	 * and secret values.
 	 *
-	 * @Dom\XmlText(type="string", name="sha1hash")
 	 */
 	private $hash;
 
@@ -152,7 +141,6 @@ class PaymentRequest implements iRequest {
 	 * @var CommentCollection List of {@link Comment} objects to be passed in request. Optionally, up to two comments
 	 * can be associated with any transaction.
 	 *
-	 * @Dom\XmlElement(type="com\realexpayments\remote\sdk\domain\payment\CommentCollection", name="comments")
 	 */
 	private $comments;
 
@@ -167,7 +155,6 @@ class PaymentRequest implements iRequest {
 	 *
 	 * @var string payment reference
 	 *
-	 * @Dom\XmlText(type="string",name="pasref")
 	 */
 	private $paymentsReference;
 
@@ -181,7 +168,6 @@ class PaymentRequest implements iRequest {
 	 *
 	 * @var string auth code
 	 *
-	 * @Dom\XmlText(type="string",name="authcode")
 	 */
 	private $authCode;
 
@@ -189,21 +175,18 @@ class PaymentRequest implements iRequest {
 	 * @var string Represents a hash of the refund password, which Realex Payments will provide. The SHA1
 	 * algorithm must be used to generate this hash.
 	 *
-	 * @Dom\XmlText(type="string",name="refundhash")
 	 */
 	private $refundHash;
 
 	/**
 	 * @var string wellTODO - info on this
 	 *
-	 * @Dom\XmlText(type="string",name="fraudfilter")
 	 */
 	private $fraudFilter;
 
 	/**
 	 * @var Recurring If you are configured for recurring/continuous authority transactions, you must set the recurring values.
 	 *
-	 * @Dom\XmlElement(type="com\realexpayments\remote\sdk\domain\payment\Recurring", name="recurring")
 	 */
 	private $recurring;
 
@@ -211,7 +194,6 @@ class PaymentRequest implements iRequest {
 	 * @var TssInfo Contains optional variables which can be used to identify customers in the
 	 * Realex Payments system.
 	 *
-	 * @Dom\XmlElement(type="com\realexpayments\remote\sdk\domain\payment\TssInfo", name="tssinfo")
 	 */
 	private $tssInfo;
 
@@ -219,7 +201,6 @@ class PaymentRequest implements iRequest {
 	 * @var Mpi Contains 3D Secure/Secure Code information if this transaction has used a 3D
 	 * Secure/Secure Code system, either Realex's RealMPI or a third party's.
 	 *
-	 * @Dom\XmlElement(type="com\realexpayments\remote\sdk\domain\payment\Mpi", name="mpi")
 	 */
 	private $mpi;
 
@@ -228,6 +209,10 @@ class PaymentRequest implements iRequest {
 	 */
 	public function __construct() {
 
+	}
+
+	public static function GetClassName() {
+		return __CLASS__;
 	}
 
 

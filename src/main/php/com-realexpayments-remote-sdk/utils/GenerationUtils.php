@@ -112,6 +112,9 @@ class GenerationUtils {
 
 
 	private static function getGuid() {
+
+		self::pauseExecution();
+
 		if ( function_exists( 'com_create_guid' ) ) {
 			return trim( com_create_guid(), '{}' );
 		} else {
@@ -129,6 +132,12 @@ class GenerationUtils {
 			return $uuid;
 		}
 
+	}
+
+	private static function pauseExecution() {
+		// pause the execution for 100 milliseconds to avoid name collission
+		// in case many ids are generated in one go
+		usleep( 100000 );
 	}
 
 }

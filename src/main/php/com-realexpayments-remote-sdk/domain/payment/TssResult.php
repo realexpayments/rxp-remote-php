@@ -2,7 +2,7 @@
 
 
 namespace com\realexpayments\remote\sdk\domain\payment;
-use Doctrine\OXM\Mapping as DOM;
+
 
 
 /**
@@ -11,21 +11,18 @@ use Doctrine\OXM\Mapping as DOM;
  * @package com\realexpayments\remote\sdk\domain\payment
  * @author vicpada
  *
- * @Dom\XmlEntity(xml="tss")
  */
 class TssResult {
 
 	/**
 	 * @var string The weighted total score of realscore. The weights can be adjusted in the realcontrol application.
 	 *
-	 * @Dom\XmlText(type="string",name="result")
 	 */
 	private $result;
 
 	/**
 	 * @var TssResultCheck[] The list of realscore check results.
 	 *
-	 * @Dom\XmlElement(type="com\realexpayments\remote\sdk\domain\payment\TssResultCheck", collection=true, direct=true, name="check")
 	 */
 	private $checks;
 

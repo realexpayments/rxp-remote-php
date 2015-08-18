@@ -8,7 +8,7 @@ use com\realexpayments\remote\sdk\utils\GenerationUtils;
 use com\realexpayments\remote\sdk\utils\MessageType;
 use com\realexpayments\remote\sdk\utils\ResponseUtils;
 use com\realexpayments\remote\sdk\utils\XmlUtils;
-use Doctrine\OXM\Mapping as DOM;
+
 
 /**
  * <p>
@@ -17,7 +17,6 @@ use Doctrine\OXM\Mapping as DOM;
  *
  * @package com\realexpayments\remote\sdk\domain\payment
  * @author vicpada
- * @Dom\XmlRootEntity(xml="response")
  */
 class PaymentResponse implements iResponse {
 
@@ -25,14 +24,12 @@ class PaymentResponse implements iResponse {
 	 * @var string Time stamp in the format YYYYMMDDHHMMSS, which represents the time in the format year
 	 * month date hour minute second.
 	 *
-	 * @Dom\XmlAttribute(type="string",name="timestamp")
 	 */
 	private $timeStamp;
 
 	/**
 	 * @var string Represents Realex Payments assigned merchant id.
 	 *
-	 * @Dom\XmlText(type="string",name="merchantid")
 	 */
 	private $merchantId;
 
@@ -40,21 +37,18 @@ class PaymentResponse implements iResponse {
 	 * @var string Represents the Realex Payments subaccount to use. If you omit this element then
 	 * we will use your default account.
 	 *
-	 * @Dom\XmlText(type="string",name="account")
 	 */
 	private $account;
 
 	/**
 	 * @var string Represents the unique order id of this transaction. Must be unique across all of your accounts.
 	 *
-	 * @Dom\XmlText(type="string",name="orderid")
 	 */
 	private $orderId;
 
 	/**
 	 * @var string The result codes returned by the Realex Payments system.
 	 *
-	 * @Dom\XmlText(type="string",name="result")
 	 */
 	private $result;
 
@@ -62,14 +56,12 @@ class PaymentResponse implements iResponse {
 	 * @var string If successful an authcode is returned from the bank. Used when referencing
 	 * this transaction in refund and void requests.
 	 *
-	 * @Dom\XmlText(type="string",name="authcode")
 	 */
 	private $authCode;
 
 	/**
 	 * @var string The text of the response.
 	 *
-	 * @Dom\XmlText(type="string",name="message")
 	 */
 	private $message;
 
@@ -77,7 +69,6 @@ class PaymentResponse implements iResponse {
 	 * @var string The Realex payments reference (pasref) for the transaction. Used when referencing
 	 * this transaction in refund and void requests.
 	 *
-	 * @Dom\XmlText(type="string",name="pasref")
 	 */
 	private $paymentsReference;
 
@@ -97,28 +88,24 @@ class PaymentResponse implements iResponse {
 	 *
 	 * @var string
 	 *
-	 * @Dom\XmlText(type="string",name="cvnresult")
 	 */
 	private $cvnResult;
 
 	/**
 	 * @var int The time taken
 	 *
-	 * @Dom\XmlText(type="integer",name="timetaken")
 	 */
 	private $timeTaken;
 
 	/**
 	 * @var int The AUTH time taken.
 	 *
-	 * @Dom\XmlText(type="integer",name="authtimetaken")
 	 */
 	private $authTimeTaken;
 
 	/**
 	 * @var string The raw XML response from the acquirer (if the account is set up to return this).
 	 *
-	 * @Dom\XmlText(type="string",name="acquirerresponse")
 	 */
 	private $acquirerResponse;
 
@@ -126,14 +113,12 @@ class PaymentResponse implements iResponse {
 	 * @var int The batch id of the transaction. Returned in the case of auth and refund requests.
 	 * This can be used to assist with the reconciliation of your batches.
 	 *
-	 * @Dom\XmlText(type="integer",name="batchid")
 	 */
 	private $batchId;
 
 	/**
 	 * @var CardIssuer The details of the cardholder's bank (if available).
 	 *
-	 * @Dom\XmlElement(type="com\realexpayments\remote\sdk\domain\payment\CardIssuer",name="cardissuer")
 	 */
 	private $cardIssuer;
 
@@ -141,14 +126,12 @@ class PaymentResponse implements iResponse {
 	 * @var string The SHA-1 hash of certain elements of the response. The details of this are to be found
 	 * in the realauth developer's guide.
 	 *
-	 * @Dom\XmlText(type="string",name="sha1hash")
 	 */
 	private $hash;
 
 	/**
 	 * @var TssResult The results of realscore.
 	 *
-	 * @Dom\XmlElement(type="com\realexpayments\remote\sdk\domain\payment\TssResult",name="tss")
 	 */
 	private $tssResult;
 
@@ -166,7 +149,6 @@ class PaymentResponse implements iResponse {
 	 *
 	 * @var string
 	 *
-	 * @Dom\XmlText(type="string",name="avspostcoderesponse")
 	 */
 	private $avsPostcodeResponse;
 
@@ -184,7 +166,6 @@ class PaymentResponse implements iResponse {
 	 *
 	 * @var string
 	 *
-	 * @Dom\XmlText(type="string",name="avsaddressresponse")
 	 */
 	private $avsAddressResponse;
 
@@ -192,6 +173,10 @@ class PaymentResponse implements iResponse {
 	 * PaymentResponse constructor.
 	 */
 	public function __construct() {
+	}
+
+	public static function GetClassName() {
+		return __CLASS__;
 	}
 
 
@@ -205,7 +190,7 @@ class PaymentResponse implements iResponse {
 	 * @return iResponse
 	 */
 	public function fromXML( $xml ) {
-		return XmlUtils::fromXml($xml, new MessageType( MessageType::PAYMENT ));
+		return XmlUtils::fromXml( $xml, new MessageType( MessageType::PAYMENT ) );
 	}
 
 	/**
@@ -214,7 +199,7 @@ class PaymentResponse implements iResponse {
 	 * @return string
 	 */
 	public function toXML() {
-		return XmlUtils::toXml($this, new MessageType( MessageType::PAYMENT ));
+		return XmlUtils::toXml( $this, new MessageType( MessageType::PAYMENT ) );
 	}
 
 	/**
@@ -303,7 +288,7 @@ class PaymentResponse implements iResponse {
 	 * @return bool
 	 */
 	public function isSuccess() {
-		return ResponseUtils::isSuccess($this);
+		return ResponseUtils::isSuccess( $this );
 	}
 
 	/**

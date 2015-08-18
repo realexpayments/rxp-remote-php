@@ -18,12 +18,15 @@ use com\realexpayments\remote\sdk\domain\payment\PaymentRequest;
 use com\realexpayments\remote\sdk\domain\payment\PaymentResponse;
 use com\realexpayments\remote\sdk\domain\payment\PaymentType;
 use com\realexpayments\remote\sdk\domain\payment\Recurring;
+use com\realexpayments\remote\sdk\domain\payment\RecurringFlag;
+use com\realexpayments\remote\sdk\domain\payment\RecurringType;
 use com\realexpayments\remote\sdk\domain\payment\TssInfo;
 use com\realexpayments\remote\sdk\domain\payment\TssResult;
 use com\realexpayments\remote\sdk\domain\payment\TssResultCheck;
 use com\realexpayments\remote\sdk\domain\threeDSecure\ThreeDSecureRequest;
 use com\realexpayments\remote\sdk\domain\threeDSecure\ThreeDSecureResponse;
 use com\realexpayments\remote\sdk\domain\threeDSecure\ThreeDSecureType;
+use Composer\DependencyResolver\Request;
 
 
 /**
@@ -40,7 +43,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$cvn = new CVN();
 		$cvn = $cvn
 			->addNumber( SampleXmlValidationUtils::CARD_CVN_NUMBER )
-			->addPresenceIndicatorType( SampleXmlValidationUtils::$CARD_CVN_PRESENCE );
+			->addPresenceIndicator( SampleXmlValidationUtils::$CARD_CVN_PRESENCE );
 
 
 		$card = new Card();
@@ -56,12 +59,12 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$tssInfo = new TssInfo();
 
 		$businessAddress = new Address();
-		$businessAddress ->addAddressType( SampleXmlValidationUtils::$ADDRESS_TYPE_BUSINESS )
+		$businessAddress ->addType( SampleXmlValidationUtils::$ADDRESS_TYPE_BUSINESS )
 		                                   ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_BUSINESS )
 		                                   ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_BUSINESS );
 
 		$shippingAddress = new Address();
-		$shippingAddress ->addAddressType( SampleXmlValidationUtils::$ADDRESS_TYPE_SHIPPING )
+		$shippingAddress ->addType( SampleXmlValidationUtils::$ADDRESS_TYPE_SHIPPING )
 		                                   ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_SHIPPING )
 		                                   ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_SHIPPING );
 		$tssInfo
@@ -74,7 +77,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 
 
 		$autoSettle = new AutoSettle();
-		$autoSettle = $autoSettle->addAutoSettleFlag( SampleXmlValidationUtils::$AUTO_SETTLE_FLAG );
+		$autoSettle = $autoSettle->addFlag( SampleXmlValidationUtils::$AUTO_SETTLE_FLAG );
 
 		$mpi = new Mpi();
 		$mpi->addCavv( SampleXmlValidationUtils::THREE_D_SECURE_CAVV )
@@ -137,12 +140,12 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$tssInfo = new TssInfo();
 
 		$businessAddress = new Address();
-		$businessAddress->addAddressType( SampleXmlValidationUtils::$ADDRESS_TYPE_BUSINESS )
+		$businessAddress->addType( SampleXmlValidationUtils::$ADDRESS_TYPE_BUSINESS )
 		                ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_BUSINESS )
 		                ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_BUSINESS );
 
 		$shippingAddress = new Address();
-		$shippingAddress->addAddressType( SampleXmlValidationUtils::$ADDRESS_TYPE_SHIPPING )
+		$shippingAddress->addType( SampleXmlValidationUtils::$ADDRESS_TYPE_SHIPPING )
 		                ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_SHIPPING )
 		                ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_SHIPPING );
 
@@ -155,7 +158,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 			->addAddress( $shippingAddress );
 
 		$autoSettle = new AutoSettle();
-		$autoSettle = $autoSettle->addAutoSettleFlag( SampleXmlValidationUtils::$AUTO_SETTLE_FLAG );
+		$autoSettle = $autoSettle->addFlag( SampleXmlValidationUtils::$AUTO_SETTLE_FLAG );
 
 		$mpi = new Mpi();
 		$mpi->addCavv( SampleXmlValidationUtils::THREE_D_SECURE_CAVV )
@@ -427,7 +430,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		     ->addCardType( new CardType( CardType::VISA ) )
 		     ->addCardHolderName( SampleXmlValidationUtils::CARD_HOLDER_NAME )
 		     ->addCvn( SampleXmlValidationUtils::CARD_CVN_NUMBER )
-		     ->addCvnPresenceIndicatorType( SampleXmlValidationUtils::$CARD_CVN_PRESENCE )
+		     ->addCvnPresenceIndicator( SampleXmlValidationUtils::$CARD_CVN_PRESENCE )
 		     ->addIssueNumber( SampleXmlValidationUtils::CARD_ISSUE_NUMBER );
 
 
@@ -656,5 +659,372 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 
 		//Try to unmarshal invalid XML
 		XmlUtils::fromXml( "<xml>test</xml>xml>", new MessageType( MessageType::THREE_D_SECURE ) );
+	}
+
+	/**
+	 * Tests that press indicator is sent correctly even when it is out of range
+	 */
+	public function  testPressIndicator() {
+		$expectedCVN="5";
+
+		$card = new Card();
+		$card->addExpiryDate( SampleXmlValidationUtils::CARD_EXPIRY_DATE )
+		     ->addNumber( SampleXmlValidationUtils::CARD_NUMBER )
+		     ->addCardType( new CardType( CardType::VISA ) )
+		     ->addCardHolderName( SampleXmlValidationUtils::CARD_HOLDER_NAME )
+		     ->addCvn( SampleXmlValidationUtils::CARD_CVN_NUMBER )
+		     ->addCvnPresenceIndicator( $expectedCVN )
+		     ->addIssueNumber( SampleXmlValidationUtils::CARD_ISSUE_NUMBER );
+
+
+		$tssInfo = new TssInfo();
+
+		$businessAddress = new Address();
+		$businessAddress->addType( SampleXmlValidationUtils::$ADDRESS_TYPE_BUSINESS )
+		                ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_BUSINESS )
+		                ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_BUSINESS );
+
+		$shippingAddress = new Address();
+		$shippingAddress->addType( SampleXmlValidationUtils::$ADDRESS_TYPE_SHIPPING )
+		                ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_SHIPPING )
+		                ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_SHIPPING );
+
+		$tssInfo
+			->addCustomerNumber( SampleXmlValidationUtils::CUSTOMER_NUMBER )
+			->addProductId( SampleXmlValidationUtils::PRODUCT_ID )
+			->addVariableReference( SampleXmlValidationUtils::VARIABLE_REFERENCE )
+			->addCustomerIpAddress( SampleXmlValidationUtils::CUSTOMER_IP )
+			->addAddress( $businessAddress )
+			->addAddress( $shippingAddress );
+
+		$autoSettle = new AutoSettle();
+		$autoSettle = $autoSettle->addFlag( SampleXmlValidationUtils::$AUTO_SETTLE_FLAG );
+
+		$mpi = new Mpi();
+		$mpi->addCavv( SampleXmlValidationUtils::THREE_D_SECURE_CAVV )
+		    ->addXid( SampleXmlValidationUtils::THREE_D_SECURE_XID )
+		    ->addEci( SampleXmlValidationUtils::THREE_D_SECURE_ECI );
+
+		$recurring = new Recurring();
+		$recurring->addFlag( SampleXmlValidationUtils::$RECURRING_FLAG->getRecurringFlag() )
+		          ->addSequence( SampleXmlValidationUtils::$RECURRING_SEQUENCE->getSequence() )
+		          ->addType( SampleXmlValidationUtils::$RECURRING_TYPE->getType() );
+
+		$request = new PaymentRequest();
+		$request
+			->addAccount( SampleXmlValidationUtils::ACCOUNT )
+			->addMerchantId( SampleXmlValidationUtils::MERCHANT_ID )
+			->addType( PaymentType::AUTH )
+			->addAmount( SampleXmlValidationUtils::AMOUNT )
+			->addCurrency( SampleXmlValidationUtils::CURRENCY )
+			->addCard( $card )
+			->addAutoSettle( $autoSettle )
+			->addTimestamp( SampleXmlValidationUtils::TIMESTAMP )
+			->addChannel( SampleXmlValidationUtils::CHANNEL )
+			->addOrderId( SampleXmlValidationUtils::ORDER_ID )
+			->addHash( SampleXmlValidationUtils::REQUEST_HASH )
+			->addComment( SampleXmlValidationUtils::COMMENT1 )
+			->addComment( SampleXmlValidationUtils::COMMENT2 )
+			->addPaymentsReference( SampleXmlValidationUtils::PASREF )
+			->addAuthCode( SampleXmlValidationUtils::AUTH_CODE )
+			->addRefundHash( SampleXmlValidationUtils::REFUND_HASH )
+			->addFraudFilter( SampleXmlValidationUtils::FRAUD_FILTER )
+			->addRecurring( $recurring )
+			->addTssInfo( $tssInfo )
+			->addMpi( $mpi );
+
+
+		// convert to XML
+		$xml = $request->toXml();
+
+		// Convert from XML back to PaymentRequest
+
+		/* @var PaymentRequest $fromXmlRequest */
+		$fromXmlRequest = new PaymentRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+
+
+		$this->assertEquals( $expectedCVN, $fromXmlRequest->getCard()->getCvn()->getPresenceIndicator() );
+	}
+
+	/**
+	 * Tests and invaluid recurring flag value
+	 */
+	public function  testInvalidRecurringFlag() {
+
+
+		$card = new Card();
+		$card->addExpiryDate( SampleXmlValidationUtils::CARD_EXPIRY_DATE )
+		     ->addNumber( SampleXmlValidationUtils::CARD_NUMBER )
+		     ->addCardType( new CardType( CardType::VISA ) )
+		     ->addCardHolderName( SampleXmlValidationUtils::CARD_HOLDER_NAME )
+		     ->addCvn( SampleXmlValidationUtils::CARD_CVN_NUMBER )
+		     ->addCvnPresenceIndicator( SampleXmlValidationUtils::$CARD_CVN_PRESENCE )
+		     ->addIssueNumber( SampleXmlValidationUtils::CARD_ISSUE_NUMBER );
+
+
+		$tssInfo = new TssInfo();
+
+		$businessAddress = new Address();
+		$businessAddress->addType( SampleXmlValidationUtils::$ADDRESS_TYPE_BUSINESS )
+		                ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_BUSINESS )
+		                ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_BUSINESS );
+
+		$shippingAddress = new Address();
+		$shippingAddress->addType( SampleXmlValidationUtils::$ADDRESS_TYPE_SHIPPING )
+		                ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_SHIPPING )
+		                ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_SHIPPING );
+
+		$tssInfo
+			->addCustomerNumber( SampleXmlValidationUtils::CUSTOMER_NUMBER )
+			->addProductId( SampleXmlValidationUtils::PRODUCT_ID )
+			->addVariableReference( SampleXmlValidationUtils::VARIABLE_REFERENCE )
+			->addCustomerIpAddress( SampleXmlValidationUtils::CUSTOMER_IP )
+			->addAddress( $businessAddress )
+			->addAddress( $shippingAddress );
+
+		$autoSettle = new AutoSettle();
+		$autoSettle = $autoSettle->addFlag( SampleXmlValidationUtils::$AUTO_SETTLE_FLAG );
+
+		$mpi = new Mpi();
+		$mpi->addCavv( SampleXmlValidationUtils::THREE_D_SECURE_CAVV )
+		    ->addXid( SampleXmlValidationUtils::THREE_D_SECURE_XID )
+		    ->addEci( SampleXmlValidationUtils::THREE_D_SECURE_ECI );
+
+		$expectedFlag = "3";
+		$recurringFlag = new RecurringFlag($expectedFlag);
+
+		$recurring = new Recurring();
+		$recurring->addFlag( $recurringFlag )
+		          ->addSequence( SampleXmlValidationUtils::$RECURRING_SEQUENCE->getSequence() )
+		          ->addType( SampleXmlValidationUtils::$RECURRING_TYPE->getType() );
+
+		$request = new PaymentRequest();
+		$request
+			->addAccount( SampleXmlValidationUtils::ACCOUNT )
+			->addMerchantId( SampleXmlValidationUtils::MERCHANT_ID )
+			->addType( PaymentType::AUTH )
+			->addAmount( SampleXmlValidationUtils::AMOUNT )
+			->addCurrency( SampleXmlValidationUtils::CURRENCY )
+			->addCard( $card )
+			->addAutoSettle( $autoSettle )
+			->addTimestamp( SampleXmlValidationUtils::TIMESTAMP )
+			->addChannel( SampleXmlValidationUtils::CHANNEL )
+			->addOrderId( SampleXmlValidationUtils::ORDER_ID )
+			->addHash( SampleXmlValidationUtils::REQUEST_HASH )
+			->addComment( SampleXmlValidationUtils::COMMENT1 )
+			->addComment( SampleXmlValidationUtils::COMMENT2 )
+			->addPaymentsReference( SampleXmlValidationUtils::PASREF )
+			->addAuthCode( SampleXmlValidationUtils::AUTH_CODE )
+			->addRefundHash( SampleXmlValidationUtils::REFUND_HASH )
+			->addFraudFilter( SampleXmlValidationUtils::FRAUD_FILTER )
+			->addRecurring( $recurring )
+			->addTssInfo( $tssInfo )
+			->addMpi( $mpi );
+
+
+		// convert to XML
+		$xml = $request->toXml();
+
+		// Convert from XML back to PaymentRequest
+
+		/* @var PaymentRequest $fromXmlRequest */
+		$fromXmlRequest = new PaymentRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+
+
+		$this->assertEquals( $expectedFlag, $fromXmlRequest->getRecurring()->getFlag());
+	}
+
+	/**
+	 * Tests and invaluid recurring type value
+	 */
+	public function  testInvalidRecurringType() {
+
+
+		$card = new Card();
+		$card->addExpiryDate( SampleXmlValidationUtils::CARD_EXPIRY_DATE )
+		     ->addNumber( SampleXmlValidationUtils::CARD_NUMBER )
+		     ->addCardType( new CardType( CardType::VISA ) )
+		     ->addCardHolderName( SampleXmlValidationUtils::CARD_HOLDER_NAME )
+		     ->addCvn( SampleXmlValidationUtils::CARD_CVN_NUMBER )
+		     ->addCvnPresenceIndicator( SampleXmlValidationUtils::$CARD_CVN_PRESENCE )
+		     ->addIssueNumber( SampleXmlValidationUtils::CARD_ISSUE_NUMBER );
+
+
+		$tssInfo = new TssInfo();
+
+		$businessAddress = new Address();
+		$businessAddress->addType( SampleXmlValidationUtils::$ADDRESS_TYPE_BUSINESS )
+		                ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_BUSINESS )
+		                ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_BUSINESS );
+
+		$shippingAddress = new Address();
+		$shippingAddress->addType( SampleXmlValidationUtils::$ADDRESS_TYPE_SHIPPING )
+		                ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_SHIPPING )
+		                ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_SHIPPING );
+
+		$tssInfo
+			->addCustomerNumber( SampleXmlValidationUtils::CUSTOMER_NUMBER )
+			->addProductId( SampleXmlValidationUtils::PRODUCT_ID )
+			->addVariableReference( SampleXmlValidationUtils::VARIABLE_REFERENCE )
+			->addCustomerIpAddress( SampleXmlValidationUtils::CUSTOMER_IP )
+			->addAddress( $businessAddress )
+			->addAddress( $shippingAddress );
+
+		$autoSettle = new AutoSettle();
+		$autoSettle = $autoSettle->addFlag( SampleXmlValidationUtils::$AUTO_SETTLE_FLAG );
+
+		$mpi = new Mpi();
+		$mpi->addCavv( SampleXmlValidationUtils::THREE_D_SECURE_CAVV )
+		    ->addXid( SampleXmlValidationUtils::THREE_D_SECURE_XID )
+		    ->addEci( SampleXmlValidationUtils::THREE_D_SECURE_ECI );
+
+		$expectedType = "badValue";
+		$recurringType = new RecurringType($expectedType);
+
+		$recurring = new Recurring();
+		$recurring->addFlag( SampleXmlValidationUtils::$RECURRING_FLAG->getRecurringFlag() )
+		          ->addSequence( SampleXmlValidationUtils::$RECURRING_SEQUENCE->getSequence() )
+		          ->addType( $recurringType );
+
+		$request = new PaymentRequest();
+		$request
+			->addAccount( SampleXmlValidationUtils::ACCOUNT )
+			->addMerchantId( SampleXmlValidationUtils::MERCHANT_ID )
+			->addType( PaymentType::AUTH )
+			->addAmount( SampleXmlValidationUtils::AMOUNT )
+			->addCurrency( SampleXmlValidationUtils::CURRENCY )
+			->addCard( $card )
+			->addAutoSettle( $autoSettle )
+			->addTimestamp( SampleXmlValidationUtils::TIMESTAMP )
+			->addChannel( SampleXmlValidationUtils::CHANNEL )
+			->addOrderId( SampleXmlValidationUtils::ORDER_ID )
+			->addHash( SampleXmlValidationUtils::REQUEST_HASH )
+			->addComment( SampleXmlValidationUtils::COMMENT1 )
+			->addComment( SampleXmlValidationUtils::COMMENT2 )
+			->addPaymentsReference( SampleXmlValidationUtils::PASREF )
+			->addAuthCode( SampleXmlValidationUtils::AUTH_CODE )
+			->addRefundHash( SampleXmlValidationUtils::REFUND_HASH )
+			->addFraudFilter( SampleXmlValidationUtils::FRAUD_FILTER )
+			->addRecurring( $recurring )
+			->addTssInfo( $tssInfo )
+			->addMpi( $mpi );
+
+
+		// convert to XML
+		$xml = $request->toXml();
+
+		// Convert from XML back to PaymentRequest
+
+		/* @var PaymentRequest $fromXmlRequest */
+		$fromXmlRequest = new PaymentRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+
+
+		$this->assertEquals( $expectedType, $fromXmlRequest->getRecurring()->getType());
+	}
+
+	/**
+	 * Tests symbols on comments fields
+	 */
+	public function testSymbolsOnCommentsAndTSS() {
+		$cvn = new CVN();
+		$cvn = $cvn
+			->addNumber( SampleXmlValidationUtils::CARD_CVN_NUMBER )
+			->addPresenceIndicator( SampleXmlValidationUtils::$CARD_CVN_PRESENCE );
+
+
+		$card = new Card();
+		$card
+			->addExpiryDate( SampleXmlValidationUtils::CARD_EXPIRY_DATE )
+			->addNumber( SampleXmlValidationUtils::CARD_NUMBER )
+			->addCardType( new CardType( CardType::VISA ) )
+			->addCardHolderName( SampleXmlValidationUtils::CARD_HOLDER_NAME )
+			->addIssueNumber( SampleXmlValidationUtils::CARD_ISSUE_NUMBER );
+
+		$card->setCvn( $cvn );
+
+		$tssInfo = new TssInfo();
+
+		$businessAddress = new Address();
+		$businessAddress ->addType( SampleXmlValidationUtils::$ADDRESS_TYPE_BUSINESS )
+		                 ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_BUSINESS )
+		                 ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_BUSINESS );
+
+		$shippingAddress = new Address();
+		$shippingAddress ->addType( SampleXmlValidationUtils::$ADDRESS_TYPE_SHIPPING )
+		                 ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_SHIPPING )
+		                 ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_SHIPPING );
+		$tssInfo
+			->addCustomerNumber( SampleXmlValidationUtils::CUSTOMER_NUMBER_WITH_SYMBOLS )
+			->addProductId( SampleXmlValidationUtils::PRODUCT_ID )
+			->addVariableReference( SampleXmlValidationUtils::VARIABLE_REFERENCE_WITH_SYMBOLS )
+			->addCustomerIpAddress( SampleXmlValidationUtils::CUSTOMER_IP )
+			->addAddress( $businessAddress )
+			->addAddress( $shippingAddress );
+
+
+		$autoSettle = new AutoSettle();
+		$autoSettle = $autoSettle->addFlag( SampleXmlValidationUtils::$AUTO_SETTLE_FLAG );
+
+		$mpi = new Mpi();
+		$mpi->addCavv( SampleXmlValidationUtils::THREE_D_SECURE_CAVV )
+		    ->addXid( SampleXmlValidationUtils::THREE_D_SECURE_XID )
+		    ->addEci( SampleXmlValidationUtils::THREE_D_SECURE_ECI );
+
+		$recurring = new Recurring();
+		$recurring->addFlag( SampleXmlValidationUtils::$RECURRING_FLAG )
+		          ->addSequence( SampleXmlValidationUtils::$RECURRING_SEQUENCE )
+		          ->addType( SampleXmlValidationUtils::$RECURRING_TYPE );
+
+		$request = new PaymentRequest();
+		$request
+			->addAccount( SampleXmlValidationUtils::ACCOUNT )
+			->addMerchantId( SampleXmlValidationUtils::MERCHANT_ID )
+			->addPaymentType( new PaymentType( PaymentType::AUTH ) )
+			->addAmount( SampleXmlValidationUtils::AMOUNT )
+			->addCurrency( SampleXmlValidationUtils::CURRENCY )
+			->addCard( $card )
+			->addAutoSettle( $autoSettle )
+			->addTimestamp( SampleXmlValidationUtils::TIMESTAMP )
+			->addChannel( SampleXmlValidationUtils::CHANNEL )
+			->addOrderId( SampleXmlValidationUtils::ORDER_ID )
+			->addHash( SampleXmlValidationUtils::REQUEST_HASH )
+			->addComment( SampleXmlValidationUtils::COMMENT1_WITH_SYMBOLS )
+			->addComment( SampleXmlValidationUtils::COMMENT2_WITH_SYMBOLS )
+			->addPaymentsReference( SampleXmlValidationUtils::PASREF )
+			->addAuthCode( SampleXmlValidationUtils::AUTH_CODE )
+			->addRefundHash( SampleXmlValidationUtils::REFUND_HASH )
+			->addFraudFilter( SampleXmlValidationUtils::FRAUD_FILTER )
+			->addRecurring( $recurring )
+			->addTssInfo( $tssInfo )
+			->addMpi( $mpi );
+
+		// convert to XML
+		$xml = $request->toXml();
+
+		// Convert from XML back to PaymentRequest
+
+		/* @var PaymentRequest $fromXmlRequest */
+		$fromXmlRequest = new PaymentRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledPaymentRequestWithSymbols( $fromXmlRequest, $this );
+	}
+
+	/**
+	 * Tests symbols on comments fields from file
+	 */
+	public function testSymbolsOnCommentsAndTSSFromFile() {
+
+		$path   = SampleXmlValidationUtils::PAYMENT_REQUEST_WITH_SYMBOLS_XML_PATH;
+		$prefix = __DIR__ . '/../../../resources';
+		$xml    = file_get_contents( $prefix . $path );
+
+
+		/* @var PaymentRequest $fromXmlRequest */
+		$fromXmlRequest = new PaymentRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledPaymentRequestWithSymbols( $fromXmlRequest, $this );
 	}
 }
