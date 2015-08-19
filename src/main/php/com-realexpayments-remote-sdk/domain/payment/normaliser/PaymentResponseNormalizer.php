@@ -174,17 +174,17 @@ class PaymentResponseNormalizer extends AbstractNormalizer {
 			return array();
 		}
 
-		return array(
+		return array_filter( array(
 			'bank'        => $cardIssuer->getBank(),
 			'country'     => $cardIssuer->getCountry(),
 			'countrycode' => $cardIssuer->getCountryCode(),
 			'region'      => $cardIssuer->getRegion()
-		);
+		) );
 	}
 
 	private function normaliseTss( PaymentResponse $response ) {
 		$tss = $response->getTssResult();
-		if ( is_null( $tss ) ) {
+		if ( is_null( $tss ) || $this->tss_is_empty( $response ) ) {
 			return array();
 		}
 
@@ -192,6 +192,11 @@ class PaymentResponseNormalizer extends AbstractNormalizer {
 			'result' => $tss->getResult(),
 			'check'  => $tss->getChecks()
 		);
+	}
+
+	private function tss_is_empty( PaymentResponse $response ) {
+		return $response->getTssResult()->getResult() == null ||
+		       $response->getTssResult()->getChecks() == null;
 	}
 
 }

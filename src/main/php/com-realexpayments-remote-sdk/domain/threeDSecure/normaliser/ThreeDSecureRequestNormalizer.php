@@ -160,7 +160,7 @@ class ThreeDSecureRequestNormalizer extends AbstractNormalizer {
 		/** @var ThreeDSecureRequest $object */
 
 		$hasComments = true;
-		$comments = $object->getComments();
+		$comments    = $object->getComments();
 		if ( is_null( $comments ) || $comments->getSize() == 0 ) {
 			$hasComments = false;
 		} else {
@@ -178,7 +178,7 @@ class ThreeDSecureRequestNormalizer extends AbstractNormalizer {
 			'card'       => $this->normaliseCard( $object ),
 			'pares'      => $object->getPares(),
 			'sha1hash'   => $object->getHash(),
-			'comments'    => $hasComments ? array( 'comment' => $comments ) : array()
+			'comments'   => $hasComments ? array( 'comment' => $comments ) : array()
 		) );
 	}
 
@@ -188,10 +188,10 @@ class ThreeDSecureRequestNormalizer extends AbstractNormalizer {
 			return array();
 		}
 
-		return array(
+		return array_filter( array(
 			'@currency' => $amount->getCurrency(),
 			'#'         => $amount->getAmount()
-		);
+		) );
 	}
 
 	private function normaliseCard( ThreeDSecureRequest $request ) {
@@ -200,14 +200,14 @@ class ThreeDSecureRequestNormalizer extends AbstractNormalizer {
 			return array();
 		}
 
-		return array(
+		return array_filter( array(
 			'number'  => $card->getNumber(),
 			'expdate' => $card->getExpiryDate(),
 			'chname'  => $card->getCardHolderName(),
 			'type'    => $card->getType(),
 			'issueno' => $card->getIssueNumber(),
 			'cvn'     => $this->normaliseCVN( $card )
-		);
+		) );
 	}
 
 	private function normaliseCVN( Card $card ) {
@@ -216,10 +216,10 @@ class ThreeDSecureRequestNormalizer extends AbstractNormalizer {
 			return array();
 		}
 
-		return array(
+		return array_filter( array(
 			'number'  => $cvn->getNumber(),
 			'presind' => $cvn->getPresenceIndicator()
-		);
+		) );
 	}
 
 	/**

@@ -320,19 +320,19 @@ class PaymentRequestNormalizer extends AbstractNormalizer {
 			return array();
 		}
 
-		return array(
+		return array_filter( array(
 			'number'  => $card->getNumber(),
 			'expdate' => $card->getExpiryDate(),
 			'chname'  => $card->getCardHolderName(),
 			'type'    => $card->getType(),
 			'issueno' => $card->getIssueNumber(),
 			'cvn'     => $this->normaliseCVN( $card )
-		);
+		) );
 	}
 
 	private function normaliseAutoSettle( PaymentRequest $request ) {
 		$autoSettle = $request->getAutoSettle();
-		if ( is_null( $autoSettle ) ) {
+		if ( is_null( $autoSettle ) || is_null( $autoSettle->getFlag() ) ) {
 			return array();
 		}
 
@@ -344,43 +344,63 @@ class PaymentRequestNormalizer extends AbstractNormalizer {
 	private function normaliseRecurring( PaymentRequest $request ) {
 
 		$recurring = $request->getRecurring();
-		if ( is_null( $recurring ) ) {
+		if ( is_null( $recurring ) || $this->recurring_is_empty( $request ) ) {
 			return array();
 		}
 
-		return array(
+		return array_filter( array(
 			'@flag'     => $recurring->getFlag(),
 			'@sequence' => $recurring->getSequence(),
 			'@type'     => $recurring->getType()
-		);
+		) );
+	}
+
+	private function recurring_is_empty( PaymentRequest $request ) {
+		return $request->getRecurring()->getFlag() == null &&
+		       $request->getRecurring()->getSequence() == null &&
+		       $request->getRecurring()->getType() == null;
 	}
 
 	private function normaliseTssInfo( PaymentRequest $request ) {
 		$tssInfo = $request->getTssInfo();
-		if ( is_null( $tssInfo ) ) {
+		if ( is_null( $tssInfo ) || $this->tss_is_empty( $request ) ) {
 			return array();
 		}
 
-		return array(
+		return array_filter( array(
 			'custnum'       => $tssInfo->getCustomerNumber(),
 			'prodid'        => $tssInfo->getProductId(),
 			'varref'        => $tssInfo->getVariableReference(),
 			'custipaddress' => $tssInfo->getCustomerIpAddress(),
 			'address'       => $tssInfo->getAddresses()
-		);
+		) );
+	}
+
+	private function tss_is_empty( PaymentRequest $request ) {
+		return $request->getTssInfo()->getCustomerNumber() == null &&
+		       $request->getTssInfo()->getProductId() == null &&
+		       $request->getTssInfo()->getVariableReference() == null &&
+		       $request->getTssInfo()->getCustomerIpAddress() == null &&
+		       $request->getTssInfo()->getAddresses() == null;
 	}
 
 	private function normaliseMpi( PaymentRequest $request ) {
 		$mpi = $request->getMpi();
-		if ( is_null( $mpi ) ) {
+		if ( is_null( $mpi ) || $this->mpi_is_empty( $request ) ) {
 			return array();
 		}
 
-		return array(
+		return array_filter( array(
 			'cavv' => $mpi->getCavv(),
 			'xid'  => $mpi->getXid(),
 			'eci'  => $mpi->getEci()
-		);
+		) );
+	}
+
+	private function mpi_is_empty( PaymentRequest $request ) {
+		return $request->getMpi()->getCavv() == null &&
+		       $request->getMpi()->getXid() == null &&
+		       $request->getMpi()->getEci() == null;
 	}
 
 	private function normaliseCVN( Card $card ) {
@@ -389,10 +409,10 @@ class PaymentRequestNormalizer extends AbstractNormalizer {
 			return array();
 		}
 
-		return array(
+		return array_filter( array(
 			'number'  => $cvn->getNumber(),
 			'presind' => $cvn->getPresenceIndicator()
-		);
+		) );
 	}
 
 	/**
