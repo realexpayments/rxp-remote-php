@@ -1,5 +1,23 @@
 {
+  "name": "Realex Remote PHP SDK",
+  "type": "library",
+  "description": "SDK to send requests and parse responses from Realex ",
+  "keywords": [
+    "realex",
+    "payments",
+    "remote"
+  ],
+  "authors": [
+    {
+      "name": "Victor Palomares",
+      "email": "victor.palomares@softwaredesign.ie",
+      "homepage": "http://www.softwaredesign.ie",
+      "role": "Developer"
+    }
+  ],
+  "license": "MIT",
   "require": {
+    "php": ">=5.3.9",
     "hafriedlander/phockito": "1.0.0",
     "apache/log4php": "2.3.0",
     "symfony/serializer": "2.7.3",
