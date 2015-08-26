@@ -83,21 +83,23 @@ class PaymentResponseNormalizer extends AbstractNormalizer {
 		$tss->setResult( $data['result'] );
 
 		$checks    = $data['check'];
-
-		// Ensure that $checks is an array of results
-		if ( isset( $checks['@id'] ) ) {
-			$checks = array(0 => $checks);
-		}
-
 		$tssChecks = array();
-		foreach ( $checks as $check ) {
-			$check = new SafeArrayAccess( $check );
 
-			$tssCheck = new TssResultCheck();
-			$tssCheck->setId( $check['@id'] );
-			$tssCheck->setValue( $check['#'] );
+		if ( ! empty( $checks ) ) {
+			// Ensure that $checks is an array of results
+			if ( isset( $checks['@id'] ) ) {
+				$checks = array( 0 => $checks );
+			}
 
-			$tssChecks[] = $tssCheck;
+			foreach ( $checks as $check ) {
+				$check = new SafeArrayAccess( $check );
+
+				$tssCheck = new TssResultCheck();
+				$tssCheck->setId( $check['@id'] );
+				$tssCheck->setValue( $check['#'] );
+
+				$tssChecks[] = $tssCheck;
+			}
 		}
 
 		$tss->setChecks( $tssChecks );
