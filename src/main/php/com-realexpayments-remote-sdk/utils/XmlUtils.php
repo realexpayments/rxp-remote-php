@@ -7,6 +7,7 @@ namespace com\realexpayments\remote\sdk\utils;
 use com\realexpayments\remote\sdk\domain\iRequest;
 use com\realexpayments\remote\sdk\domain\payment\normaliser\AddressNormaliser;
 use com\realexpayments\remote\sdk\domain\payment\normaliser\CommentsNormalizer;
+use com\realexpayments\remote\sdk\domain\payment\normaliser\CustomStringXmlEncoder;
 use com\realexpayments\remote\sdk\domain\payment\normaliser\PaymentRequestNormalizer;
 use com\realexpayments\remote\sdk\domain\payment\normaliser\PaymentResponseNormalizer;
 use com\realexpayments\remote\sdk\domain\payment\normaliser\TssCheckNormaliser;
@@ -20,7 +21,6 @@ use com\realexpayments\remote\sdk\RealexException;
 use com\realexpayments\remote\sdk\RXPLogger;
 use Exception;
 use Logger;
-use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
@@ -124,7 +124,7 @@ class XmlUtils {
 
 		self::$marshallers = array();
 
-		$encoders                                  = array( new XmlEncoder() );
+		$encoders                                  = array( new CustomStringXmlEncoder( 'response', array( 'timestamp' ) ) );
 		$normalizers                               = array(
 			new PaymentRequestNormalizer(),
 			new PaymentResponseNormalizer(),
@@ -135,7 +135,7 @@ class XmlUtils {
 		);
 		self::$marshallers[ MessageType::PAYMENT ] = new Serializer( $normalizers, $encoders );
 
-		$encoders                                         = array( new XmlEncoder() );
+		$encoders                                         = array( new CustomStringXmlEncoder( 'response', array( 'timestamp' ) ) );
 		$normalizers                                      = array(
 			new ThreeDSecureRequestNormalizer(),
 			new ThreeDSecureResponseNormalizer(),
