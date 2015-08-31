@@ -26,7 +26,6 @@ use com\realexpayments\remote\sdk\domain\payment\TssResultCheck;
 use com\realexpayments\remote\sdk\domain\threeDSecure\ThreeDSecureRequest;
 use com\realexpayments\remote\sdk\domain\threeDSecure\ThreeDSecureResponse;
 use com\realexpayments\remote\sdk\domain\threeDSecure\ThreeDSecureType;
-use Composer\DependencyResolver\Request;
 
 
 /**
@@ -59,14 +58,14 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$tssInfo = new TssInfo();
 
 		$businessAddress = new Address();
-		$businessAddress ->addType( SampleXmlValidationUtils::$ADDRESS_TYPE_BUSINESS )
-		                                   ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_BUSINESS )
-		                                   ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_BUSINESS );
+		$businessAddress->addType( SampleXmlValidationUtils::$ADDRESS_TYPE_BUSINESS )
+		                ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_BUSINESS )
+		                ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_BUSINESS );
 
 		$shippingAddress = new Address();
-		$shippingAddress ->addType( SampleXmlValidationUtils::$ADDRESS_TYPE_SHIPPING )
-		                                   ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_SHIPPING )
-		                                   ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_SHIPPING );
+		$shippingAddress->addType( SampleXmlValidationUtils::$ADDRESS_TYPE_SHIPPING )
+		                ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_SHIPPING )
+		                ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_SHIPPING );
 		$tssInfo
 			->addCustomerNumber( SampleXmlValidationUtils::CUSTOMER_NUMBER )
 			->addProductId( SampleXmlValidationUtils::PRODUCT_ID )
@@ -665,7 +664,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 	 * Tests that press indicator is sent correctly even when it is out of range
 	 */
 	public function  testPressIndicator() {
-		$expectedCVN="5";
+		$expectedCVN = "5";
 
 		$card = new Card();
 		$card->addExpiryDate( SampleXmlValidationUtils::CARD_EXPIRY_DATE )
@@ -748,7 +747,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * Tests and invaluid recurring flag value
+	 * Tests and invalid recurring flag value
 	 */
 	public function  testInvalidRecurringFlag() {
 
@@ -791,8 +790,8 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		    ->addXid( SampleXmlValidationUtils::THREE_D_SECURE_XID )
 		    ->addEci( SampleXmlValidationUtils::THREE_D_SECURE_ECI );
 
-		$expectedFlag = "3";
-		$recurringFlag = new RecurringFlag($expectedFlag);
+		$expectedFlag  = "3";
+		$recurringFlag = new RecurringFlag( $expectedFlag );
 
 		$recurring = new Recurring();
 		$recurring->addFlag( $recurringFlag )
@@ -833,11 +832,11 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
 
 
-		$this->assertEquals( $expectedFlag, $fromXmlRequest->getRecurring()->getFlag());
+		$this->assertEquals( $expectedFlag, $fromXmlRequest->getRecurring()->getFlag() );
 	}
 
 	/**
-	 * Tests and invaluid recurring type value
+	 * Tests and invalid recurring type value
 	 */
 	public function  testInvalidRecurringType() {
 
@@ -880,8 +879,8 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		    ->addXid( SampleXmlValidationUtils::THREE_D_SECURE_XID )
 		    ->addEci( SampleXmlValidationUtils::THREE_D_SECURE_ECI );
 
-		$expectedType = "badValue";
-		$recurringType = new RecurringType($expectedType);
+		$expectedType  = "badValue";
+		$recurringType = new RecurringType( $expectedType );
 
 		$recurring = new Recurring();
 		$recurring->addFlag( SampleXmlValidationUtils::$RECURRING_FLAG->getRecurringFlag() )
@@ -922,7 +921,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
 
 
-		$this->assertEquals( $expectedType, $fromXmlRequest->getRecurring()->getType());
+		$this->assertEquals( $expectedType, $fromXmlRequest->getRecurring()->getType() );
 	}
 
 	/**
@@ -948,14 +947,14 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$tssInfo = new TssInfo();
 
 		$businessAddress = new Address();
-		$businessAddress ->addType( SampleXmlValidationUtils::$ADDRESS_TYPE_BUSINESS )
-		                 ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_BUSINESS )
-		                 ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_BUSINESS );
+		$businessAddress->addType( SampleXmlValidationUtils::$ADDRESS_TYPE_BUSINESS )
+		                ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_BUSINESS )
+		                ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_BUSINESS );
 
 		$shippingAddress = new Address();
-		$shippingAddress ->addType( SampleXmlValidationUtils::$ADDRESS_TYPE_SHIPPING )
-		                 ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_SHIPPING )
-		                 ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_SHIPPING );
+		$shippingAddress->addType( SampleXmlValidationUtils::$ADDRESS_TYPE_SHIPPING )
+		                ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_SHIPPING )
+		                ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_SHIPPING );
 		$tssInfo
 			->addCustomerNumber( SampleXmlValidationUtils::CUSTOMER_NUMBER_WITH_SYMBOLS )
 			->addProductId( SampleXmlValidationUtils::PRODUCT_ID )
@@ -1026,5 +1025,93 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$fromXmlRequest = new PaymentRequest();
 		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
 		SampleXmlValidationUtils::checkUnmarshalledPaymentRequestWithSymbols( $fromXmlRequest, $this );
+	}
+
+	/**
+	 * Tests and invalid currency value (null)
+	 */
+	public function  testNullValueOnCurrency() {
+
+
+		$card = new Card();
+		$card->addExpiryDate( SampleXmlValidationUtils::CARD_EXPIRY_DATE )
+		     ->addNumber( SampleXmlValidationUtils::CARD_NUMBER )
+		     ->addCardType( new CardType( CardType::VISA ) )
+		     ->addCardHolderName( SampleXmlValidationUtils::CARD_HOLDER_NAME )
+		     ->addCvn( SampleXmlValidationUtils::CARD_CVN_NUMBER )
+		     ->addCvnPresenceIndicator( SampleXmlValidationUtils::$CARD_CVN_PRESENCE )
+		     ->addIssueNumber( SampleXmlValidationUtils::CARD_ISSUE_NUMBER );
+
+
+		$tssInfo = new TssInfo();
+
+		$businessAddress = new Address();
+		$businessAddress->addType( SampleXmlValidationUtils::$ADDRESS_TYPE_BUSINESS )
+		                ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_BUSINESS )
+		                ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_BUSINESS );
+
+		$shippingAddress = new Address();
+		$shippingAddress->addType( SampleXmlValidationUtils::$ADDRESS_TYPE_SHIPPING )
+		                ->addCode( SampleXmlValidationUtils::ADDRESS_CODE_SHIPPING )
+		                ->addCountry( SampleXmlValidationUtils::ADDRESS_COUNTRY_SHIPPING );
+
+		$tssInfo
+			->addCustomerNumber( SampleXmlValidationUtils::CUSTOMER_NUMBER )
+			->addProductId( SampleXmlValidationUtils::PRODUCT_ID )
+			->addVariableReference( SampleXmlValidationUtils::VARIABLE_REFERENCE )
+			->addCustomerIpAddress( SampleXmlValidationUtils::CUSTOMER_IP )
+			->addAddress( $businessAddress )
+			->addAddress( $shippingAddress );
+
+		$autoSettle = new AutoSettle();
+		$autoSettle = $autoSettle->addFlag( SampleXmlValidationUtils::$AUTO_SETTLE_FLAG );
+
+		$mpi = new Mpi();
+		$mpi->addCavv( SampleXmlValidationUtils::THREE_D_SECURE_CAVV )
+		    ->addXid( SampleXmlValidationUtils::THREE_D_SECURE_XID )
+		    ->addEci( SampleXmlValidationUtils::THREE_D_SECURE_ECI );
+
+
+		$recurring = new Recurring();
+		$recurring->addFlag( SampleXmlValidationUtils::$RECURRING_FLAG )
+		          ->addSequence( SampleXmlValidationUtils::$RECURRING_SEQUENCE )
+		          ->addType( SampleXmlValidationUtils::$RECURRING_TYPE );
+
+		$expectedCurrency = null;
+		$request          = new PaymentRequest();
+		$request
+			->addAccount( SampleXmlValidationUtils::ACCOUNT )
+			->addMerchantId( SampleXmlValidationUtils::MERCHANT_ID )
+			->addType( PaymentType::AUTH )
+			->addAmount( SampleXmlValidationUtils::AMOUNT )
+			->addCurrency( $expectedCurrency )
+			->addCard( $card )
+			->addAutoSettle( $autoSettle )
+			->addTimestamp( SampleXmlValidationUtils::TIMESTAMP )
+			->addChannel( SampleXmlValidationUtils::CHANNEL )
+			->addOrderId( SampleXmlValidationUtils::ORDER_ID )
+			->addHash( SampleXmlValidationUtils::REQUEST_HASH )
+			->addComment( SampleXmlValidationUtils::COMMENT1 )
+			->addComment( SampleXmlValidationUtils::COMMENT2 )
+			->addPaymentsReference( SampleXmlValidationUtils::PASREF )
+			->addAuthCode( SampleXmlValidationUtils::AUTH_CODE )
+			->addRefundHash( SampleXmlValidationUtils::REFUND_HASH )
+			->addFraudFilter( SampleXmlValidationUtils::FRAUD_FILTER )
+			->addRecurring( $recurring )
+			->addTssInfo( $tssInfo )
+			->addMpi( $mpi );
+
+
+		// convert to XML
+		$xml = $request->toXml();
+
+		// Convert from XML back to PaymentRequest
+
+		/* @var PaymentRequest $fromXmlRequest */
+		$fromXmlRequest = new PaymentRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+
+
+		$this->assertEquals( $expectedCurrency, $fromXmlRequest->getAmount()->getCurrency() );
 	}
 }

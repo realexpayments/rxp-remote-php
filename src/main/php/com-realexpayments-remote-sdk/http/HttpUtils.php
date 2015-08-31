@@ -43,8 +43,8 @@ class HttpUtils {
 		self::$logger->debug( "Creating HttpClient with simple no pooling/no connection reuse default settings." );
 
 		$httpClient = new HttpClient();
-		$httpClient->setConnectTimeout($httpConfiguration->getTimeout());
-		$httpClient->setSocketTimeout($httpConfiguration->getTimeout());
+		$httpClient->setConnectTimeout( $httpConfiguration->getTimeout() );
+		$httpClient->setSocketTimeout( $httpConfiguration->getTimeout() );
 
 		return $httpClient;
 	}
@@ -103,8 +103,14 @@ class HttpUtils {
 
 			self::$logger->debug( "Checking the HTTP response status code." );
 			$statusCode = $response->getResponseCode();
+
+
 			if ( $statusCode != 200 ) {
-				throw new RealexException( "Unexpected http status code [" . $statusCode . "]" );
+				if ( $statusCode == 404 ) {
+					throw new RealexException( "Exception communicating with Realex" );
+				} else {
+					throw new RealexException( "Unexpected http status code [" . $statusCode . "]" );
+				}
 			}
 
 			self::$logger->debug( "Converting HTTP entity (the xml response) back into a string." );

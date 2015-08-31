@@ -142,6 +142,46 @@ class HttpUtilsTest extends \PHPUnit_Framework_TestCase {
 		} catch ( Exception $e ) {
 			$this->fail( "Unexpected exception:" . $e->getMessage() );
 		}
+	}
+
+	/**
+	 * Test sending a message, expecting an exception due to failure response.
+	 *
+	 */
+	public function testSendMessageFailure404() {
+		// Dummy and Mock required objects
+		$statusCode = 404;
+
+		$this->setExpectedException( "com\\realexpayments\\remote\\sdk\\RealexException", "Exception communicating with Realex" );
+
+		try {
+			$endpoint       = 'https://some-test-endpoint';
+			$onlyAllowHttps = true;
+
+			$xml = "<element>test response xml</element>";
+
+			$httpResponse = new HttpResponse();
+			$httpResponse->setResponseCode( $statusCode );
+			$httpResponse->setBody( $xml );
+
+			/** @var HttpConfiguration $configurationMock */
+			$configurationMock = \Phockito::mock( "com\\realexpayments\\remote\\sdk\\http\\HttpConfiguration" );
+			\Phockito::when( $configurationMock->getEndPoint() )->return( $endpoint );
+			\Phockito::when( $configurationMock->isOnlyAllowHttps() )->return( $onlyAllowHttps );
+
+			/** @var HttpClient $httpClientMock */
+			$httpClientMock = \Phockito::mock( "com\\realexpayments\\remote\\sdk\\http\\HttpClient" );
+
+			/** @var HttpRequest $anything */
+			\Phockito::when( $httpClientMock->execute( \Hamcrest_Core_IsAnything::anything(), \Hamcrest_Core_IsAnything::anything() ) )->return( $httpResponse );
+
+			// execute the method
+			$response = HttpUtils::sendMessage( $xml, $httpClientMock, $configurationMock );
+		} catch ( RealexException $e ) {
+			throw $e;
+		} catch ( Exception $e ) {
+			$this->fail( "Unexpected exception:" . $e->getMessage() );
+		}
 
 
 	}
