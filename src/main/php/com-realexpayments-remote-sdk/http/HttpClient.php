@@ -58,7 +58,7 @@ class HttpClient {
 		curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT_MS, $this->connectTimeout );
 		curl_setopt( $ch, CURLOPT_TIMEOUT_MS, $this->socketTimeout );
 
-		if ($onlyAllowHttps === false) {
+		if ( $onlyAllowHttps === false ) {
 			curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false );
 		}
 
@@ -70,7 +70,7 @@ class HttpClient {
 		if ( $errorNumber ) {
 			$this->logger->error( "Exception communicating with Realex. Error number: " . $errorNumber . ". Description: " . curl_error( $ch ) );
 			curl_close( $ch );
-			throw new RealexException("Exception communicating with Realex");
+			throw new RealexException( "Exception communicating with Realex" );
 		}
 
 		curl_close( $ch );
