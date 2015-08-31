@@ -925,10 +925,11 @@ class PaymentRequest implements iRequest {
 	 *
 	 * @param string $addressLine
 	 * @param string $postcode
+	 * @param string $country
 	 *
 	 * @return PaymentRequest
 	 */
-	public function addAddressVerificationServiceDetails( $addressLine, $postcode ) {
+	public function addAddressVerificationServiceDetails( $addressLine, $postcode, $country ) {
 
 		//build code in format <digits from postcode>|<digits from address>
 		$postcodeDigits    = preg_replace( "/\\D+/", "", $postcode );
@@ -938,6 +939,7 @@ class PaymentRequest implements iRequest {
 		$address = new Address();
 
 		$address->addCode( $code )
+		        ->addCountry( $country )
 		        ->addType( AddressType::BILLING );
 
 		//add address to TSS Info

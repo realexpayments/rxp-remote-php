@@ -50,7 +50,7 @@ class HttpUtilsTest extends \PHPUnit_Framework_TestCase {
 			$httpClientMock = \Phockito::mock( "com\\realexpayments\\remote\\sdk\\http\\HttpClient" );
 
 			/** @var HttpRequest $anything */
-			\Phockito::when( $httpClientMock->execute( \Hamcrest_Core_IsAnything::anything() ) )->return( $httpResponse );
+			\Phockito::when( $httpClientMock->execute( \Hamcrest_Core_IsAnything::anything(), \Hamcrest_Core_IsAnything::anything() ) )->return( $httpResponse );
 
 			// execute the method
 			$response = HttpUtils::sendMessage( $xml, $httpClientMock, $configurationMock );
@@ -92,7 +92,7 @@ class HttpUtilsTest extends \PHPUnit_Framework_TestCase {
 			$httpClientMock = \Phockito::mock( "com\\realexpayments\\remote\\sdk\\http\\HttpClient" );
 
 			/** @var HttpRequest $anything */
-			\Phockito::when( $httpClientMock->execute( \Hamcrest_Core_IsAnything::anything() ) )->return( $httpResponse );
+			\Phockito::when( $httpClientMock->execute( \Hamcrest_Core_IsAnything::anything(), \Hamcrest_Core_IsAnything::anything() ) )->return( $httpResponse );
 
 			// execute the method
 			$response = HttpUtils::sendMessage( $xml, $httpClientMock, $configurationMock );
@@ -133,7 +133,7 @@ class HttpUtilsTest extends \PHPUnit_Framework_TestCase {
 			$httpClientMock = \Phockito::mock( "com\\realexpayments\\remote\\sdk\\http\\HttpClient" );
 
 			/** @var HttpRequest $anything */
-			\Phockito::when( $httpClientMock->execute( \Hamcrest_Core_IsAnything::anything() ) )->return( $httpResponse );
+			\Phockito::when( $httpClientMock->execute( \Hamcrest_Core_IsAnything::anything(), \Hamcrest_Core_IsAnything::anything() ) )->return( $httpResponse );
 
 			// execute the method
 			$response = HttpUtils::sendMessage( $xml, $httpClientMock, $configurationMock );

@@ -139,6 +139,7 @@ class XmlUtils {
 		$normalizers                                      = array(
 			new ThreeDSecureRequestNormalizer(),
 			new ThreeDSecureResponseNormalizer(),
+			new CommentsNormalizer(),
 			new  ObjectNormalizer()
 		);
 		self::$marshallers[ MessageType::THREE_D_SECURE ] = new Serializer( $normalizers, $encoders );

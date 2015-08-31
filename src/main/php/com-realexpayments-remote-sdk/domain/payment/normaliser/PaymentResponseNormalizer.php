@@ -84,14 +84,22 @@ class PaymentResponseNormalizer extends AbstractNormalizer {
 
 		$checks    = $data['check'];
 		$tssChecks = array();
-		foreach ( $checks as $check ) {
-			$check = new SafeArrayAccess( $check );
 
-			$tssCheck = new TssResultCheck();
-			$tssCheck->setId( $check['@id'] );
-			$tssCheck->setValue( $check['#'] );
+		if ( ! empty( $checks ) ) {
+			// Ensure that $checks is an array of results
+			if ( isset( $checks['@id'] ) ) {
+				$checks = array( 0 => $checks );
+			}
 
-			$tssChecks[] = $tssCheck;
+			foreach ( $checks as $check ) {
+				$check = new SafeArrayAccess( $check );
+
+				$tssCheck = new TssResultCheck();
+				$tssCheck->setId( $check['@id'] );
+				$tssCheck->setValue( $check['#'] );
+
+				$tssChecks[] = $tssCheck;
+			}
 		}
 
 		$tss->setChecks( $tssChecks );
@@ -174,17 +182,17 @@ class PaymentResponseNormalizer extends AbstractNormalizer {
 			return array();
 		}
 
-		return array(
+		return array_filter( array(
 			'bank'        => $cardIssuer->getBank(),
 			'country'     => $cardIssuer->getCountry(),
 			'countrycode' => $cardIssuer->getCountryCode(),
 			'region'      => $cardIssuer->getRegion()
-		);
+		) );
 	}
 
 	private function normaliseTss( PaymentResponse $response ) {
 		$tss = $response->getTssResult();
-		if ( is_null( $tss ) ) {
+		if ( is_null( $tss ) || $this->tss_is_empty( $response ) ) {
 			return array();
 		}
 
@@ -192,6 +200,11 @@ class PaymentResponseNormalizer extends AbstractNormalizer {
 			'result' => $tss->getResult(),
 			'check'  => $tss->getChecks()
 		);
+	}
+
+	private function tss_is_empty( PaymentResponse $response ) {
+		return $response->getTssResult()->getResult() == null ||
+		       $response->getTssResult()->getChecks() == null;
 	}
 
 }

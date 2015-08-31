@@ -49,7 +49,7 @@ class RealexClientTest extends \PHPUnit_Framework_TestCase {
 
 		// mock HttpClient instance
 		$httpClientMock = Phockito::mock( "com\\realexpayments\\remote\\sdk\\http\\HttpClient" );
-		\Phockito::when( $httpClientMock->execute( \Hamcrest_Core_IsAnything::anything() ) )->return( $httpResponseMock );
+		\Phockito::when( $httpClientMock->execute( \Hamcrest_Core_IsAnything::anything(), \Hamcrest_Core_IsAnything::anything() ) )->return( $httpResponseMock );
 
 		// execute and send on client
 		$realexClient = new RealexClient( SampleXmlValidationUtils::SECRET, $httpConfiguration, $httpClientMock );
@@ -86,7 +86,7 @@ class RealexClientTest extends \PHPUnit_Framework_TestCase {
 
 		// mock HttpClient instance
 		$httpClientMock = Phockito::mock( "com\\realexpayments\\remote\\sdk\\http\\HttpClient" );
-		\Phockito::when( $httpClientMock->execute( \Hamcrest_Core_IsAnything::anything() ) )->return( $httpResponseMock );
+		\Phockito::when( $httpClientMock->execute( \Hamcrest_Core_IsAnything::anything(), \Hamcrest_Core_IsAnything::anything() ) )->return( $httpResponseMock );
 
 		// execute and send on client
 		$realexClient = new RealexClient( SampleXmlValidationUtils::SECRET, $httpConfiguration, $httpClientMock );
@@ -129,7 +129,7 @@ class RealexClientTest extends \PHPUnit_Framework_TestCase {
 
 		// mock HttpClient instance
 		$httpClientMock = Phockito::mock( "com\\realexpayments\\remote\\sdk\\http\\HttpClient" );
-		\Phockito::when( $httpClientMock->execute( \Hamcrest_Core_IsAnything::anything() ) )->return( $httpResponseMock );
+		\Phockito::when( $httpClientMock->execute( \Hamcrest_Core_IsAnything::anything(), \Hamcrest_Core_IsAnything::anything() ) )->return( $httpResponseMock );
 
 		// execute and send on client
 		$realexClient = new RealexClient( SampleXmlValidationUtils::SECRET, $httpConfiguration, $httpClientMock );
@@ -173,7 +173,7 @@ class RealexClientTest extends \PHPUnit_Framework_TestCase {
 
 		// mock HttpClient instance
 		$httpClientMock = Phockito::mock( "com\\realexpayments\\remote\\sdk\\http\\HttpClient" );
-		\Phockito::when( $httpClientMock->execute( \Hamcrest_Core_IsAnything::anything() ) )->return( $httpResponseMock );
+		\Phockito::when( $httpClientMock->execute( \Hamcrest_Core_IsAnything::anything(), \Hamcrest_Core_IsAnything::anything() ) )->return( $httpResponseMock );
 
 		// execute and send on client
 		$realexClient = new RealexClient( SampleXmlValidationUtils::SECRET, $httpConfiguration, $httpClientMock );
@@ -229,7 +229,7 @@ class RealexClientTest extends \PHPUnit_Framework_TestCase {
 
 		// mock HttpClient instance
 		$httpClientMock = Phockito::mock( "com\\realexpayments\\remote\\sdk\\http\\HttpClient" );
-		\Phockito::when( $httpClientMock->execute( \Hamcrest_Core_IsAnything::anything() ) )->return( $httpResponseMock );
+		\Phockito::when( $httpClientMock->execute( \Hamcrest_Core_IsAnything::anything(), \Hamcrest_Core_IsAnything::anything() ) )->return( $httpResponseMock );
 
 		// execute and send on client
 		$realexClient = new RealexClient( SampleXmlValidationUtils::SECRET, $httpConfiguration, $httpClientMock );
@@ -265,7 +265,7 @@ class RealexClientTest extends \PHPUnit_Framework_TestCase {
 
 		// mock HttpClient instance
 		$httpClientMock = Phockito::mock( "com\\realexpayments\\remote\\sdk\\http\\HttpClient" );
-		\Phockito::when( $httpClientMock->execute( \Hamcrest_Core_IsAnything::anything() ) )->return( $httpResponseMock );
+		\Phockito::when( $httpClientMock->execute( \Hamcrest_Core_IsAnything::anything(), \Hamcrest_Core_IsAnything::anything() ) )->return( $httpResponseMock );
 
 		// execute and send on client
 		$realexClient = new RealexClient( SampleXmlValidationUtils::SECRET, $httpConfiguration, $httpClientMock );
@@ -308,7 +308,7 @@ class RealexClientTest extends \PHPUnit_Framework_TestCase {
 
 		// mock HttpClient instance
 		$httpClientMock = Phockito::mock( "com\\realexpayments\\remote\\sdk\\http\\HttpClient" );
-		\Phockito::when( $httpClientMock->execute( \Hamcrest_Core_IsAnything::anything() ) )->return( $httpResponseMock );
+		\Phockito::when( $httpClientMock->execute( \Hamcrest_Core_IsAnything::anything(), \Hamcrest_Core_IsAnything::anything() ) )->return( $httpResponseMock );
 
 		// execute and send on client
 		$realexClient = new RealexClient( SampleXmlValidationUtils::SECRET, $httpConfiguration, $httpClientMock );

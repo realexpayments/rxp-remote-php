@@ -123,13 +123,13 @@ class ThreeDSecureResponseNormalizer extends AbstractNormalizer {
 			return array();
 		}
 
-		return array(
+		return array_filter( array(
 			'status'    => $threeDSecure->getStatus(),
 			'eci'       => $threeDSecure->getEci(),
 			'xid'       => $threeDSecure->getXid(),
 			'cavv'      => $threeDSecure->getCavv(),
 			'algorithm' => $threeDSecure->getAlgorithm()
-		);
+		) );
 	}
 
 	/**

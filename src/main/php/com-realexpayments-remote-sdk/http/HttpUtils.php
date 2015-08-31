@@ -99,7 +99,7 @@ class HttpUtils {
 			$httpPost->setBody( $xml );
 
 			self::$logger->debug( "Executing HTTP Post message to: " . $httpPost->getUrl() );
-			$response = $httpClient->execute( $httpPost );
+			$response = $httpClient->execute( $httpPost, $httpConfiguration->isOnlyAllowHttps() );
 
 			self::$logger->debug( "Checking the HTTP response status code." );
 			$statusCode = $response->getResponseCode();

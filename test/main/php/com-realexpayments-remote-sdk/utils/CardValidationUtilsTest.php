@@ -166,5 +166,13 @@ class CardValidationUtilsTest extends \PHPUnit_Framework_TestCase {
 		$this->assertFalse( $cvvIsValid, "Testing valid " . $cardType . " card type with invalid CVV number " . $cvvNumber . self::EMPTY_STRING );
 	}
 
+	public function testOneLetterTwoNumbersOnCVV() {
+		$cvvNumber = "a23";
+		$cardType  = "VISA";
+
+		$cvvIsValid = CardValidationUtils::performCvvCheck( $cvvNumber, $cardType );
+		$this->assertFalse( $cvvIsValid, "Testing valid " . $cardType . " card type with invalid CVV number " . $cvvNumber . self::EMPTY_STRING );
+	}
+
 
 }

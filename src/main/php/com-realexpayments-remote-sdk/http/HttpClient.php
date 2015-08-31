@@ -38,10 +38,11 @@ class HttpClient {
 
 	/**
 	 * @param HttpRequest $httpRequest
+	 * @param boolean $onlyAllowHttps
 	 *
 	 * @return HttpResponse
 	 */
-	public function execute( $httpRequest ) {
+	public function execute( $httpRequest, $onlyAllowHttps = true ) {
 
 		$url  = $httpRequest->getUrl();
 		$post = $httpRequest->getMethod() == HttpRequest::METH_POST ? 1 : 0;
@@ -56,6 +57,10 @@ class HttpClient {
 		curl_setopt( $ch, CURLOPT_HTTPHEADER, array( 'Content-Type: text/plain' ) );
 		curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT_MS, $this->connectTimeout );
 		curl_setopt( $ch, CURLOPT_TIMEOUT_MS, $this->socketTimeout );
+
+		if ($onlyAllowHttps === false) {
+			curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false );
+		}
 
 		$responseXml = curl_exec( $ch );
 		$statusCode  = curl_getinfo( $ch, CURLINFO_HTTP_CODE );
