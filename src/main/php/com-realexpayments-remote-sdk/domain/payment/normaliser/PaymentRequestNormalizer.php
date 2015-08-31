@@ -309,7 +309,7 @@ class PaymentRequestNormalizer extends AbstractNormalizer {
 		}
 
 		return array(
-			'@currency' => $amount->getCurrency(),
+			'@currency' => $amount->getCurrency() == null ? "" : $amount->getCurrency(),
 			'#'         => $amount->getAmount()
 		);
 	}
