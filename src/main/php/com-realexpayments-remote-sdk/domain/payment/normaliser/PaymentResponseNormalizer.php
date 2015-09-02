@@ -203,8 +203,9 @@ class PaymentResponseNormalizer extends AbstractNormalizer {
 	}
 
 	private function tss_is_empty( PaymentResponse $response ) {
-		return $response->getTssResult()->getResult() == null ||
-		       $response->getTssResult()->getChecks() == null;
+		return
+			$response->getTssResult()->getResult() == null &&
+			$response->getTssResult()->getChecks() == null;
 	}
 
 }

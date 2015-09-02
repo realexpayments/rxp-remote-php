@@ -187,7 +187,7 @@ class SampleXmlValidationUtils {
 	 * @param PaymentResponse $fromXmlResponse
 	 * @param PHPUnit_Framework_TestCase $testCase
 	 */
-	public static function checkUnmarshalledPaymentResponse( PaymentResponse $fromXmlResponse, PHPUnit_Framework_TestCase $testCase ) {
+	public static function checkUnmarshalledPaymentResponse( PaymentResponse $fromXmlResponse, PHPUnit_Framework_TestCase $testCase, $ignoreTssChecks = false ) {
 
 		$testCase->assertEquals( self::ACCOUNT, $fromXmlResponse->getAccount() );
 		$testCase->assertEquals( self::ACQUIRER_RESPONSE, $fromXmlResponse->getAcquirerResponse() );
@@ -208,11 +208,15 @@ class SampleXmlValidationUtils {
 		$testCase->assertEquals( self::TIMESTAMP, $fromXmlResponse->getTimeStamp() );
 		$testCase->assertEquals( self::TIME_TAKEN, $fromXmlResponse->getTimeTaken() );
 		$testCase->assertEquals( self::TSS_RESULT, $fromXmlResponse->getTssResult()->getResult() );
-		$checks = $fromXmlResponse->getTssResult()->getChecks();
-		$testCase->assertEquals( self::TSS_RESULT_CHECK1_ID, $checks[0]->getId() );
-		$testCase->assertEquals( self::TSS_RESULT_CHECK1_VALUE, $checks[0]->getValue() );
-		$testCase->assertEquals( self::TSS_RESULT_CHECK2_ID, $checks[1]->getId() );
-		$testCase->assertEquals( self::TSS_RESULT_CHECK2_VALUE, $checks[1]->getValue() );
+
+		if ( ! $ignoreTssChecks ) {
+			$checks = $fromXmlResponse->getTssResult()->getChecks();
+			$testCase->assertEquals( self::TSS_RESULT_CHECK1_ID, $checks[0]->getId() );
+			$testCase->assertEquals( self::TSS_RESULT_CHECK1_VALUE, $checks[0]->getValue() );
+			$testCase->assertEquals( self::TSS_RESULT_CHECK2_ID, $checks[1]->getId() );
+			$testCase->assertEquals( self::TSS_RESULT_CHECK2_VALUE, $checks[1]->getValue() );
+		}
+
 		$testCase->assertEquals( self::AVS_ADDRESS, $fromXmlResponse->getAvsAddressResponse() );
 		$testCase->assertEquals( self::AVS_POSTCODE, $fromXmlResponse->getAvsPostcodeResponse() );
 		$testCase->assertTrue( $fromXmlResponse->isSuccess() );
