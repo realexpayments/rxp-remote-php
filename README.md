@@ -7,38 +7,46 @@ The official PHP Remote SDK of Realex Payments
 
 ## Instructions ##
 
+
 1. Add the following to your 'composer.json' file
-```
-{
-    "require": {
-        "realexpayments/rxp-remote-php": "1.0.0"
+
+    ```
+    {
+        "require": {
+            "realexpayments/rxp-remote-php": "1.0.0"
+        }    
     }
-}
-```
+    ```
 
 2. Inside the application directory run composer:
-```
+
+    ```
     composer update
-```
-OR (depending on your server configuration)
-```
+    ```
+
+    OR (depending on your server configuration)
+
+    ```
     php composer.phar update
-```
+    ```
 
 3. Add a reference to the autoloader class anywhere you need to use the sdk
-```
+
+    ```php
     require_once ('vendor/autoload.php');
-```
+    ```
 
 4. Use the sdk <br/>
-```php
- $card = ( new Card() )
-         ->addNumber( "4263971921001307" )                                                                                                                                                                                              
-         ->addCardHolderName( "JoeBloggs" )
-         ....
-```
 
-##Example of an index.php page##
+    ```php
+    $card = ( new Card() )
+        ->addNumber( "4263971921001307" )                                                                                                                                                                                              
+        ->addCardHolderName( "JoeBloggs" )
+        ....
+    ```
+
+
+##SDK Example##
 
 ```php                                                                                    
 require_once ('vendor/autoload.php');
@@ -64,9 +72,9 @@ $card = ( new Card() )
 $request = ( new PaymentRequest() )                                                 
         ->addType( PaymentType::AUTH )                                            
         ->addCard( $card )                                                        
-        ->addMerchantId( "merchant123" )                                       
+        ->addMerchantId( "myMerchantId" )                                       
         ->addAccount( "internet" )                                                
-        ->addAmount( "50" )                                                         
+        ->addAmount( 50 )                                                         
         ->addCurrency( "EUR" )                                                    
         ->addAutoSettle( ( new AutoSettle() )->addFlag( AutoSettleFlag::TRUE ) ); 
                                                                                   
