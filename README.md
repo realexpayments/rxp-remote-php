@@ -1,26 +1,33 @@
 # rxp-remote-php
 The official PHP Remote SDK of Realex Payments
 
-
-## Requeriments ##
+## Requirements ##
 - PHP >= 5.3
 - Composer (https://getcomposer.org/)
 
 ## Instructions ##
 
-1. In you application root folder checkout the latest version of the project from Git:
+1. Add the following to your 'composer.json' file
 ```
-    git clone https://github.com/realexpayments-developers/rxp-remote-php.git
+{
+    "require": {
+        "realexpayments/rxp-remote-php": "1.0.0"
+    }
+}
 ```
 
-2. Inside the rxp-remote-php directory run composer:
+2. Inside the application directory run composer:
 ```
     composer update
 ```
-
-3. Add a reference to the autoloader class anywhere where you need to use the sdk
+OR (depending on your server configuration)
 ```
-    require __DIR__ . "/rxp-remote-php/vendor/autoload.php";
+    php composer.phar update
+```
+
+3. Add a reference to the autoloader class anywhere you need to use the sdk
+```
+    require_once ('vendor/autoload.php');
 ```
 
 4. Use the sdk <br/>
@@ -34,7 +41,7 @@ The official PHP Remote SDK of Realex Payments
 ##Example of an index.php page##
 
 ```php                                                                                    
-require __DIR__ . "/rxp-remote-php/vendor/autoload.php";
+require_once ('vendor/autoload.php');
         
 use com\realexpayments\remote\sdk\domain\Card;                                            
 use com\realexpayments\remote\sdk\domain\CardType;                                        
@@ -44,22 +51,22 @@ use com\realexpayments\remote\sdk\domain\payment\PaymentRequest;
 use com\realexpayments\remote\sdk\domain\payment\PaymentType;                             
 use com\realexpayments\remote\sdk\RealexClient;
                                                                                           
-// test payment                                                                           
-                                                                                          
+// test payment                                                                                                                                                                   
                                                                                    
 $card = ( new Card() )                                                            
-        ->addNumber( "4263971921001307" )                                         
-        ->addCardHolderName( "JoeBloggs" )                                        
-        ->addType( CardType::VISA )                                               
+        ->addType( CardType::VISA ) 
+		->addNumber( "4263971921001307" )                                         
         ->addExpiryDate( "1220" )
-        ->addCvn( "123" );
-                                                                                  
-$request = ( new PaymentRequest )                                                 
+		->addCvn( "123" )
+		->addCvnPresenceIndicator( PresenceIndicator::CVN_PRESENT )
+		->addCardHolderName( "James Mason" );                                     
+                                                                                
+$request = ( new PaymentRequest() )                                                 
         ->addType( PaymentType::AUTH )                                            
         ->addCard( $card )                                                        
         ->addMerchantId( "merchant123" )                                       
         ->addAccount( "internet" )                                                
-        ->addAmount( 50 )                                                         
+        ->addAmount( "50" )                                                         
         ->addCurrency( "EUR" )                                                    
         ->addAutoSettle( ( new AutoSettle() )->addFlag( AutoSettleFlag::TRUE ) ); 
                                                                                   
