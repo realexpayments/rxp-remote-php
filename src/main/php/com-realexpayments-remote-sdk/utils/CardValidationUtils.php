@@ -16,8 +16,8 @@ class CardValidationUtils {
 
 	/**
 	 * Method to perform a Luhn check on the card number.  This allows the SDK user to perform
-	 * basic validation on the card number. The card number may contain whitespace or '-' which will
-	 * be stripped before validation.
+	 * basic validation on the card number. Any whitespaces or '-' should be stripped out
+	 * before validation.
 	 *
 	 * @param string $cardNumber
 	 *
@@ -97,8 +97,8 @@ class CardValidationUtils {
 
 	/**
 	 * Method to perform an expiry date check.  This allows the SDK user to perform basic validation
-	 * on the card number. The expiry date may contain whitespace, '-' or '/' separators, should be
-	 * two digits for the month followed by two digits for the year and may not be in the past.
+	 * on the card number. Should be two digits for the month followed by two digits for the year and
+	 * may not be in the past. Any whitespaces or '-' should be stripped out before validation.
 	 *
 	 * @param string $expiryDate
 	 *

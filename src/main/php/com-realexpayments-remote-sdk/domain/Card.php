@@ -16,12 +16,13 @@ namespace com\realexpayments\remote\sdk\domain;
  * Example creation:
  * </p>
  * <p><code><pre>
- * $card = (new Card())->addExpiryDate("0119")
- *        ->addNumber("420000000000000000")
- *        ->addType(CardType.VISA)
- *        ->addCardHolderName("Joe Smith")
- *        ->addCvn("123")
- *        ->addCvnPresenceIndicator(PresenceIndicator.CVN_PRESENT);
+ * $card = (new Card())
+ * 	  ->addType(CardType::VISA)
+ * 	  ->addNumber("4242424242424242")
+ * 	  ->addExpiryDate("0525")
+ *    ->addCvn("123")
+ *    ->addCvnPresenceIndicator(PresenceIndicator::CVN_PRESENT);
+ *    ->addCardHolderName("Joe Bloggs");
  * </pre></code></p>
  *
  * @author vicpada

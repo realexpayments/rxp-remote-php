@@ -13,7 +13,7 @@ namespace com\realexpayments\remote\sdk\domain\payment;
  * Helper methods are provided (prefixed with 'add') for object creation.
  * </p>
  * <p><code>
- * Address $address = new (Address())->addCode("D2")->addCountry("IE")->addType(new AddressType(AddressType::Billing));
+ * $address = (new Address())->addCode("774|123")->addCountry("GB")->addType(new AddressType(AddressType::SHIPPING));
  * </code></p>
  *  *
  * @package com\realexpayments\remote\sdk\domain\payment

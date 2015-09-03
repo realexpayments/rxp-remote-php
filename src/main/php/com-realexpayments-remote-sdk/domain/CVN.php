@@ -17,7 +17,7 @@ namespace com\realexpayments\remote\sdk\domain;
  * Example creation:
  * </p>
  * <p><code><pre>
- * $cvn = (new Cvn())->addNumber(123)->addPresenceIndicator(PresenceIndicator.CVN_PRESENT);
+ * $cvn = (new CVN())->addNumber("123")->addPresenceIndicator(PresenceIndicator::CVN_PRESENT);
  * </pre></code></p>
  *
  * @author vicpada

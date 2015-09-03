@@ -15,11 +15,12 @@ namespace com\realexpayments\remote\sdk\domain\payment;
  * Helper methods are provided (prefixed with 'add') for object creation.
  * </p>
  * <p><code>
- * $recurring = (new Recurring())
- * ->addFlag(RecurringFlag::ONE)
- * ->addSequence(RecurringSequence::FIRST)
- * ->addType(RecurringType::FIXED);
- * </code></p>
+ *	$recurring = (new Recurring())
+ *		->addFlag(RecurringFlag::ONE);
+ *	
+ *	$recurring = (new Recurring())
+ *		->addSequence(RecurringSequence::FIRST)
+ *		->addType(RecurringType::FIXED);
  *
  * @author vicpada
  * @package com\realexpayments\remote\sdk\domain\payment
