@@ -18,7 +18,7 @@ namespace com\realexpayments\remote\sdk\domain;
  * Example creation:
  * </p>
  * <p><code><pre>
- * $amount = (new Amount())->addAmount(100l)->addCurrency(new CurrencyType(CurrencyType.EUR));
+ * $amount = (new Amount())->addAmount(1001)->addCurrency("EUR");
  * </pre></code></p>
  *
  * @author vicpada

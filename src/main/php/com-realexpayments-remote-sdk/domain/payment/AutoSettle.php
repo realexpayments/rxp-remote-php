@@ -19,7 +19,7 @@ namespace com\realexpayments\remote\sdk\domain\payment;
  * Example creation:
  * </p>
  * <p><code><pre>
- * AutoSettle autoSettle = new AutoSettle().addFlag(AutoSettleTrue.TRUE);
+ * $autoSettle = (new AutoSettle())->addFlag(AutoSettleFlag::TRUE);
  * </pre></code></p>
  *
  * @author vicpada

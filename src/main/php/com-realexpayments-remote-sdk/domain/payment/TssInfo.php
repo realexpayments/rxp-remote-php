@@ -14,19 +14,18 @@ namespace com\realexpayments\remote\sdk\domain\payment;
  *
  * <p><code><pre>
  * $tssInfo = (new TssInfo())
- * 	->addCustomerNumber("customer number")
- * 	->addProductId("product ID")
- * 	->addVariableReference("variable ref")
- * 	->addCustomerIpAddress("127.0.0.1")
- * 	->addAddress(
- * 		new Address()
- * 			->addType("billing")
- * 			->addCode("12|123")
- * 			->addCountry("IE"))
- * 	->addAddress(
- * 		new Address()
- * 			->addType("shipping")
- * 			->addCountry("GB"));
+ *     ->addCustomerNumber("customer number")
+ *     ->addProductId("product ID")
+ *     ->addVariableReference("variable ref")
+ *     ->addCustomerIpAddress("127.0.0.1")
+ *     ->addAddress((new Address())
+ *           ->addType(AddressType::BILLING)
+ *           ->addCode("digitsFromPostcode|digitsFromAddressLineOne")
+ *           ->addCountry("countryCode"))
+ *    ->addAddress((new Address())
+ *           ->addType(AddressType::SHIPPING)
+ *           ->addCode("digitsFromPostcode|digitsFromAddressLineOne")
+ *           ->addCountry("countryCode"));
  * </pre></code></p>
  *
  * @author vicpada

@@ -26,21 +26,21 @@ use com\realexpayments\remote\sdk\utils\XmlUtils;
  * </p>
  * <p><code><pre>
  * $card = (new Card())
- *    ->addExpiryDate("0119")
- *    ->addNumber("420000000000000000")
- *    ->addType(CardType.VISA)
- *    ->addCardHolderName("Joe Smith")
+ * 	  ->addType(CardType::VISA)
+ * 	  ->addNumber("4242424242424242")
+ * 	  ->addExpiryDate("0525")
  *    ->addCvn("123")
- *    ->addCvnPresenceIndicator(PresenceIndicator.CVN_PRESENT);
+ *    ->addCvnPresenceIndicator(PresenceIndicator::CVN_PRESENT);
+ *    ->addCardHolderName("Joe Bloggs");
  *
  * $request = (new PaymentRequest())
- *    ->addAccount("yourAccount")
- *    ->addMerchantId("yourMerchantId")
- *    ->addType(PaymentType.AUTH)
- *    ->addAmount(100)
- *    ->addCurrency("EUR")
- *    ->addCard(card)
- *    ->addAutoSettle(new AutoSettle()->addFlag(AutoSettleFlag.TRUE));
+ *	  ->addMerchantId("yourMerchantId")
+ *	  ->addAccount("yourAccount")
+ *	  ->addType(PaymentType::AUTH)
+ *	  ->addAmount(10001)
+ *	  ->addCurrency("EUR")
+ *	  ->addCard($card)
+ *	  ->addAutoSettle((new AutoSettle())->addFlag(AutoSettleFlag::TRUE));
  * </pre></code></p>
  *
  * <p>
@@ -48,22 +48,23 @@ use com\realexpayments\remote\sdk\utils\XmlUtils;
  * <p>
  * <p><code><pre>
  * $card = (new Card())
- *    ->addExpiryDate("0119")
- *    ->addNumber("420000000000000000")
- *    ->addType(CardType.VISA)
- *    ->addCardHolderName("Joe Smith")
+ * 	  ->addType(CardType::VISA)
+ * 	  ->addNumber("4242424242424242")
+ * 	  ->addExpiryDate("0525")
  *    ->addCvn("123")
- *    ->addCvnPresenceIndicator(PresenceIndicator.CVN_PRESENT);
+ *    ->addCvnPresenceIndicator(PresenceIndicator::CVN_PRESENT)
+ *    ->addCardHolderName("Joe Bloggs");
+
  *
  * $request = (new PaymentRequest())
- *    ->addAccount("yourAccount")
- *    ->addMerchantId("yourMerchantId")
- *    ->addType(PaymentType.AUTH)
- *    ->addAmount(100)
- *    ->addCurrency("EUR")
- *    ->addCard(card)
- *    ->addAutoSettle(new AutoSettle().addFlag(AutoSettleFlag.TRUE))
- *    ->addAddressVerificationServiceDetails("382 The Road", "WB1 A42");
+ *	  ->addMerchantId("yourMerchantId")
+ *	  ->addAccount("yourAccount")
+ *	  ->addType(PaymentType::AUTH)
+ *	  ->addAmount(10001)
+ *	  ->addCurrency("EUR")
+ *	  ->addCard($card)
+ *	  ->addAutoSettle((new AutoSettle())->addFlag(AutoSettleFlag::TRUE));
+ *    ->addAddressVerificationServiceDetails("382 The Road", "WB1 A42", "GB");
  * </pre></code></p>
  *
  * @author vicpada
@@ -107,7 +108,7 @@ class PaymentRequest implements iRequest {
 	private $channel;
 
 	/**
-	 * @var string Represents the unique order id of this transaction. Must be unique across all of the sub-accounts.
+	 * @var string Represents the unique order id of this transaction. Must be unique across all sub-accounts.
 	 *
 	 */
 	private $orderId;
