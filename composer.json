@@ -1,7 +1,7 @@
 {
-  "name": "realexpayments/rxp-remote-php",
+  "name": "vicpada/rxp-remote-php",
   "type": "library",
-  "description": "SDK to send requests and parse responses from Realex Payments using Remote",
+  "description": "SDK to send requests and parse responses from Realex ",
   "keywords": [
     "realex",
     "payments",
@@ -9,13 +9,10 @@
   ],
   "authors": [
     {
-      "name": "Realex Payments",
-      "homepage": "https://www.realexpayments.com",
-    },
-	  {
       "name": "Victor Palomares",
+      "email": "victor.palomares@softwaredesign.ie",
       "homepage": "http://www.softwaredesign.ie",
-	  "role": "Developer"
+      "role": "Developer"
     }
   ],
   "license": "MIT",
