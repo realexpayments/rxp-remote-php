@@ -1,0 +1,13 @@
+<request timestamp="20120926112654" type="3ds-verifyenrolled">
+    <merchantid>thestore</merchantid>
+    <account>internet</account>
+    <orderid>ORD453-11</orderid>
+    <amount currency="EUR">29900</amount>
+    <card>
+        <number>420000000000000000</number>
+        <expdate>0119</expdate>
+        <type>VISA</type>
+        <chname>Joe Smith</chname>
+    </card>
+    <sha1hash>1f6db5dc1a72c35b4c07cc9405a9674e272d57e7</sha1hash>
+</request>

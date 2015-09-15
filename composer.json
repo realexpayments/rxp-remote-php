@@ -1,0 +1,37 @@
+{
+  "name": "realexpayments/rxp-remote-php",
+  "type": "library",
+  "description": "SDK to send requests and parse responses from Realex Payments using Remote",
+  "keywords": [
+    "realex",
+    "payments",
+    "remote"
+  ],
+  "authors": [
+    {
+      "name": "Realex Payments",
+      "homepage": "https://www.realexpayments.com/"
+    },
+    {
+      "name": "Victor Palomares",
+      "homepage": "http://www.softwaredesign.ie",
+      "role": "Developer"
+    }
+  ],
+  "license": "MIT",
+  "require": {
+    "php": ">=5.3.9",
+    "hafriedlander/phockito": "1.0.0",
+    "apache/log4php": "2.3.0",
+    "symfony/serializer": "2.7.3",
+    "symfony/property-access": "2.7.3"
+  },
+  "autoload": {
+    "psr-4": {
+      "com\\realexpayments\\remote\\sdk\\": [
+        "src/main/php/com-realexpayments-remote-sdk",
+        "test/main/php/com-realexpayments-remote-sdk"
+      ]
+    }
+  }
+}
