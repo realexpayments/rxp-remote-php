@@ -51,7 +51,8 @@ You can sign up for a free Realex Payments sandbox account at https://www.realex
 require_once ( 'vendor/autoload.php' );
         
 use com\realexpayments\remote\sdk\domain\Card;                                            
-use com\realexpayments\remote\sdk\domain\CardType;                                        
+use com\realexpayments\remote\sdk\domain\CardType;
+use com\realexpayments\remote\sdk\domain\PresenceIndicator;
 use com\realexpayments\remote\sdk\domain\payment\AutoSettle;                              
 use com\realexpayments\remote\sdk\domain\payment\AutoSettleFlag;
 use com\realexpayments\remote\sdk\domain\payment\PaymentRequest;
