@@ -345,7 +345,11 @@ class CustomStringXmlEncoder extends SerializerAwareEncoder implements EncoderIn
 
 		foreach ( $value as $key => $val ) {
 			if ( is_array( $val ) && 1 === count( $val ) ) {
-				$value[ $key ] = current( $val );
+				$val = current( $val );
+				if ( is_string( $val ) ) {
+					$val = trim( $val );
+				}
+				$value[ $key ] = $val;
 			}
 		}
 
