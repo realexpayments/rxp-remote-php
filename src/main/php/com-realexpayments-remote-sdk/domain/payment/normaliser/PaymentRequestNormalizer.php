@@ -41,16 +41,38 @@ class PaymentRequestNormalizer extends AbstractNormalizer {
 		        ->addAccount( $array['account'] )
 		        ->addChannel( $array['channel'] )
 		        ->addOrderId( $array['orderid'] )
-		        ->addCard( $this->denormaliseCard( $array ) )
-		        ->addAutoSettle( $this->denormaliseAutoSettle( $array ) )
 		        ->addHash( $array['sha1hash'] )
 		        ->addPaymentsReference( $array['pasref'] )
 		        ->addAuthCode( $array['authcode'] )
 		        ->addRefundHash( $array['refundhash'] )
 		        ->addFraudFilter( $array['fraudfilter'] )
-		        ->addRecurring( $this->denormaliseRecurring( $array ) )
-		        ->addTssInfo( $this->denormaliseTssInfo( $array ) )
-		        ->addMpi( $this->denormaliseMpi( $array ) );
+		        ->addMobile( $array['mobile'] )
+		        ->addToken( $array['token'] );
+
+		$autoSettle = $this->denormaliseAutoSettle( $array );
+		if ( $autoSettle != null ) {
+			$request->addAutoSettle( $autoSettle );
+		}
+
+		$card = $this->denormaliseCard( $array );
+		if ( $card != null ) {
+			$request->addCard( $card );
+		}
+
+		$recurring = $this->denormaliseRecurring( $array );
+		if ( $recurring != null ) {
+			$request->addRecurring( $recurring );
+		}
+
+		$tssInfo = $this->denormaliseTssInfo( $array );
+		if ( $tssInfo != null ) {
+			$request->addTssInfo( $tssInfo );
+		}
+
+		$mpi = $this->denormaliseMpi( $array );
+		if ( $mpi != null ) {
+			$request->addMpi( $mpi );
+		}
 
 		$request->setAmount( $this->denormaliseAmount( $array ) );
 		$request->setComments( $this->denormaliseComments( $array ) );
@@ -299,6 +321,8 @@ class PaymentRequestNormalizer extends AbstractNormalizer {
 					'recurring'   => $this->normaliseRecurring( $object ),
 					'tssinfo'     => $this->normaliseTssInfo( $object ),
 					'mpi'         => $this->normaliseMpi( $object ),
+					'mobile'      => $object->getMobile(),
+					'token'       => $object->getToken(),
 				) );
 	}
 

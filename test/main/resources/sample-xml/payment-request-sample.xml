@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<request type="auth" timestamp="20120926112654">
+<request type="auth" timestamp="20151201094345">
     <merchantid>thestore</merchantid>
     <account>internet</account>
     <orderid>ORD453-11</orderid>
@@ -17,7 +17,7 @@
         </cvn>
     </card>
     <autosettle flag="MULTI"/>
-    <sha1hash>581b84c1dbfd0a6c9c7d4e2d0a620157e879dac5</sha1hash>
+    <sha1hash>085f09727da50c2392b64894f962e7eb5050f762</sha1hash>
     <comments>
         <comment id="1">comment 1</comment>
         <comment id="2">comment 2</comment>

@@ -36,7 +36,7 @@ class HttpUtils {
 	 *
 	 * @return HttpClient httpclient
 	 */
-	public static function  getDefaultClient( HttpConfiguration $httpConfiguration ) {
+	public static function getDefaultClient( HttpConfiguration $httpConfiguration ) {
 
 		self::getLogger();
 
@@ -123,7 +123,7 @@ class HttpUtils {
 
 		} catch ( Exception $e ) {
 
-			self::$logger->error( "Exception communicating with Realex.", $e->getMessage() );
+			self::$logger->error( "Exception communicating with Realex." . $e->getMessage() );
 			throw new RealexException( "Exception communicating with Realex", $e );
 		}
 	}
