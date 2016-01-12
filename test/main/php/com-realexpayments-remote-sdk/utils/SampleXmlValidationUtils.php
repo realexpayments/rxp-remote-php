@@ -38,6 +38,10 @@ class SampleXmlValidationUtils {
 	const THREE_D_SECURE_VERIFY_SIG_REQUEST_XML_PATH = "/sample-xml/3ds-verify-sig-request-sample.xml";
 	const THREE_D_SECURE_VERIFY_SIG_RESPONSE_XML_PATH = "/sample-xml/3ds-verify-sig-response-sample.xml";
 
+	//mobile auth payment sample XML
+	const MOBILE_AUTH_PAYMENT_REQUEST_XML_PATH = "/sample-xml/auth-mobile-payment-request-sample.xml";
+
+
 	//Card
 	const CARD_NUMBER = "420000000000000000";
 	/**
@@ -63,10 +67,10 @@ class SampleXmlValidationUtils {
 	 * @var AutoSettleFlag
 	 */
 	static $AUTO_SETTLE_FLAG;
-	const TIMESTAMP = "20120926112654";
+	const TIMESTAMP = "20151201094345";
 	const CHANNEL = "yourChannel";
 	const ORDER_ID = "ORD453-11";
-	const REQUEST_HASH = "581b84c1dbfd0a6c9c7d4e2d0a620157e879dac5";
+	const REQUEST_HASH = "085f09727da50c2392b64894f962e7eb5050f762";
 	const COMMENT1 = "comment 1";
 	const COMMENT2 = "comment 2";
 	const COMMENT1_WITH_SYMBOLS = "a-z A-Z 0-9 ' \", + “” ._ - & \\ / @ ! ? % ( )* : £ $ & € # [ ] | = ;ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷ø¤ùúûüýþÿŒŽšœžŸ¥";
@@ -111,6 +115,11 @@ class SampleXmlValidationUtils {
 	const ADDRESS_CODE_SHIPPING = "77|9876";
 	const ADDRESS_COUNTRY_SHIPPING = "GB";
 
+	/**
+	 * @var AutoSettleFlag
+	 */
+	static $AUTH_MOBILE_AUTO_SETTLE_FLAG;
+
 	//response fields
 	const ACQUIRER_RESPONSE = "<response>test acquirer response</response>";
 	const AUTH_TIME_TAKEN = 1001;
@@ -133,6 +142,8 @@ class SampleXmlValidationUtils {
 	const AUTH_CODE = "79347";
 	const AVS_POSTCODE = "M";
 	const AVS_ADDRESS = "P";
+	const MOBILE = "apple-pay";
+	const TIMESTAMP_RESPONSE = "20120926112654";
 
 	//basic response error fields
 	const MESSAGE_BASIC_ERROR = "error message returned from system";
@@ -146,8 +157,8 @@ class SampleXmlValidationUtils {
 	const RESPONSE_FULL_ERROR_HASH = "0ad8a9f121c4041b4b832ae8069e80674269e22f";
 
 	//3DS request fields
-	const THREE_D_SECURE_VERIFY_ENROLLED_REQUEST_HASH = "1f6db5dc1a72c35b4c07cc9405a9674e272d57e7";
-	const THREE_D_SECURE_VERIFY_SIG_REQUEST_HASH = "1f6db5dc1a72c35b4c07cc9405a9674e272d57e7";
+	const THREE_D_SECURE_VERIFY_ENROLLED_REQUEST_HASH = "085f09727da50c2392b64894f962e7eb5050f762";
+	const THREE_D_SECURE_VERIFY_SIG_REQUEST_HASH = "085f09727da50c2392b64894f962e7eb5050f762";
 
 	//3DS response fields
 	const THREE_D_SECURE_ENROLLED_RESULT = "00";
@@ -170,15 +181,26 @@ class SampleXmlValidationUtils {
 	const THREE_D_SECURE_ENROLLED_RESPONSE_HASH = "728cdbef90ff535ed818748f329ed8b1df6b8f5a";
 	const THREE_D_SECURE_SIG_RESPONSE_HASH = "e5a7745da5dc32d234c3f52860132c482107e9ac";
 
+	// auth-mobile fields
+	const AUTH_MOBILE_TIMESTAMP = "20150820154047";
+	const AUTH_MOBILE_TYPE = "AUTH_MOBILE";
+	const AUTH_MOBILE_MERCHANT_ID = "thestore";
+	const AUTH_MOBILE_ACCOUNT = "internet";
+	const AUTH_MOBILE_ORDER_ID = "8cdbf036-73e2-44ff-bf11-eba8cab33a14";
+	const AUTH_MOBILE_MOBILE = "apple-pay";
+	const AUTH_MOBILE_TOKEN = "{\"version\":\"EC_v1\",\"data\":\"Ft+dvmdfgnsdfnbg+zerKtkh/RWWjdfgdjhHGFHGFlkjdfgkljlkfs78678hEPnsbXZnMDy3o7qDg+iDHB0JVEjDHxjQIAPcNN1Cqdtq63nX4+VRU3eXzdo1QGqSptH6D5KW5SxZLAdnMEmCxG9vkVEdHTTlhVPddxiovAkFTBWBFTJ2uf5f2grXC/VnK0X/efAowXrhJIX1ngsGfAk3/EVRzADGHJFGHJKH78hjkhdfgih80UU05zSluzATidvvBoHBz/WpytSYyrUx1QI9nyH/Nbv8f8lOUjPzBFb+EFOzJaIf+fr0swKU6EB2/2Sm0Y20mD0IvyomtKQ7Tf3VHKA7zhFrDvZUdtX808oHnrqDFRAQZHWAppGUVstqkOyibA0C4suxnOQlsQNZT0r70Tz84=\",\"signature\":\"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\",\"header\":{\"ephemeralPublicKey\":\"MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEWdNhNAHy9kO2Kol33kIh7k6wh6E/lxriM46MR1FUrn7SHugprkaeFmWKZPgGpWgZ+telY/G1+YSoaCbR57bdGA==\",\"transactionId\":\"fd88874954acdb29976gfnjd784ng8ern8BDF8gT7G3fd4ebc22a864398684198644c3\",\"publicKeyHash\":\"h7njghUJVz2gmpTSkHqETOWsskhsdfjj4mgf3sPTS2cBxgrk=\"}}";
+	const AUTH_MOBILE_REQUEST_HASH = "b13f183cd3ea2a0b63033fb53bdeb4894c684643";
+
 	static function Init() {
-		self::$CARD_CVN_PRESENCE     = new PresenceIndicator( PresenceIndicator::CVN_PRESENT );
-		self::$ADDRESS_TYPE_BUSINESS = new AddressType( AddressType::BILLING );
-		self::$ADDRESS_TYPE_SHIPPING = new AddressType( AddressType::SHIPPING );
-		self::$AUTO_SETTLE_FLAG      = new AutoSettleFlag( AutoSettleFlag::MULTI );
-		self::$CARD_TYPE             = new CardType( CardType::VISA );
-		self::$RECURRING_TYPE        = new RecurringType( RecurringType::FIXED );
-		self::$RECURRING_FLAG        = new RecurringFlag( RecurringFlag::ONE );
-		self::$RECURRING_SEQUENCE    = new RecurringSequence( RecurringSequence::FIRST );
+		self::$CARD_CVN_PRESENCE            = new PresenceIndicator( PresenceIndicator::CVN_PRESENT );
+		self::$ADDRESS_TYPE_BUSINESS        = new AddressType( AddressType::BILLING );
+		self::$ADDRESS_TYPE_SHIPPING        = new AddressType( AddressType::SHIPPING );
+		self::$AUTO_SETTLE_FLAG             = new AutoSettleFlag( AutoSettleFlag::MULTI );
+		self::$CARD_TYPE                    = new CardType( CardType::VISA );
+		self::$RECURRING_TYPE               = new RecurringType( RecurringType::FIXED );
+		self::$RECURRING_FLAG               = new RecurringFlag( RecurringFlag::ONE );
+		self::$RECURRING_SEQUENCE           = new RecurringSequence( RecurringSequence::FIRST );
+		self::$AUTH_MOBILE_AUTO_SETTLE_FLAG = new AutoSettleFlag( AutoSettleFlag::TRUE );
 	}
 
 	/**
@@ -205,7 +227,7 @@ class SampleXmlValidationUtils {
 		$testCase->assertEquals( self::PASREF, $fromXmlResponse->getPaymentsReference() );
 		$testCase->assertEquals( self::RESULT_SUCCESS, $fromXmlResponse->getResult() );
 		$testCase->assertEquals( self::RESPONSE_HASH, $fromXmlResponse->getHash() );
-		$testCase->assertEquals( self::TIMESTAMP, $fromXmlResponse->getTimeStamp() );
+		$testCase->assertEquals( self::TIMESTAMP_RESPONSE, $fromXmlResponse->getTimeStamp() );
 		$testCase->assertEquals( self::TIME_TAKEN, $fromXmlResponse->getTimeTaken() );
 		$testCase->assertEquals( self::TSS_RESULT, $fromXmlResponse->getTssResult()->getResult() );
 
@@ -231,53 +253,69 @@ class SampleXmlValidationUtils {
 	public static function checkUnmarshalledPaymentRequest( PaymentRequest $fromXmlRequest, PHPUnit_Framework_TestCase $testCase ) {
 
 		$testCase->assertNotNull( $fromXmlRequest );
-		$testCase->assertEquals( self::CARD_NUMBER, $fromXmlRequest->getCard()->getNumber() );
 
-		$testCase->assertEquals( self::$CARD_TYPE->getType(), $fromXmlRequest->getCard()->getType() );
-		$testCase->assertEquals( self::CARD_HOLDER_NAME, $fromXmlRequest->getCard()->getCardHolderName() );
-		$testCase->assertEquals( self::CARD_CVN_NUMBER, $fromXmlRequest->getCard()->getCvn()->getNumber() );
-		$testCase->assertEquals( self::$CARD_CVN_PRESENCE->getIndicator(), $fromXmlRequest->getCard()->getCvn()->getPresenceIndicator() );
-		$testCase->assertEquals( self::CARD_ISSUE_NUMBER, $fromXmlRequest->getCard()->getIssueNumber() );
-		$testCase->assertEquals( self::CARD_EXPIRY_DATE, $fromXmlRequest->getCard()->getExpiryDate() );
+		if ( PaymentType::AUTH == $fromXmlRequest->getType() ) {
 
-		$testCase->assertEquals( self::ACCOUNT, $fromXmlRequest->getAccount() );
-		$testCase->assertEquals( self::MERCHANT_ID, $fromXmlRequest->getMerchantId() );
-		$testCase->assertEquals( PaymentType::AUTH, $fromXmlRequest->getType() );
-		$testCase->assertEquals( self:: AMOUNT, $fromXmlRequest->getAmount()->getAmount() );
-		$testCase->assertEquals( self::CURRENCY, $fromXmlRequest->getAmount()->getCurrency() );
-		$testCase->assertEquals( self::$AUTO_SETTLE_FLAG->getFlag(), $fromXmlRequest->getAutoSettle()->getFlag() );
-		$testCase->assertEquals( self::TIMESTAMP, $fromXmlRequest->getTimeStamp() );
-		$testCase->assertEquals( self::CHANNEL, $fromXmlRequest->getChannel() );
-		$testCase->assertEquals( self::ORDER_ID, $fromXmlRequest->getOrderId() );
-		$testCase->assertEquals( self::REQUEST_HASH, $fromXmlRequest->getHash() );
-		$testCase->assertEquals( self::COMMENT1, $fromXmlRequest->getComments()->get( 0 )->getComment() );
-		$testCase->assertEquals( "1", $fromXmlRequest->getComments()->get( 0 )->getId() );
-		$testCase->assertEquals( self::COMMENT2, $fromXmlRequest->getComments()->get( 1 )->getComment() );
-		$testCase->assertEquals( "2", $fromXmlRequest->getComments()->get( 1 )->getId() );
-		$testCase->assertEquals( self::PASREF, $fromXmlRequest->getPaymentsReference() );
-		$testCase->assertEquals( self::AUTH_CODE, $fromXmlRequest->getAuthCode() );
-		$testCase->assertEquals( self::REFUND_HASH, $fromXmlRequest->getRefundHash() );
-		$testCase->assertEquals( self::FRAUD_FILTER, $fromXmlRequest->getFraudFilter() );
+			$testCase->assertEquals( self::CARD_NUMBER, $fromXmlRequest->getCard()->getNumber() );
 
-		$testCase->assertEquals( self::$RECURRING_FLAG->getRecurringFlag(), $fromXmlRequest->getRecurring()->getFlag() );
-		$testCase->assertEquals( self::$RECURRING_TYPE->getType(), $fromXmlRequest->getRecurring()->getType() );
-		$testCase->assertEquals( self::$RECURRING_SEQUENCE->getSequence(), $fromXmlRequest->getRecurring()->getSequence() );
+			$testCase->assertEquals( self::$CARD_TYPE->getType(), $fromXmlRequest->getCard()->getType() );
+			$testCase->assertEquals( self::CARD_HOLDER_NAME, $fromXmlRequest->getCard()->getCardHolderName() );
+			$testCase->assertEquals( self::CARD_CVN_NUMBER, $fromXmlRequest->getCard()->getCvn()->getNumber() );
+			$testCase->assertEquals( self::$CARD_CVN_PRESENCE->getIndicator(), $fromXmlRequest->getCard()->getCvn()->getPresenceIndicator() );
+			$testCase->assertEquals( self::CARD_ISSUE_NUMBER, $fromXmlRequest->getCard()->getIssueNumber() );
+			$testCase->assertEquals( self::CARD_EXPIRY_DATE, $fromXmlRequest->getCard()->getExpiryDate() );
 
-		$testCase->assertEquals( self::CUSTOMER_NUMBER, $fromXmlRequest->getTssInfo()->getCustomerNumber() );
-		$testCase->assertEquals( self::PRODUCT_ID, $fromXmlRequest->getTssInfo()->getProductId() );
-		$testCase->assertEquals( self::VARIABLE_REFERENCE, $fromXmlRequest->getTssInfo()->getVariableReference() );
-		$testCase->assertEquals( self::CUSTOMER_IP, $fromXmlRequest->getTssInfo()->getCustomerIpAddress() );
-		$addresses = $fromXmlRequest->getTssInfo()->getAddresses();
-		$testCase->assertEquals( self::$ADDRESS_TYPE_BUSINESS->getAddressType(), $addresses[0]->getType() );
-		$testCase->assertEquals( self::ADDRESS_CODE_BUSINESS, $addresses[0]->getCode() );
-		$testCase->assertEquals( self::ADDRESS_COUNTRY_BUSINESS, $addresses[0]->getCountry() );
-		$testCase->assertEquals( self::$ADDRESS_TYPE_SHIPPING->getAddressType(), $addresses[1]->getType() );
-		$testCase->assertEquals( self::ADDRESS_CODE_SHIPPING, $addresses[1]->getCode() );
-		$testCase->assertEquals( self::ADDRESS_COUNTRY_SHIPPING, $addresses[1]->getCountry() );
+			$testCase->assertEquals( self::ACCOUNT, $fromXmlRequest->getAccount() );
+			$testCase->assertEquals( self::MERCHANT_ID, $fromXmlRequest->getMerchantId() );
+			$testCase->assertEquals( PaymentType::AUTH, $fromXmlRequest->getType() );
+			$testCase->assertEquals( self:: AMOUNT, $fromXmlRequest->getAmount()->getAmount() );
+			$testCase->assertEquals( self::CURRENCY, $fromXmlRequest->getAmount()->getCurrency() );
+			$testCase->assertEquals( self::$AUTO_SETTLE_FLAG->getFlag(), $fromXmlRequest->getAutoSettle()->getFlag() );
+			$testCase->assertEquals( self::TIMESTAMP, $fromXmlRequest->getTimeStamp() );
+			$testCase->assertEquals( self::CHANNEL, $fromXmlRequest->getChannel() );
+			$testCase->assertEquals( self::ORDER_ID, $fromXmlRequest->getOrderId() );
+			$testCase->assertEquals( self::REQUEST_HASH, $fromXmlRequest->getHash() );
+			$testCase->assertEquals( self::COMMENT1, $fromXmlRequest->getComments()->get( 0 )->getComment() );
+			$testCase->assertEquals( "1", $fromXmlRequest->getComments()->get( 0 )->getId() );
+			$testCase->assertEquals( self::COMMENT2, $fromXmlRequest->getComments()->get( 1 )->getComment() );
+			$testCase->assertEquals( "2", $fromXmlRequest->getComments()->get( 1 )->getId() );
+			$testCase->assertEquals( self::PASREF, $fromXmlRequest->getPaymentsReference() );
+			$testCase->assertEquals( self::AUTH_CODE, $fromXmlRequest->getAuthCode() );
+			$testCase->assertEquals( self::REFUND_HASH, $fromXmlRequest->getRefundHash() );
+			$testCase->assertEquals( self::FRAUD_FILTER, $fromXmlRequest->getFraudFilter() );
 
-		$testCase->assertEquals( self::THREE_D_SECURE_CAVV, $fromXmlRequest->getMpi()->getCavv() );
-		$testCase->assertEquals( self::THREE_D_SECURE_XID, $fromXmlRequest->getMpi()->getXid() );
-		$testCase->assertEquals( self::THREE_D_SECURE_ECI, $fromXmlRequest->getMpi()->getEci() );
+			$testCase->assertEquals( self::$RECURRING_FLAG->getRecurringFlag(), $fromXmlRequest->getRecurring()->getFlag() );
+			$testCase->assertEquals( self::$RECURRING_TYPE->getType(), $fromXmlRequest->getRecurring()->getType() );
+			$testCase->assertEquals( self::$RECURRING_SEQUENCE->getSequence(), $fromXmlRequest->getRecurring()->getSequence() );
+
+			$testCase->assertEquals( self::CUSTOMER_NUMBER, $fromXmlRequest->getTssInfo()->getCustomerNumber() );
+			$testCase->assertEquals( self::PRODUCT_ID, $fromXmlRequest->getTssInfo()->getProductId() );
+			$testCase->assertEquals( self::VARIABLE_REFERENCE, $fromXmlRequest->getTssInfo()->getVariableReference() );
+			$testCase->assertEquals( self::CUSTOMER_IP, $fromXmlRequest->getTssInfo()->getCustomerIpAddress() );
+			$addresses = $fromXmlRequest->getTssInfo()->getAddresses();
+			$testCase->assertEquals( self::$ADDRESS_TYPE_BUSINESS->getAddressType(), $addresses[0]->getType() );
+			$testCase->assertEquals( self::ADDRESS_CODE_BUSINESS, $addresses[0]->getCode() );
+			$testCase->assertEquals( self::ADDRESS_COUNTRY_BUSINESS, $addresses[0]->getCountry() );
+			$testCase->assertEquals( self::$ADDRESS_TYPE_SHIPPING->getAddressType(), $addresses[1]->getType() );
+			$testCase->assertEquals( self::ADDRESS_CODE_SHIPPING, $addresses[1]->getCode() );
+			$testCase->assertEquals( self::ADDRESS_COUNTRY_SHIPPING, $addresses[1]->getCountry() );
+
+			$testCase->assertEquals( self::THREE_D_SECURE_CAVV, $fromXmlRequest->getMpi()->getCavv() );
+			$testCase->assertEquals( self::THREE_D_SECURE_XID, $fromXmlRequest->getMpi()->getXid() );
+			$testCase->assertEquals( self::THREE_D_SECURE_ECI, $fromXmlRequest->getMpi()->getEci() );
+
+		} elseif ( PaymentType::AUTH_MOBILE == $fromXmlRequest->getType() ) {
+			$testCase->assertEquals( self::AUTH_MOBILE_ACCOUNT, $fromXmlRequest->getAccount() );
+			$testCase->assertEquals( self::AUTH_MOBILE_MERCHANT_ID, $fromXmlRequest->getMerchantId() );
+			$testCase->assertEquals( self::$AUTH_MOBILE_AUTO_SETTLE_FLAG->getFlag(), $fromXmlRequest->getAutoSettle()->getFlag() );
+			$testCase->assertEquals( self::AUTH_MOBILE_TIMESTAMP, $fromXmlRequest->getTimeStamp() );
+			$testCase->assertEquals( self::AUTH_MOBILE_ORDER_ID, $fromXmlRequest->getOrderId() );
+			$testCase->assertEquals( self::AUTH_MOBILE_MOBILE, $fromXmlRequest->getMobile() );
+			$testCase->assertEquals( self::AUTH_MOBILE_TOKEN, $fromXmlRequest->getToken() );
+			$testCase->assertEquals( self::AUTH_MOBILE_REQUEST_HASH, $fromXmlRequest->getHash() );
+		} else {
+			$testCase->fail( "Invalid payment type." );
+		}
 	}
 
 	/**
@@ -378,7 +416,7 @@ class SampleXmlValidationUtils {
 		$testCase->assertEquals( self::PASREF, $response->getPaymentsReference() );
 		$testCase->assertEquals( self::RESULT_FULL_ERROR, $response->getResult() );
 		$testCase->assertEquals( self::RESPONSE_FULL_ERROR_HASH, $response->getHash() );
-		$testCase->assertEquals( self::TIMESTAMP, $response->getTimeStamp() );
+		$testCase->assertEquals( self::TIMESTAMP_RESPONSE, $response->getTimeStamp() );
 		$testCase->assertEquals( self::TIME_TAKEN, $response->getTimeTaken() );
 		$testCase->assertEquals( self::TSS_RESULT, $response->getTssResult()->getResult() );
 		$checks = $response->getTssResult()->getChecks();
@@ -459,7 +497,7 @@ class SampleXmlValidationUtils {
 		$testCase->assertEquals( self::PASREF, $fromXmlResponse->getPaymentsReference() );
 		$testCase->assertEquals( self::THREE_D_SECURE_ENROLLED_RESULT, $fromXmlResponse->getResult() );
 		$testCase->assertEquals( self::THREE_D_SECURE_ENROLLED_RESPONSE_HASH, $fromXmlResponse->getHash() );
-		$testCase->assertEquals( self::TIMESTAMP, $fromXmlResponse->getTimeStamp() );
+		$testCase->assertEquals( self::TIMESTAMP_RESPONSE, $fromXmlResponse->getTimeStamp() );
 		$testCase->assertEquals( self::TIME_TAKEN, $fromXmlResponse->getTimeTaken() );
 		$testCase->assertEquals( self::THREE_D_SECURE_URL, $fromXmlResponse->getUrl() );
 		$testCase->assertEquals( self::THREE_D_SECURE_PAREQ, $fromXmlResponse->getPareq() );
@@ -482,7 +520,7 @@ class SampleXmlValidationUtils {
 		$testCase->assertEquals( self::ORDER_ID, $fromXmlResponse->getOrderId() );
 		$testCase->assertEquals( self::THREE_D_SECURE_SIG_RESULT, $fromXmlResponse->getResult() );
 		$testCase->assertEquals( self::THREE_D_SECURE_SIG_RESPONSE_HASH, $fromXmlResponse->getHash() );
-		$testCase->assertEquals( self::TIMESTAMP, $fromXmlResponse->getTimeStamp() );
+		$testCase->assertEquals( self::TIMESTAMP_RESPONSE, $fromXmlResponse->getTimeStamp() );
 		$testCase->assertEquals( self::THREE_D_SECURE_STATUS, $fromXmlResponse->getThreeDSecure()->getStatus() );
 		$testCase->assertEquals( self::THREE_D_SECURE_ECI, $fromXmlResponse->getThreeDSecure()->getEci() );
 		$testCase->assertEquals( self::THREE_D_SECURE_XID, $fromXmlResponse->getThreeDSecure()->getXid() );
