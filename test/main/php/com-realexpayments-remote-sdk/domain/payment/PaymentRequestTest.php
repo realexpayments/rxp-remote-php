@@ -3,6 +3,9 @@
 
 namespace com\realexpayments\remote\sdk\domain\payment;
 
+use com\realexpayments\remote\sdk\domain\Card;
+use com\realexpayments\remote\sdk\utils\SampleXmlValidationUtils;
+
 
 /**
  * Unit test class for PaymentRequest utility methods.
@@ -15,7 +18,7 @@ class PaymentRequestTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * Tests the population of a billing address for the Address Verification Service.
 	 */
-	public function  testAddAddressVerificationServiceDetails1() {
+	public function testAddAddressVerificationServiceDetails1() {
 		//test variations of address and postcode with TSS Info field null
 		$addressLine         = "123 Fake St";
 		$postcode            = "WB1 A42";
@@ -34,7 +37,7 @@ class PaymentRequestTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * Tests the population of a billing address for the Address Verification Service.
 	 */
-	public function  testAddAddressVerificationServiceDetails2() {
+	public function testAddAddressVerificationServiceDetails2() {
 		$addressLine         = "123 5 Fake St";
 		$postcode            = "1WB 5A2";
 		$country             = "GB";
@@ -51,7 +54,7 @@ class PaymentRequestTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * Tests the population of a billing address for the Address Verification Service.
 	 */
-	public function  testAddAddressVerificationServiceDetails3() {
+	public function testAddAddressVerificationServiceDetails3() {
 		$addressLine         = "Apt 15, 123 Fake St";
 		$postcode            = "ABC 5A2";
 		$country             = "GB";
@@ -68,7 +71,7 @@ class PaymentRequestTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * Tests the population of a billing address for the Address Verification Service.
 	 */
-	public function  testAddAddressVerificationServiceDetails4() {
+	public function testAddAddressVerificationServiceDetails4() {
 		$addressLine         = "Fake St";
 		$postcode            = "AI10 9AB";
 		$country             = "GB";
@@ -86,7 +89,7 @@ class PaymentRequestTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * Tests the population of a billing address for the Address Verification Service.
 	 */
-	public function  testAddAddressVerificationServiceDetails5() {
+	public function testAddAddressVerificationServiceDetails5() {
 		$addressLine         = "30 Fake St";
 		$postcode            = "";
 		$country             = "GB";
@@ -104,7 +107,7 @@ class PaymentRequestTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * Tests the population of a billing address for the Address Verification Service.
 	 */
-	public function  testAddAddressVerificationServiceDetailsWithTssInfo() {
+	public function testAddAddressVerificationServiceDetailsWithTssInfo() {
 		$addressLine         = "123 Fake St";
 		$postcode            = "WB1 A42";
 		$country             = "";
@@ -119,7 +122,43 @@ class PaymentRequestTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals( $country, $addresses[0]->getCountry() );
 	}
 
+	/**
+	 * Tests the hash calculation for an auth payment.
+	 */
+	public function testAuthHashGeneration() {
 
+		$card = new Card();
+
+		$request = new PaymentRequest();
+		$request->addType( PaymentType::AUTH )
+		        ->addTimeStamp( SampleXmlValidationUtils::TIMESTAMP )
+		        ->addMerchantId( SampleXmlValidationUtils::MERCHANT_ID )
+		        ->addOrderId( SampleXmlValidationUtils::ORDER_ID )
+		        ->addAmount( SampleXmlValidationUtils::AMOUNT )
+		        ->addCurrency( SampleXmlValidationUtils::CURRENCY )
+		        ->addCard( $card->addNumber( SampleXmlValidationUtils::CARD_NUMBER ) );
+
+		$request->hash( SampleXmlValidationUtils::SECRET );
+
+		$this->assertEquals( SampleXmlValidationUtils::REQUEST_HASH, $request->getHash() );
+	}
+
+	/**
+	 * Tests the hash calculation for an auth payment.
+	 */
+	public function testAuthMobileHashGeneration() {
+
+		$request = new PaymentRequest();
+		$request->addType( PaymentType::AUTH_MOBILE )
+		        ->addTimeStamp( SampleXmlValidationUtils::AUTH_MOBILE_TIMESTAMP )
+		        ->addMerchantId( SampleXmlValidationUtils::AUTH_MOBILE_MERCHANT_ID )
+		        ->addOrderId( SampleXmlValidationUtils::AUTH_MOBILE_ORDER_ID )
+		        ->addToken( SampleXmlValidationUtils::AUTH_MOBILE_TOKEN );
+
+		$request->hash( SampleXmlValidationUtils::SECRET );
+
+		$this->assertEquals( SampleXmlValidationUtils::AUTH_MOBILE_REQUEST_HASH, $request->getHash() );
+	}
 
 
 }

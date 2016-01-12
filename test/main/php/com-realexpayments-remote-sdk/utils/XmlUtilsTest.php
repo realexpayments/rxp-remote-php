@@ -125,7 +125,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * Tests conversion of {@link PaymentRequest} to and from XML using the helper methods with no enums.
 	 */
-	public function  testPaymentRequestXmlHelpersNoEnums() {
+	public function testPaymentRequestXmlHelpersNoEnums() {
 		$card = new Card();
 		$card->addExpiryDate( SampleXmlValidationUtils::CARD_EXPIRY_DATE )
 		     ->addNumber( SampleXmlValidationUtils::CARD_NUMBER )
@@ -327,7 +327,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$response->setPaymentsReference( SampleXmlValidationUtils::PASREF );
 		$response->setResult( SampleXmlValidationUtils::RESULT_SUCCESS );
 		$response->setHash( SampleXmlValidationUtils::RESPONSE_HASH );
-		$response->setTimeStamp( SampleXmlValidationUtils::TIMESTAMP );
+		$response->setTimeStamp( SampleXmlValidationUtils::TIMESTAMP_RESPONSE );
 		$response->setTimeTaken( SampleXmlValidationUtils::TIME_TAKEN );
 
 		$tssResult = new TssResult();
@@ -394,7 +394,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * Tests conversion of {@link PaymentResponse} from XML file with unknown element.
 	 */
-	public function  testPaymentResponseXmlFromFileUnknownElement() {
+	public function testPaymentResponseXmlFromFileUnknownElement() {
 		$path   = SampleXmlValidationUtils::PAYMENT_RESPONSE_XML_PATH_UNKNOWN_ELEMENT;
 		$prefix = __DIR__ . '/../../../resources';
 		$xml    = file_get_contents( $prefix . $path );
@@ -661,9 +661,26 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
+	 * Tests conversion of {@link PaymentRequest} from XML file for mobile-auth payment types.
+	 *
+	 */
+	public function testPaymentRequestXmlFromFileMobileAuth() {
+
+		$path   = SampleXmlValidationUtils::MOBILE_AUTH_PAYMENT_REQUEST_XML_PATH;
+		$prefix = __DIR__ . '/../../../resources';
+		$xml    = file_get_contents( $prefix . $path );
+
+		//unmarshal back to response
+		/* @var ThreeDSecureRequest $fromXmlResponse */
+		$fromXmlRequest = new PaymentRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledPaymentRequest( $fromXmlRequest, $this );
+	}
+
+	/**
 	 * Tests that press indicator is sent correctly even when it is out of range
 	 */
-	public function  testPressIndicator() {
+	public function testPressIndicator() {
 		$expectedCVN = "5";
 
 		$card = new Card();
@@ -749,7 +766,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * Tests and invalid recurring flag value
 	 */
-	public function  testInvalidRecurringFlag() {
+	public function testInvalidRecurringFlag() {
 
 
 		$card = new Card();
@@ -838,7 +855,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * Tests and invalid recurring type value
 	 */
-	public function  testInvalidRecurringType() {
+	public function testInvalidRecurringType() {
 
 
 		$card = new Card();
@@ -1030,7 +1047,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * Tests and invalid currency value (null)
 	 */
-	public function  testNullValueOnCurrency() {
+	public function testNullValueOnCurrency() {
 
 
 		$card = new Card();
@@ -1142,7 +1159,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$response->setPaymentsReference( SampleXmlValidationUtils::PASREF );
 		$response->setResult( SampleXmlValidationUtils::RESULT_SUCCESS );
 		$response->setHash( SampleXmlValidationUtils::RESPONSE_HASH );
-		$response->setTimeStamp( SampleXmlValidationUtils::TIMESTAMP );
+		$response->setTimeStamp( SampleXmlValidationUtils::TIMESTAMP_RESPONSE );
 		$response->setTimeTaken( SampleXmlValidationUtils::TIME_TAKEN );
 
 		$tssResult = new TssResult();
@@ -1207,7 +1224,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$response->setPaymentsReference( SampleXmlValidationUtils::PASREF );
 		$response->setResult( SampleXmlValidationUtils::RESULT_SUCCESS );
 		$response->setHash( SampleXmlValidationUtils::RESPONSE_HASH );
-		$response->setTimeStamp( SampleXmlValidationUtils::TIMESTAMP );
+		$response->setTimeStamp( SampleXmlValidationUtils::TIMESTAMP_RESPONSE );
 		$response->setTimeTaken( SampleXmlValidationUtils::TIME_TAKEN );
 
 		$tssResult = new TssResult();
