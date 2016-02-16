@@ -85,6 +85,9 @@ $response = $client->send( $request );
 
 // do something with the response
 echo $response->toXML();
+
+$resultCode = $response->getResult();
+$message = $response->getMessage();
                            
 ```
 
