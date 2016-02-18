@@ -670,11 +670,131 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$prefix = __DIR__ . '/../../../resources';
 		$xml    = file_get_contents( $prefix . $path );
 
-		//unmarshal back to response
-		/* @var ThreeDSecureRequest $fromXmlResponse */
+		//unmarshal back to request
+		/* @var PaymentRequest $fromXmlRequest */
 		$fromXmlRequest = new PaymentRequest();
 		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
-		SampleXmlValidationUtils::checkUnmarshalledPaymentRequest( $fromXmlRequest, $this );
+		SampleXmlValidationUtils::checkUnmarshalledMobileAuthPaymentRequest( $fromXmlRequest, $this );
+	}
+
+	/**
+	 * Tests conversion of {@link PaymentRequest} from XML file for settle payment types.
+	 */
+	public function testPaymentRequestXmlFromFileSettle() {
+
+		$path   = SampleXmlValidationUtils::SETTLE_PAYMENT_REQUEST_XML_PATH;
+		$prefix = __DIR__ . '/../../../resources';
+		$xml    = file_get_contents( $prefix . $path );
+
+		//unmarshal back to request
+		/* @var PaymentRequest $fromXmlRequest */
+		$fromXmlRequest = new PaymentRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledSettlePaymentRequest( $fromXmlRequest, $this );
+
+	}
+
+	/**
+	 * Tests conversion of {@link PaymentRequest} from XML file for void payment types.
+	 */
+	public function testPaymentRequestXmlFromFileVoid() {
+
+		$path   = SampleXmlValidationUtils::VOID_PAYMENT_REQUEST_XML_PATH;
+		$prefix = __DIR__ . '/../../../resources';
+		$xml    = file_get_contents( $prefix . $path );
+
+		//unmarshal back to request
+		/* @var PaymentRequest $fromXmlRequest */
+		$fromXmlRequest = new PaymentRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledVoidPaymentRequest( $fromXmlRequest, $this );
+
+	}
+
+	/**
+	 * Tests conversion of {@link PaymentRequest} from XML file for rebate payment types.
+	 */
+	public function testPaymentRequestXmlFromFileRebate() {
+
+		$path   = SampleXmlValidationUtils::REBATE_PAYMENT_REQUEST_XML_PATH;
+		$prefix = __DIR__ . '/../../../resources';
+		$xml    = file_get_contents( $prefix . $path );
+
+		//unmarshal back to request
+		/* @var PaymentRequest $fromXmlRequest */
+		$fromXmlRequest = new PaymentRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledRebatePaymentRequest( $fromXmlRequest, $this );
+
+	}
+
+	/**
+	 * Tests conversion of {@link PaymentRequest} from XML file for OTB payment types.
+	 */
+	public function testPaymentRequestXmlFromFileOtb() {
+
+		$path   = SampleXmlValidationUtils::OTB_PAYMENT_REQUEST_XML_PATH;
+		$prefix = __DIR__ . '/../../../resources';
+		$xml    = file_get_contents( $prefix . $path );
+
+		//unmarshal back to request
+		/* @var PaymentRequest $fromXmlRequest */
+		$fromXmlRequest = new PaymentRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledOtbPaymentRequest( $fromXmlRequest, $this );
+
+	}
+
+	/**
+	 * Tests conversion of {@link PaymentRequest} from XML file for credit payment types.
+	 */
+	public function testPaymentRequestXmlFromFileCredit() {
+
+		$path   = SampleXmlValidationUtils::CREDIT_PAYMENT_REQUEST_XML_PATH;
+		$prefix = __DIR__ . '/../../../resources';
+		$xml    = file_get_contents( $prefix . $path );
+
+		//unmarshal back to request
+		/* @var PaymentRequest $fromXmlRequest */
+		$fromXmlRequest = new PaymentRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledCreditPaymentRequest( $fromXmlRequest, $this );
+
+	}
+
+	/**
+	 * Tests conversion of {@link PaymentRequest} from XML file for hold payment types.
+	 */
+	public function testPaymentRequestXmlFromFileHold() {
+
+		$path   = SampleXmlValidationUtils::HOLD_PAYMENT_REQUEST_XML_PATH;
+		$prefix = __DIR__ . '/../../../resources';
+		$xml    = file_get_contents( $prefix . $path );
+
+		//unmarshal back to request
+		/* @var PaymentRequest $fromXmlRequest */
+		$fromXmlRequest = new PaymentRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledHoldPaymentRequest( $fromXmlRequest, $this );
+
+	}
+
+	/**
+	 * Tests conversion of {@link PaymentRequest} from XML file for release payment types.
+	 */
+	public function testPaymentRequestXmlFromFileRelease() {
+
+
+		$path   = SampleXmlValidationUtils::RELEASE_PAYMENT_REQUEST_XML_PATH;
+		$prefix = __DIR__ . '/../../../resources';
+		$xml    = file_get_contents( $prefix . $path );
+
+		//unmarshal back to request
+		/* @var PaymentRequest $fromXmlRequest */
+		$fromXmlRequest = new PaymentRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledReleasePaymentRequest( $fromXmlRequest, $this );
+
 	}
 
 	/**
