@@ -11,7 +11,6 @@ use com\realexpayments\remote\sdk\utils\MessageType;
 use com\realexpayments\remote\sdk\utils\XmlUtils;
 
 
-
 /**
  * Class PaymentRequest
  *
@@ -26,21 +25,21 @@ use com\realexpayments\remote\sdk\utils\XmlUtils;
  * </p>
  * <p><code><pre>
  * $card = (new Card())
- * 	  ->addType(CardType::VISA)
- * 	  ->addNumber("4242424242424242")
- * 	  ->addExpiryDate("0525")
+ *      ->addType(CardType::VISA)
+ *      ->addNumber("4242424242424242")
+ *      ->addExpiryDate("0525")
  *    ->addCvn("123")
  *    ->addCvnPresenceIndicator(PresenceIndicator::CVN_PRESENT);
  *    ->addCardHolderName("Joe Bloggs");
  *
  * $request = (new PaymentRequest())
- *	  ->addMerchantId("yourMerchantId")
- *	  ->addAccount("yourAccount")
- *	  ->addType(PaymentType::AUTH)
- *	  ->addAmount(10001)
- *	  ->addCurrency("EUR")
- *	  ->addCard($card)
- *	  ->addAutoSettle((new AutoSettle())->addFlag(AutoSettleFlag::TRUE));
+ *      ->addMerchantId("yourMerchantId")
+ *      ->addAccount("yourAccount")
+ *      ->addType(PaymentType::AUTH)
+ *      ->addAmount(10001)
+ *      ->addCurrency("EUR")
+ *      ->addCard($card)
+ *      ->addAutoSettle((new AutoSettle())->addFlag(AutoSettleFlag::TRUE));
  * </pre></code></p>
  *
  * <p>
@@ -48,24 +47,37 @@ use com\realexpayments\remote\sdk\utils\XmlUtils;
  * <p>
  * <p><code><pre>
  * $card = (new Card())
- * 	  ->addType(CardType::VISA)
- * 	  ->addNumber("4242424242424242")
- * 	  ->addExpiryDate("0525")
+ *      ->addType(CardType::VISA)
+ *      ->addNumber("4242424242424242")
+ *      ->addExpiryDate("0525")
  *    ->addCvn("123")
  *    ->addCvnPresenceIndicator(PresenceIndicator::CVN_PRESENT)
  *    ->addCardHolderName("Joe Bloggs");
-
  *
  * $request = (new PaymentRequest())
- *	  ->addMerchantId("yourMerchantId")
- *	  ->addAccount("yourAccount")
- *	  ->addType(PaymentType::AUTH)
- *	  ->addAmount(10001)
- *	  ->addCurrency("EUR")
- *	  ->addCard($card)
- *	  ->addAutoSettle((new AutoSettle())->addFlag(AutoSettleFlag::TRUE));
+ *      ->addMerchantId("yourMerchantId")
+ *      ->addAccount("yourAccount")
+ *      ->addType(PaymentType::AUTH)
+ *      ->addAmount(10001)
+ *      ->addCurrency("EUR")
+ *      ->addCard($card)
+ *      ->addAutoSettle((new AutoSettle())->addFlag(AutoSettleFlag::TRUE));
  *    ->addAddressVerificationServiceDetails("382 The Road", "WB1 A42", "GB");
  * </pre></code></p>
+ *
+ * <p>
+ * Example AUTH MOBILE
+ * <p>
+ * <p><code><pre>
+ * $request = (new PaymentRequest())
+ *      ->addMerchantId("yourMerchantId")
+ *      ->addAccount("yourAccount")
+ *    ->addType(PaymentType::AUTH_MOBILE)
+ *      ->addAutoSettle((new AutoSettle())->addFlag(AutoSettleFlag::TRUE));
+ *      ->addMobile("apple-pay")
+ *      ->addToken("{auth mobile payment token}");
+ * </pre></code></p>
+ *
  *
  * @author vicpada
  * @package com\realexpayments\remote\sdk\domain\payment
@@ -180,7 +192,7 @@ class PaymentRequest implements iRequest {
 	private $refundHash;
 
 	/**
-	 * @var string wellTODO - info on this
+	 * @var string Fraud filter flag
 	 *
 	 */
 	private $fraudFilter;
@@ -204,6 +216,19 @@ class PaymentRequest implements iRequest {
 	 *
 	 */
 	private $mpi;
+
+	/**
+	 * @var string The mobile auth payment type e.g. apple-pay.
+	 *
+	 */
+	private $mobile;
+
+	/**
+	 * @var string The mobile auth payment token to be sent in place of payment data.
+	 *
+	 */
+	private $token;
+
 
 	/**
 	 * Constructor for Payment Request
@@ -543,6 +568,42 @@ class PaymentRequest implements iRequest {
 		$this->mpi = $mpi;
 	}
 
+	/**
+	 * Getter for mobile
+	 *
+	 * @return string
+	 */
+	public function getMobile() {
+		return $this->mobile;
+	}
+
+	/**
+	 * Setter for mobile
+	 *
+	 * @param string $mobile
+	 */
+	public function setMobile( $mobile ) {
+		$this->mobile = $mobile;
+	}
+
+	/**
+	 * Getter for token
+	 *
+	 * @return string
+	 */
+	public function getToken() {
+		return $this->token;
+	}
+
+	/**
+	 * Setter for token
+	 *
+	 * @param string $token
+	 */
+	public function setToken( $token ) {
+		$this->token = $token;
+	}
+
 
 	/**
 	 * Helper method for adding TSS info
@@ -822,6 +883,32 @@ class PaymentRequest implements iRequest {
 	}
 
 	/**
+	 * Helper method for adding a mobile
+	 *
+	 * @param string $mobile
+	 *
+	 * @return PaymentRequest
+	 */
+	public function addMobile( $mobile ) {
+		$this->mobile = $mobile;
+
+		return $this;
+	}
+
+	/**
+	 * Helper method for adding a token
+	 *
+	 * @param string $token
+	 *
+	 * @return PaymentRequest
+	 */
+	public function addToken( $token ) {
+		$this->token = $token;
+
+		return $this;
+	}
+
+	/**
 	 * {@inheritdoc}
 	 */
 	public function toXml() {
@@ -884,6 +971,7 @@ class PaymentRequest implements iRequest {
 		$orderId    = null == $this->orderId ? "" : $this->orderId;
 		$amount     = "";
 		$currency   = "";
+		$token      = null == $this->token ? "" : $this->token;
 
 		if ( $this->amount != null ) {
 			$amount   = null == $this->amount->getAmount() ? "" : $this->amount->getAmount();
@@ -897,17 +985,27 @@ class PaymentRequest implements iRequest {
 		}
 
 		//create String to hash
-		$toHash = $timeStamp
-		          . "."
-		          . $merchantId
-		          . "."
-		          . $orderId
-		          . "."
-		          . $amount
-		          . "."
-		          . $currency
-		          . "."
-		          . $cardNumber;
+		if ( $this->type == PaymentType::AUTH_MOBILE ) {
+			$toHash = $timeStamp
+			          . "."
+			          . $merchantId
+			          . "."
+			          . $orderId
+			          . "..."
+			          . $token;
+		} else {
+			$toHash = $timeStamp
+			          . "."
+			          . $merchantId
+			          . "."
+			          . $orderId
+			          . "."
+			          . $amount
+			          . "."
+			          . $currency
+			          . "."
+			          . $cardNumber;
+		}
 
 		$this->hash = GenerationUtils::generateHash( $toHash, $secret );
 
@@ -951,4 +1049,6 @@ class PaymentRequest implements iRequest {
 
 		return $this;
 	}
+
+
 }

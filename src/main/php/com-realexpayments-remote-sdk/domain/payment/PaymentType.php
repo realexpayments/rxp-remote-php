@@ -14,6 +14,7 @@ class PaymentType  extends EnumBase {
 
 	const __default = self::AUTH;
 	const  AUTH = "auth";
+	const  AUTH_MOBILE = "auth-mobile";
 
 	/**
 	 * @var string The payment type String value

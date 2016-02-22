@@ -29,7 +29,7 @@ class CardValidationUtils_ExpiryDateTest extends \PHPUnit_Framework_TestCase {
 			array( "Incorrect date MMYY", "1212", false ),
 			array( "Incorrect date MMYY", "0015", false ),
 			array( "Incorrect date MMYY", "0415", false ),
-			array( "Correct date MMYY", "1215", true ),
+			array( "Correct date MMYY", "1216", true ),
 			array( "Incorrect date MMYY", "0021", false )
 		);
 
