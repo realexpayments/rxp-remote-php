@@ -6,14 +6,19 @@ namespace com\realexpayments\remote\sdk\domain\threeDSecure\normaliser;
 
 use com\realexpayments\remote\sdk\domain\Amount;
 use com\realexpayments\remote\sdk\domain\Card;
-use com\realexpayments\remote\sdk\domain\CVN;
+use com\realexpayments\remote\sdk\domain\payment\AutoSettle;
 use com\realexpayments\remote\sdk\domain\payment\Comment;
 use com\realexpayments\remote\sdk\domain\payment\CommentCollection;
+use com\realexpayments\remote\sdk\domain\PaymentData;
 use com\realexpayments\remote\sdk\domain\threeDSecure\ThreeDSecureRequest;
 use com\realexpayments\remote\sdk\SafeArrayAccess;
+use com\realexpayments\remote\sdk\utils\NormaliserHelper;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 class ThreeDSecureRequestNormalizer extends AbstractNormalizer {
+
+	private $format;
+	private $context;
 
 	/**
 	 * Denormalizes data back into an object of the given class.
@@ -27,6 +32,9 @@ class ThreeDSecureRequestNormalizer extends AbstractNormalizer {
 	 */
 	public function denormalize( $data, $class, $format = null, array $context = array() ) {
 
+		$this->format  = $format;
+		$this->context = $context;
+
 		$request = new ThreeDSecureRequest();
 		$array   = new SafeArrayAccess( $data );
 
@@ -35,10 +43,15 @@ class ThreeDSecureRequestNormalizer extends AbstractNormalizer {
 		        ->addMerchantId( $array['merchantid'] )
 		        ->addAccount( $array['account'] )
 		        ->addOrderId( $array['orderid'] )
-		        ->addCard( $this->denormaliseCard( $array ) )
 		        ->addHash( $array['sha1hash'] )
-		        ->addPares( $array['pares'] );
+		        ->addPares( $array['pares'] )
+		        ->addPayerReference( $array['payerref'] )
+		        ->addPaymentMethod( $array['paymentmethod'] );
 
+
+		$request->setCard( $this->denormaliseCard( $array ) );
+		$request->setPaymentData( $this->denormalisePaymentData( $array ) );
+		$request->setAutoSettle( $this->denormaliseAutoSettle( $array ) );
 
 		$request->setAmount( $this->denormaliseAmount( $array ) );
 		$request->setComments( $this->denormaliseComments( $array ) );
@@ -47,19 +60,7 @@ class ThreeDSecureRequestNormalizer extends AbstractNormalizer {
 	}
 
 	private function denormaliseAmount( \ArrayAccess $array ) {
-		$amountData = $array['amount'];
-
-		if ( is_null( $amountData ) ) {
-			return null;
-		}
-
-		$data = new SafeArrayAccess( $amountData );
-
-		$amount = new Amount();
-		$amount->addAmount( $data['#'] );
-		$amount->addCurrency( $data['@currency'] );
-
-		return $amount;
+		return $this->serializer->denormalize( $array['amount'], Amount::GetClassName(), $this->format, $this->context );
 	}
 
 	private function denormaliseComments( \ArrayAccess $array ) {
@@ -91,44 +92,18 @@ class ThreeDSecureRequestNormalizer extends AbstractNormalizer {
 	}
 
 	private function denormaliseCard( \ArrayAccess $array ) {
-
-		$cardData = $array['card'];
-
-		if ( is_null( $cardData ) ) {
-			return null;
-		}
-
-		$data = new SafeArrayAccess( $cardData );
-
-		$card = new Card();
-		$card->addNumber( $data['number'] )
-		     ->addExpiryDate( $data['expdate'] )
-		     ->addCardHolderName( $data['chname'] )
-		     ->addType( $data['type'] )
-		     ->addIssueNumber( $data['issueno'] );
-
-		$cvn = $this->denormaliseCVN( $data );
-		$card->setCvn( $cvn );
-
-		return $card;
+		return $this->serializer->denormalize( $array['card'], Card::GetClassName(), $this->format, $this->context );
 	}
 
-	private function denormaliseCVN( \ArrayAccess $array ) {
-		$cvnData = $array['cvn'];
 
-		if ( is_null( $cvnData ) ) {
-			return null;
-		}
-
-		$data = new SafeArrayAccess( $cvnData );
-
-		$cvn = new CVN();
-		$cvn->addNumber( $data['number'] )
-		    ->addPresenceIndicator( $data['presind'] );
-
-		return $cvn;
+	private function denormalisePaymentData( $array ) {
+		return $this->serializer->denormalize( $array['paymentdata'], PaymentData::GetClassName(), $this->format, $this->context );
 	}
 
+	private function denormaliseAutoSettle( $array ) {
+
+		return $this->serializer->denormalize( $array['autosettle'], AutoSettle::GetClassName(), $this->format, $this->context );
+	}
 
 	/**
 	 * Checks whether the given class is supported for denormalization by this normalizer.
@@ -169,57 +144,21 @@ class ThreeDSecureRequestNormalizer extends AbstractNormalizer {
 
 
 		return array_filter( array(
-			'@timestamp' => $object->getTimestamp(),
-			'@type'      => $object->getType(),
-			'merchantid' => $object->getMerchantId(),
-			'account'    => $object->getAccount(),
-			'orderid'    => $object->getOrderId(),
-			'amount'     => $this->normaliseAmount( $object ),
-			'card'       => $this->normaliseCard( $object ),
-			'pares'      => $object->getPares(),
-			'sha1hash'   => $object->getHash(),
-			'comments'   => $hasComments ? array( 'comment' => $comments ) : array()
-		) );
-	}
-
-	private function normaliseAmount( ThreeDSecureRequest $request ) {
-		$amount = $request->getAmount();
-		if ( is_null( $amount ) ) {
-			return array();
-		}
-
-		return array_filter( array(
-			'@currency' => $amount->getCurrency(),
-			'#'         => $amount->getAmount()
-		) );
-	}
-
-	private function normaliseCard( ThreeDSecureRequest $request ) {
-		$card = $request->getCard();
-		if ( is_null( $card ) ) {
-			return array();
-		}
-
-		return array_filter( array(
-			'number'  => $card->getNumber(),
-			'expdate' => $card->getExpiryDate(),
-			'chname'  => $card->getCardHolderName(),
-			'type'    => $card->getType(),
-			'issueno' => $card->getIssueNumber(),
-			'cvn'     => $this->normaliseCVN( $card )
-		) );
-	}
-
-	private function normaliseCVN( Card $card ) {
-		$cvn = $card->getCvn();
-		if ( is_null( $cvn ) ) {
-			return array();
-		}
-
-		return array_filter( array(
-			'number'  => $cvn->getNumber(),
-			'presind' => $cvn->getPresenceIndicator()
-		) );
+			'@timestamp'    => $object->getTimestamp(),
+			'@type'         => $object->getType(),
+			'merchantid'    => $object->getMerchantId(),
+			'account'       => $object->getAccount(),
+			'orderid'       => $object->getOrderId(),
+			'amount'        => $object->getAmount(),
+			'card'          => $object->getCard(),
+			'pares'         => $object->getPares(),
+			'sha1hash'      => $object->getHash(),
+			'comments'      => $hasComments ? array( 'comment' => $comments ) : array(),
+			'payerref'      => $object->getPayerRef(),
+			'paymentmethod' => $object->getPaymentMethod(),
+			'paymentdata'   => $object->getPaymentData(),
+			'autosettle'    => $object->getAutoSettle()
+		), array( NormaliserHelper::GetClassName(), "filter_data" ) );
 	}
 
 	/**

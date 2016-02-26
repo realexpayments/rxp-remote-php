@@ -4,9 +4,11 @@
 namespace com\realexpayments\remote\sdk\domain\payment\normaliser;
 
 use com\realexpayments\remote\sdk\domain\payment\Comment;
+use com\realexpayments\remote\sdk\SafeArrayAccess;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class CommentsNormalizer implements  NormalizerInterface {
+class CommentsNormalizer implements NormalizerInterface{
 
 	/**
 	 * Normalizes an object into a set of arrays/scalars.
@@ -21,8 +23,8 @@ class CommentsNormalizer implements  NormalizerInterface {
 		/** @var Comment $object */
 
 		return array(
-			'@id'   => $object->getId(),
-			'#'    => $object->getComment()
+			'@id' => $object->getId(),
+			'#'   => $object->getComment()
 		);
 	}
 

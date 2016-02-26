@@ -6,7 +6,8 @@ namespace com\realexpayments\remote\sdk\domain\payment\normaliser;
 
 use com\realexpayments\remote\sdk\domain\Amount;
 use com\realexpayments\remote\sdk\domain\Card;
-use com\realexpayments\remote\sdk\domain\CVN;
+use com\realexpayments\remote\sdk\domain\DccInfo;
+use com\realexpayments\remote\sdk\domain\Payer;
 use com\realexpayments\remote\sdk\domain\payment\Address;
 use com\realexpayments\remote\sdk\domain\payment\AutoSettle;
 use com\realexpayments\remote\sdk\domain\payment\Comment;
@@ -15,10 +16,16 @@ use com\realexpayments\remote\sdk\domain\payment\Mpi;
 use com\realexpayments\remote\sdk\domain\payment\PaymentRequest;
 use com\realexpayments\remote\sdk\domain\payment\Recurring;
 use com\realexpayments\remote\sdk\domain\payment\TssInfo;
+use com\realexpayments\remote\sdk\domain\PaymentData;
 use com\realexpayments\remote\sdk\SafeArrayAccess;
+use com\realexpayments\remote\sdk\utils\NormaliserHelper;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
-class PaymentRequestNormalizer extends AbstractNormalizer {
+class PaymentRequestNormalizer extends AbstractNormalizer{
+
+	private $format;
+	private $context;
+
 
 	/**
 	 * Denormalizes data back into an object of the given class.
@@ -31,6 +38,9 @@ class PaymentRequestNormalizer extends AbstractNormalizer {
 	 * @return object
 	 */
 	public function denormalize( $data, $class, $format = null, array $context = array() ) {
+
+		$this->format  = $format;
+		$this->context = $context;
 
 		$request = new PaymentRequest();
 		$array   = new SafeArrayAccess( $data );
@@ -47,17 +57,20 @@ class PaymentRequestNormalizer extends AbstractNormalizer {
 		        ->addRefundHash( $array['refundhash'] )
 		        ->addFraudFilter( $array['fraudfilter'] )
 		        ->addMobile( $array['mobile'] )
-		        ->addToken( $array['token'] );
+		        ->addToken( $array['token'] )
+		        ->addPayerReference( $array['payerref'] )
+		        ->addPaymentMethod( $array['paymentmethod'] )
+		        ->addPaymentData( $this->denormalizePaymentData( $array ) )
+		        ->addPayer( $this->denormalizePayer( $array ) );
+
+		$request->setCard( $this->denormaliseCard( $array ) );
+
 
 		$autoSettle = $this->denormaliseAutoSettle( $array );
 		if ( $autoSettle != null ) {
 			$request->addAutoSettle( $autoSettle );
 		}
 
-		$card = $this->denormaliseCard( $array );
-		if ( $card != null ) {
-			$request->addCard( $card );
-		}
 
 		$recurring = $this->denormaliseRecurring( $array );
 		if ( $recurring != null ) {
@@ -74,6 +87,11 @@ class PaymentRequestNormalizer extends AbstractNormalizer {
 			$request->addMpi( $mpi );
 		}
 
+		$dccInfo = $this->denormaliseDccInfo($array);
+		if ( $dccInfo != null ) {
+			$request->addDccInfo( $dccInfo );
+		}
+
 		$request->setAmount( $this->denormaliseAmount( $array ) );
 		$request->setComments( $this->denormaliseComments( $array ) );
 
@@ -81,19 +99,7 @@ class PaymentRequestNormalizer extends AbstractNormalizer {
 	}
 
 	private function denormaliseAmount( \ArrayAccess $array ) {
-		$amountData = $array['amount'];
-
-		if ( is_null( $amountData ) ) {
-			return null;
-		}
-
-		$data = new SafeArrayAccess( $amountData );
-
-		$amount = new Amount();
-		$amount->addAmount( $data['#'] );
-		$amount->addCurrency( $data['@currency'] );
-
-		return $amount;
+		return $this->serializer->denormalize( $array['amount'], Amount::GetClassName(), $this->format, $this->context );
 	}
 
 	private function denormaliseComments( \ArrayAccess $array ) {
@@ -123,60 +129,10 @@ class PaymentRequestNormalizer extends AbstractNormalizer {
 		return $commentCollection;
 	}
 
-	private function denormaliseCard( \ArrayAccess $array ) {
-
-		$cardData = $array['card'];
-
-		if ( is_null( $cardData ) ) {
-			return null;
-		}
-
-		$data = new SafeArrayAccess( $cardData );
-
-		$card = new Card();
-		$card->addNumber( $data['number'] )
-		     ->addExpiryDate( $data['expdate'] )
-		     ->addCardHolderName( $data['chname'] )
-		     ->addType( $data['type'] )
-		     ->addIssueNumber( $data['issueno'] );
-
-		$cvn = $this->denormaliseCVN( $data );
-		$card->setCvn( $cvn );
-
-		return $card;
-	}
-
-	private function denormaliseCVN( \ArrayAccess $array ) {
-		$cvnData = $array['cvn'];
-
-		if ( is_null( $cvnData ) ) {
-			return null;
-		}
-
-		$data = new SafeArrayAccess( $cvnData );
-
-		$cvn = new CVN();
-		$cvn->addNumber( $data['number'] )
-		    ->addPresenceIndicator( $data['presind'] );
-
-		return $cvn;
-	}
 
 	private function denormaliseAutoSettle( \ArrayAccess $array ) {
 
-		$autoSettleData = $array['autosettle'];
-
-		if ( is_null( $autoSettleData ) ) {
-			return null;
-		}
-
-		$data = new SafeArrayAccess( $autoSettleData );
-
-		$autoSettle = new AutoSettle();
-		$autoSettle->addFlag( $data['@flag'] );
-
-		return $autoSettle;
-
+		return $this->serializer->denormalize( $array['autosettle'], AutoSettle::GetClassName(), $this->format, $this->context );
 	}
 
 	private function denormaliseRecurring( \ArrayAccess $array ) {
@@ -261,6 +217,22 @@ class PaymentRequestNormalizer extends AbstractNormalizer {
 		return $mpi;
 	}
 
+	private function denormalizePaymentData( $array ) {
+		return $this->serializer->denormalize( $array['paymentdata'], PaymentData::GetClassName(), $this->format, $this->context );
+	}
+
+	private function denormalizePayer( $array ) {
+		return $this->serializer->denormalize( $array['payer'], Payer::GetClassName(), $this->format, $this->context );
+	}
+
+	private function denormaliseCard( $array ) {
+		return $this->serializer->denormalize( $array['card'], Card::GetClassName(), $this->format, $this->context );
+	}
+
+	private function denormaliseDccInfo( $array ) {
+		return $this->serializer->denormalize( $array['dccinfo'], DccInfo::GetClassName(), $this->format, $this->context );
+	}
+
 	/**
 	 * Checks whether the given class is supported for denormalization by this normalizer.
 	 *
@@ -277,6 +249,7 @@ class PaymentRequestNormalizer extends AbstractNormalizer {
 
 		return false;
 	}
+
 
 	/**
 	 * Normalizes an object into a set of arrays/scalars.
@@ -303,66 +276,32 @@ class PaymentRequestNormalizer extends AbstractNormalizer {
 		return
 			array_filter(
 				array(
-					'@timestamp'  => $object->getTimestamp(),
-					'@type'       => $object->getType(),
-					'merchantid'  => $object->getMerchantId(),
-					'account'     => $object->getAccount(),
-					'channel'     => $object->getChannel(),
-					'orderid'     => $object->getOrderId(),
-					'amount'      => $this->normaliseAmount( $object ),
-					'card'        => $this->normaliseCard( $object ),
-					'autosettle'  => $this->normaliseAutoSettle( $object ),
-					'sha1hash'    => $object->getHash(),
-					'comments'    => $hasComments ? array( 'comment' => $comments ) : array(),
-					'pasref'      => $object->getPaymentsReference(),
-					'authcode'    => $object->getAuthCode(),
-					'refundhash'  => $object->getRefundHash(),
-					'fraudfilter' => $object->getFraudFilter(),
-					'recurring'   => $this->normaliseRecurring( $object ),
-					'tssinfo'     => $this->normaliseTssInfo( $object ),
-					'mpi'         => $this->normaliseMpi( $object ),
-					'mobile'      => $object->getMobile(),
-					'token'       => $object->getToken(),
-				) );
-	}
-
-	private function normaliseAmount( PaymentRequest $request ) {
-		$amount = $request->getAmount();
-		if ( is_null( $amount ) ) {
-			return array();
-		}
-
-		return array(
-			'@currency' => $amount->getCurrency() == null ? "" : $amount->getCurrency(),
-			'#'         => $amount->getAmount()
-		);
-	}
-
-	private function normaliseCard( PaymentRequest $request ) {
-		$card = $request->getCard();
-		if ( is_null( $card ) ) {
-			return array();
-		}
-
-		return array_filter( array(
-			'number'  => $card->getNumber(),
-			'expdate' => $card->getExpiryDate(),
-			'chname'  => $card->getCardHolderName(),
-			'type'    => $card->getType(),
-			'issueno' => $card->getIssueNumber(),
-			'cvn'     => $this->normaliseCVN( $card )
-		) );
-	}
-
-	private function normaliseAutoSettle( PaymentRequest $request ) {
-		$autoSettle = $request->getAutoSettle();
-		if ( is_null( $autoSettle ) || is_null( $autoSettle->getFlag() ) ) {
-			return array();
-		}
-
-		return array(
-			'@flag' => $autoSettle->getFlag()
-		);
+					'@timestamp'    => $object->getTimestamp(),
+					'@type'         => $object->getType(),
+					'merchantid'    => $object->getMerchantId(),
+					'account'       => $object->getAccount(),
+					'channel'       => $object->getChannel(),
+					'orderid'       => $object->getOrderId(),
+					'amount'        => $object->getAmount(),
+					'card'          => $object->getCard(),
+					'autosettle'    => $object->getAutoSettle(),
+					'sha1hash'      => $object->getHash(),
+					'comments'      => $hasComments ? array( 'comment' => $comments ) : array(),
+					'pasref'        => $object->getPaymentsReference(),
+					'authcode'      => $object->getAuthCode(),
+					'refundhash'    => $object->getRefundHash(),
+					'fraudfilter'   => $object->getFraudFilter(),
+					'recurring'     => $this->normaliseRecurring( $object ),
+					'tssinfo'       => $this->normaliseTssInfo( $object ),
+					'mpi'           => $this->normaliseMpi( $object ),
+					'mobile'        => $object->getMobile(),
+					'token'         => $object->getToken(),
+					'payerref'      => $object->getPayerRef(),
+					'paymentmethod' => $object->getPaymentMethod(),
+					'paymentdata'   => $object->getPaymentData(),
+					'payer'         => $object->getPayer(),
+					'dccinfo'       => $object->getDccInfo(),
+				), array( NormaliserHelper::GetClassName(), "filter_data" ) );
 	}
 
 	private function normaliseRecurring( PaymentRequest $request ) {
@@ -376,7 +315,7 @@ class PaymentRequestNormalizer extends AbstractNormalizer {
 			'@flag'     => $recurring->getFlag(),
 			'@sequence' => $recurring->getSequence(),
 			'@type'     => $recurring->getType()
-		) );
+		), array( NormaliserHelper::GetClassName(), "filter_data" ) );
 	}
 
 	private function recurring_is_empty( PaymentRequest $request ) {
@@ -397,7 +336,7 @@ class PaymentRequestNormalizer extends AbstractNormalizer {
 			'varref'        => $tssInfo->getVariableReference(),
 			'custipaddress' => $tssInfo->getCustomerIpAddress(),
 			'address'       => $tssInfo->getAddresses()
-		) );
+		), array( NormaliserHelper::GetClassName(), "filter_data" ) );
 	}
 
 	private function tss_is_empty( PaymentRequest $request ) {
@@ -418,25 +357,13 @@ class PaymentRequestNormalizer extends AbstractNormalizer {
 			'cavv' => $mpi->getCavv(),
 			'xid'  => $mpi->getXid(),
 			'eci'  => $mpi->getEci()
-		) );
+		), array( NormaliserHelper::GetClassName(), "filter_data" ) );
 	}
 
 	private function mpi_is_empty( PaymentRequest $request ) {
 		return $request->getMpi()->getCavv() == null &&
 		       $request->getMpi()->getXid() == null &&
 		       $request->getMpi()->getEci() == null;
-	}
-
-	private function normaliseCVN( Card $card ) {
-		$cvn = $card->getCvn();
-		if ( is_null( $cvn ) ) {
-			return array();
-		}
-
-		return array_filter( array(
-			'number'  => $cvn->getNumber(),
-			'presind' => $cvn->getPresenceIndicator()
-		) );
 	}
 
 	/**

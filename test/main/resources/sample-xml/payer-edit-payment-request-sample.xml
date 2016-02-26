@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<request type="payer-edit" timestamp="20160122155725">
+    <merchantid>thestore</merchantid>
+    <orderid>292af5fa-6cbc-43d5-b2f0-7fd134d78A77</orderid>
+    <account>internet</account>
+    <payer type="Business" ref="bloggsj01">
+        <title>Mr</title>
+        <firstname>John</firstname>
+        <surname>Smith</surname>
+        <company>Acme Inc</company>
+        <address>
+            <line1>123 Fake St.</line1>
+            <line2 />
+            <line3/>
+            <city>Hytown</city>
+            <county>Dunham</county>
+            <postcode>3</postcode>
+            <country code="IE">Ireland</country>
+        </address>
+        <phonenumbers>
+            <home/>
+            <work>+35317433923</work>
+            <fax>+35317893248</fax>
+            <mobile>+353873748392</mobile>
+        </phonenumbers>
+        <email>jsmith@acme.com</email>
+        <comments>
+            <comment id="1">comment 1</comment>
+            <comment id="2"/>
+        </comments>
+    </payer>
+    <sha1hash>9ac73a4c8e5d4904c1e6814f48aaeb9bcb4e2615</sha1hash>
+    <comments>
+        <comment id="1"/>
+        <comment id="2"/>
+    </comments>
+</request>

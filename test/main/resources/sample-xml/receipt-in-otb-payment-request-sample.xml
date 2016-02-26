@@ -1,0 +1,15 @@
+<request type="receipt-in-otb" timestamp="20160119171625">
+    <merchantid>thestore</merchantid>
+    <account>internet</account>
+    <orderid>292af5fa-6cbc-43d5-b2f0-7fd134d78d95</orderid>
+    <paymentdata>
+        <cvn>
+            <number>123</number>
+        </cvn>
+    </paymentdata>
+    <amount currency="EUR">3000</amount>
+    <payerref>bloggsj01</payerref>
+    <paymentmethod>visa01</paymentmethod>
+    <autosettle flag="1"/>
+    <sha1hash>ceeeb16edfeda0dc919db1be1b0e9db7b01b24cf</sha1hash>
+</request>

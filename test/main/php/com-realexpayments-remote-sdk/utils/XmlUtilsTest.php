@@ -7,7 +7,13 @@ namespace com\realexpayments\remote\sdk\utils;
 use com\realexpayments\remote\sdk\domain\Amount;
 use com\realexpayments\remote\sdk\domain\Card;
 use com\realexpayments\remote\sdk\domain\CardType;
+use com\realexpayments\remote\sdk\domain\Country;
 use com\realexpayments\remote\sdk\domain\CVN;
+use com\realexpayments\remote\sdk\domain\CvnNumber;
+use com\realexpayments\remote\sdk\domain\DccInfo;
+use com\realexpayments\remote\sdk\domain\DccInfoResult;
+use com\realexpayments\remote\sdk\domain\Payer;
+use com\realexpayments\remote\sdk\domain\PayerAddress;
 use com\realexpayments\remote\sdk\domain\payment\Address;
 use com\realexpayments\remote\sdk\domain\payment\AutoSettle;
 use com\realexpayments\remote\sdk\domain\payment\CardIssuer;
@@ -23,6 +29,8 @@ use com\realexpayments\remote\sdk\domain\payment\RecurringType;
 use com\realexpayments\remote\sdk\domain\payment\TssInfo;
 use com\realexpayments\remote\sdk\domain\payment\TssResult;
 use com\realexpayments\remote\sdk\domain\payment\TssResultCheck;
+use com\realexpayments\remote\sdk\domain\PaymentData;
+use com\realexpayments\remote\sdk\domain\PhoneNumbers;
 use com\realexpayments\remote\sdk\domain\threeDSecure\ThreeDSecureRequest;
 use com\realexpayments\remote\sdk\domain\threeDSecure\ThreeDSecureResponse;
 use com\realexpayments\remote\sdk\domain\threeDSecure\ThreeDSecureType;
@@ -301,6 +309,387 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
+	 * Tests conversion of {@link PaymentRequest} to and from XML using setters for DCCInfo.
+	 */
+	public function testPaymentRequestXmlDCCInfoSetters() {
+
+		$request = new PaymentRequest();
+		$request->setAccount( SampleXmlValidationUtils::DCC_RATE_ACCOUNT );
+		$request->setMerchantId( SampleXmlValidationUtils::DCC_RATE_MERCHANT_ID );
+		$request->setType( PaymentType::DCC_RATE_LOOKUP );
+
+		$card = new Card();
+		$card->setExpiryDate( SampleXmlValidationUtils::DCC_RATE_CARD_EXPIRY_DATE );
+		$card->setNumber( SampleXmlValidationUtils::DCC_RATE_CARD_NUMBER );
+		$card->setType( SampleXmlValidationUtils::DCC_RATE_CARD_TYPE );
+		$card->setCardHolderName( SampleXmlValidationUtils::DCC_RATE_CARD_HOLDER_NAME );
+		$request->setCard( $card );
+
+		$dccInfo = new DccInfo();
+		$dccInfo->setDccProcessor( SampleXmlValidationUtils::DCC_RATE_CCP );
+		$request->setDccInfo( $dccInfo );
+
+		$amount = new Amount();
+		$amount->setAmount( SampleXmlValidationUtils::DCC_RATE_AMOUNT );
+		$amount->setCurrency( SampleXmlValidationUtils::DCC_RATE_CURRENCY );
+		$request->setAmount( $amount );
+
+		$autoSettle = new AutoSettle();
+		$autoSettle->setFlag( SampleXmlValidationUtils::$AUTO_SETTLE_FLAG->getFlag() );
+
+		$request->setAutoSettle( $autoSettle );
+		$request->setTimeStamp( SampleXmlValidationUtils::DCC_RATE_TIMESTAMP );
+
+		$request->setOrderId( SampleXmlValidationUtils::DCC_RATE_ORDER_ID );
+		$request->setHash( SampleXmlValidationUtils::DCC_RATE_REQUEST_HASH );
+
+		// convert to XML
+		$xml = $request->toXml();
+
+		// Convert from XML back to PaymentRequest
+
+		/* @var PaymentRequest $fromXmlRequest */
+		$fromXmlRequest = new PaymentRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledDccRateLookUpPaymentRequest( $fromXmlRequest, $this );
+	}
+
+	/**
+	 * Tests conversion of {@link PaymentRequest} to and from XML using setters for DCCInfo.
+	 */
+	public function testPaymentRequestXmlDCCInfoFluentSetters() {
+
+		$request = new PaymentRequest();
+		$request->addAccount( SampleXmlValidationUtils::DCC_RATE_ACCOUNT )
+		        ->addMerchantId( SampleXmlValidationUtils::DCC_RATE_MERCHANT_ID )
+		        ->addType( PaymentType::DCC_RATE_LOOKUP );
+
+		$card = new Card();
+		$card->addExpiryDate( SampleXmlValidationUtils::DCC_RATE_CARD_EXPIRY_DATE )
+		     ->addNumber( SampleXmlValidationUtils::DCC_RATE_CARD_NUMBER )
+		     ->addType( SampleXmlValidationUtils::DCC_RATE_CARD_TYPE )
+		     ->addCardHolderName( SampleXmlValidationUtils::DCC_RATE_CARD_HOLDER_NAME );
+
+		$request->addCard( $card );
+
+		$dccInfo = new DccInfo();
+		$dccInfo->addDccProcessor( SampleXmlValidationUtils::DCC_RATE_CCP );
+		$request->addDccInfo( $dccInfo );
+
+		$request->addAmount( SampleXmlValidationUtils::DCC_RATE_AMOUNT )
+		        ->addCurrency( SampleXmlValidationUtils::DCC_RATE_CURRENCY );
+
+		$autoSettle = new AutoSettle();
+		$autoSettle->addFlag( SampleXmlValidationUtils::$AUTO_SETTLE_FLAG->getFlag() );
+
+		$request->addAutoSettle( $autoSettle )
+		        ->addTimeStamp( SampleXmlValidationUtils::DCC_RATE_TIMESTAMP )
+		        ->addOrderId( SampleXmlValidationUtils::DCC_RATE_ORDER_ID )
+		        ->addHash( SampleXmlValidationUtils::DCC_RATE_REQUEST_HASH );
+
+		// convert to XML
+		$xml = $request->toXml();
+
+		// Convert from XML back to PaymentRequest
+
+		/* @var PaymentRequest $fromXmlRequest */
+		$fromXmlRequest = new PaymentRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledDccRateLookUpPaymentRequest( $fromXmlRequest, $this );
+	}
+
+	/**
+	 * Tests conversion of {@link PaymentRequest} to and from XML using setters for DCCInfo.
+	 */
+	public function testPaymentRequestXmlDCCAuthSetters() {
+
+		$request = new PaymentRequest();
+		$request->setAccount( SampleXmlValidationUtils::DCC_AUTH_ACCOUNT );
+		$request->setMerchantId( SampleXmlValidationUtils::DCC_AUTH_MERCHANT_ID );
+		$request->setType( PaymentType::DCC_AUTH );
+
+		$card = new Card();
+		$card->setExpiryDate( SampleXmlValidationUtils::DCC_AUTH_CARD_EXPIRY_DATE );
+		$card->setNumber( SampleXmlValidationUtils::DCC_AUTH_CARD_NUMBER );
+		$card->setType( SampleXmlValidationUtils::DCC_AUTH_CARD_TYPE );
+		$card->setCardHolderName( SampleXmlValidationUtils::DCC_AUTH_CARD_HOLDER_NAME );
+		$request->setCard( $card );
+
+		$dccAmount = new Amount();
+		$dccAmount->setAmount( SampleXmlValidationUtils:: DCC_AUTH_CH_AMOUNT );
+		$dccAmount->setCurrency( SampleXmlValidationUtils::DCC_AUTH_CH_CURRENCY );
+
+		$dccInfo = new DccInfo();
+		$dccInfo->setDccProcessor( SampleXmlValidationUtils::DCC_AUTH_CCP );
+		$dccInfo->setRate( SampleXmlValidationUtils::DCC_AUTH_RATE );
+		$dccInfo->setAmount( $dccAmount );
+		$request->setDccInfo( $dccInfo );
+
+		$amount = new Amount();
+		$amount->setAmount( SampleXmlValidationUtils::DCC_AUTH_AMOUNT );
+		$amount->setCurrency( SampleXmlValidationUtils::DCC_AUTH_CURRENCY );
+		$request->setAmount( $amount );
+
+		$autoSettle = new AutoSettle();
+		$autoSettle->setFlag( SampleXmlValidationUtils::$AUTO_SETTLE_FLAG->getFlag() );
+		$request->setAutoSettle( $autoSettle );
+
+		$request->setTimeStamp( SampleXmlValidationUtils::DCC_AUTH_TIMESTAMP );
+
+		$request->setOrderId( SampleXmlValidationUtils::DCC_AUTH_ORDER_ID );
+		$request->setHash( SampleXmlValidationUtils::DCC_AUTH_REQUEST_HASH );
+
+
+		// convert to XML
+		$xml = $request->toXml();
+
+		// Convert from XML back to PaymentRequest
+
+		/* @var PaymentRequest $fromXmlRequest */
+		$fromXmlRequest = new PaymentRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledDccAuthLookUpPaymentRequest( $fromXmlRequest, $this );
+	}
+
+	/**
+	 * Tests conversion of {@link PaymentRequest} to and from XML using setters for Payer.
+	 */
+	public function testPaymentRequestXmlPayerSetters() {
+
+		$request = new PaymentRequest();
+		$request->setAccount( SampleXmlValidationUtils::PAYER_NEW_ACCOUNT );
+		$request->setMerchantId( SampleXmlValidationUtils::PAYER_NEW_MERCHANT_ID );
+		$request->setType( PaymentType::PAYER_NEW );
+
+		$payer = new Payer();
+		$payer->setType( SampleXmlValidationUtils::PAYER_NEW_PAYER_TYPE );
+		$payer->setRef( SampleXmlValidationUtils::PAYER_NEW_PAYER_REF );
+		$payer->setTitle( SampleXmlValidationUtils::PAYER_NEW_PAYER_TITLE );
+		$payer->setFirstName( SampleXmlValidationUtils::PAYER_NEW_PAYER_FIRSTNAME );
+		$payer->setSurname( SampleXmlValidationUtils::PAYER_NEW_PAYER_SURNAME );
+		$payer->setCompany( SampleXmlValidationUtils::PAYER_NEW_PAYER_COMPANY );
+		$payer->setEmail( SampleXmlValidationUtils::PAYER_NEW_PAYER_EMAIL );
+
+		$address = new PayerAddress();
+		$address->setLine1( SampleXmlValidationUtils::PAYER_NEW_PAYER_ADDRESS_LINE_1 );
+		$address->setLine2( SampleXmlValidationUtils::PAYER_NEW_PAYER_ADDRESS_LINE_2 );
+		$address->setLine3( SampleXmlValidationUtils::PAYER_NEW_PAYER_ADDRESS_LINE_3 );
+		$address->setCity( SampleXmlValidationUtils::PAYER_NEW_PAYER_ADDRESS_CITY );
+		$address->setCounty( SampleXmlValidationUtils::PAYER_NEW_PAYER_ADDRESS_COUNTY );
+		$address->setPostcode( SampleXmlValidationUtils::PAYER_NEW_PAYER_ADDRESS_POSTCODE );
+
+		$country = new Country();
+		$country->setCode( SampleXmlValidationUtils::PAYER_NEW_PAYER_ADDRESS_COUNTRY_CODE );
+		$country->setName( SampleXmlValidationUtils::PAYER_NEW_PAYER_ADDRESS_COUNTRY_NAME );
+
+		$address->setCountry( $country );
+
+		$payer->setAddress( $address );
+		$payer->addComment( SampleXmlValidationUtils::PAYER_NEW_PAYER_COMMENT_1 );
+		$payer->addComment( SampleXmlValidationUtils::PAYER_NEW_PAYER_COMMENT_2 );
+
+		$phoneNumbers = new PhoneNumbers();
+		$phoneNumbers->setHomePhoneNumber( SampleXmlValidationUtils::PAYER_NEW_PAYER_HOME_NUMBER );
+		$phoneNumbers->setWorkPhoneNumber( SampleXmlValidationUtils::PAYER_NEW_PAYER_WORK_NUMBER );
+		$phoneNumbers->setFaxPhoneNumber( SampleXmlValidationUtils::PAYER_NEW_PAYER_FAX_NUMBER );
+		$phoneNumbers->setMobilePhoneNumber( SampleXmlValidationUtils::PAYER_NEW_PAYER_MOBILE_NUMBER );
+
+		$payer->setPhoneNumbers( $phoneNumbers );
+
+		$request->setPayer( $payer );
+
+		$request->setTimeStamp( SampleXmlValidationUtils::PAYER_NEW_TIMESTAMP );
+
+		$request->setOrderId( SampleXmlValidationUtils::PAYER_NEW_ORDER_ID );
+		$request->setHash( SampleXmlValidationUtils::PAYER_NEW_REQUEST_HASH );
+
+		// convert to XML
+		$xml = $request->toXml();
+
+		// Convert from XML back to PaymentRequest
+
+		/* @var PaymentRequest $fromXmlRequest */
+		$fromXmlRequest = new PaymentRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledPayerNewPaymentRequest( $fromXmlRequest, $this );
+	}
+
+	/**
+	 * Tests conversion of {@link PaymentRequest} to and from XML using setters for Payer.
+	 */
+	public function testPaymentRequestXmlPayerFluentSetters() {
+
+		$request = new PaymentRequest();
+		$request->addAccount( SampleXmlValidationUtils::PAYER_NEW_ACCOUNT )
+		        ->addMerchantId( SampleXmlValidationUtils::PAYER_NEW_MERCHANT_ID )
+		        ->addType( PaymentType::PAYER_NEW );
+
+		$payer = new Payer();
+		$payer->addType( SampleXmlValidationUtils::PAYER_NEW_PAYER_TYPE )
+		      ->addRef( SampleXmlValidationUtils::PAYER_NEW_PAYER_REF )
+		      ->addTitle( SampleXmlValidationUtils::PAYER_NEW_PAYER_TITLE )
+		      ->addFirstName( SampleXmlValidationUtils::PAYER_NEW_PAYER_FIRSTNAME )
+		      ->addSurname( SampleXmlValidationUtils::PAYER_NEW_PAYER_SURNAME )
+		      ->addCompany( SampleXmlValidationUtils::PAYER_NEW_PAYER_COMPANY )
+		      ->addEmail( SampleXmlValidationUtils::PAYER_NEW_PAYER_EMAIL );
+
+		$address = new PayerAddress();
+		$address->addLine1( SampleXmlValidationUtils::PAYER_NEW_PAYER_ADDRESS_LINE_1 )
+		        ->addLine2( SampleXmlValidationUtils::PAYER_NEW_PAYER_ADDRESS_LINE_2 )
+		        ->addLine3( SampleXmlValidationUtils::PAYER_NEW_PAYER_ADDRESS_LINE_3 )
+		        ->addCity( SampleXmlValidationUtils::PAYER_NEW_PAYER_ADDRESS_CITY )
+		        ->addCounty( SampleXmlValidationUtils::PAYER_NEW_PAYER_ADDRESS_COUNTY )
+		        ->addPostcode( SampleXmlValidationUtils::PAYER_NEW_PAYER_ADDRESS_POSTCODE )
+		        ->addCountryCode( SampleXmlValidationUtils::PAYER_NEW_PAYER_ADDRESS_COUNTRY_CODE )
+		        ->addCountryName( SampleXmlValidationUtils::PAYER_NEW_PAYER_ADDRESS_COUNTRY_NAME );
+
+
+		$payer->addAddress( $address )
+		      ->addComment( SampleXmlValidationUtils::PAYER_NEW_PAYER_COMMENT_1 )
+		      ->addComment( SampleXmlValidationUtils::PAYER_NEW_PAYER_COMMENT_2 )
+		      ->addMobileNumber( SampleXmlValidationUtils::PAYER_NEW_PAYER_HOME_NUMBER )
+		      ->addWorkPhoneNumber( SampleXmlValidationUtils::PAYER_NEW_PAYER_WORK_NUMBER )
+		      ->addFaxPhoneNumber( SampleXmlValidationUtils::PAYER_NEW_PAYER_FAX_NUMBER )
+		      ->addMobileNumber( SampleXmlValidationUtils::PAYER_NEW_PAYER_MOBILE_NUMBER );
+
+		$request->addPayer( $payer )
+		        ->addTimeStamp( SampleXmlValidationUtils::PAYER_NEW_TIMESTAMP )
+		        ->addOrderId( SampleXmlValidationUtils::PAYER_NEW_ORDER_ID )
+		        ->addHash( SampleXmlValidationUtils::PAYER_NEW_REQUEST_HASH );
+
+		// convert to XML
+		$xml = $request->toXml();
+
+		// Convert from XML back to PaymentRequest
+
+		/* @var PaymentRequest $fromXmlRequest */
+		$fromXmlRequest = new PaymentRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledPayerNewPaymentRequest( $fromXmlRequest, $this );
+	}
+
+	/**
+	 * Tests conversion of {@link PaymentRequest} to and from XML using setters for Paymentdata.
+	 */
+	public function testPaymentRequestXmlPaymentDataSetters() {
+
+		$cvnNumber = new CvnNumber();
+		$cvnNumber->setNumber( SampleXmlValidationUtils::RECEIPT_IN_CVN );
+
+		$paymentData = new PaymentData();
+		$paymentData->setCvnNumber( $cvnNumber );
+
+		$request = new PaymentRequest();
+		$request->setAccount( SampleXmlValidationUtils::RECEIPT_IN_ACCOUNT );
+		$request->setMerchantId( SampleXmlValidationUtils::RECEIPT_IN_MERCHANT_ID );
+		$request->setType( PaymentType::RECEIPT_IN );
+		$request->setPaymentData($paymentData);
+
+		$amount = new Amount();
+		$amount->setAmount( SampleXmlValidationUtils::RECEIPT_IN_AMOUNT );
+		$amount->setCurrency( SampleXmlValidationUtils::RECEIPT_IN_CURRENCY );
+		$request->setAmount( $amount );
+
+		$request->setPayerRef( SampleXmlValidationUtils::RECEIPT_IN_PAYER );
+		$request->setPaymentMethod( SampleXmlValidationUtils::RECEIPT_IN_PAYMENT_METHOD );
+
+		$autoSettle = new AutoSettle();
+		$autoSettle->setFlag( SampleXmlValidationUtils::$RECEIPT_IN_AUTO_SETTLE_FLAG->getFlag() );
+		$request->setAutoSettle( $autoSettle );
+
+		$request->setTimeStamp( SampleXmlValidationUtils::RECEIPT_IN_TIMESTAMP );
+
+		$request->setOrderId( SampleXmlValidationUtils::RECEIPT_IN_ORDER_ID );
+		$request->setHash( SampleXmlValidationUtils::RECEIPT_IN_REQUEST_HASH );
+
+		// convert to XML
+		$xml = $request->toXml();
+
+		// Convert from XML back to PaymentRequest
+
+		/* @var PaymentRequest $fromXmlRequest */
+		$fromXmlRequest = new PaymentRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledReceiptInPaymentRequest( $fromXmlRequest, $this );
+	}
+
+	/**
+	 * Tests conversion of {@link PaymentRequest} to and from XML using setters for Paymentdata.
+	 */
+	public function testPaymentRequestXmlPaymentDataFluentSetters1() {
+
+		$autoSettle = new AutoSettle();
+		$autoSettle->setFlag( SampleXmlValidationUtils::$RECEIPT_IN_AUTO_SETTLE_FLAG->getFlag() );
+
+		$cvnNumber = new CvnNumber();
+		$cvnNumber->addNumber( SampleXmlValidationUtils::RECEIPT_IN_CVN );
+
+		$paymentData = new PaymentData();
+		$paymentData->addCvnNumber( $cvnNumber );
+
+		$request = new PaymentRequest();
+		$request->addAccount( SampleXmlValidationUtils::RECEIPT_IN_ACCOUNT )
+		        ->addMerchantId( SampleXmlValidationUtils::RECEIPT_IN_MERCHANT_ID )
+		        ->addType( PaymentType::RECEIPT_IN )
+		        ->addAmount( SampleXmlValidationUtils::RECEIPT_IN_AMOUNT )
+		        ->addCurrency( SampleXmlValidationUtils::RECEIPT_IN_CURRENCY )
+		        ->addPayerReference( SampleXmlValidationUtils::RECEIPT_IN_PAYER )
+		        ->addPaymentMethod( SampleXmlValidationUtils::RECEIPT_IN_PAYMENT_METHOD )
+		        ->addAutoSettle( $autoSettle )
+		        ->addTimeStamp( SampleXmlValidationUtils::RECEIPT_IN_TIMESTAMP )
+		        ->addOrderId( SampleXmlValidationUtils::RECEIPT_IN_ORDER_ID )
+		        ->addHash( SampleXmlValidationUtils::RECEIPT_IN_REQUEST_HASH )
+		        ->addPaymentData( $paymentData );
+
+		// convert to XML
+		$xml = $request->toXml();
+
+		// Convert from XML back to PaymentRequest
+
+		/* @var PaymentRequest $fromXmlRequest */
+		$fromXmlRequest = new PaymentRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledReceiptInPaymentRequest( $fromXmlRequest, $this );
+	}
+
+	/**
+	 * Tests conversion of {@link PaymentRequest} to and from XML using setters for Paymentdata.
+	 */
+	public function testPaymentRequestXmlPaymentDataFluentSetters2() {
+
+		$autoSettle = new AutoSettle();
+		$autoSettle->setFlag( SampleXmlValidationUtils::$RECEIPT_IN_AUTO_SETTLE_FLAG->getFlag() );
+
+		$paymentData = new PaymentData();
+		$paymentData->addCvnNumber( SampleXmlValidationUtils::RECEIPT_IN_CVN);
+
+		$request = new PaymentRequest();
+		$request->addAccount( SampleXmlValidationUtils::RECEIPT_IN_ACCOUNT )
+		        ->addMerchantId( SampleXmlValidationUtils::RECEIPT_IN_MERCHANT_ID )
+		        ->addType( PaymentType::RECEIPT_IN )
+		        ->addAmount( SampleXmlValidationUtils::RECEIPT_IN_AMOUNT )
+		        ->addCurrency( SampleXmlValidationUtils::RECEIPT_IN_CURRENCY )
+		        ->addPayerReference( SampleXmlValidationUtils::RECEIPT_IN_PAYER )
+		        ->addPaymentMethod( SampleXmlValidationUtils::RECEIPT_IN_PAYMENT_METHOD )
+		        ->addAutoSettle( $autoSettle )
+		        ->addTimeStamp( SampleXmlValidationUtils::RECEIPT_IN_TIMESTAMP )
+		        ->addOrderId( SampleXmlValidationUtils::RECEIPT_IN_ORDER_ID )
+		        ->addHash( SampleXmlValidationUtils::RECEIPT_IN_REQUEST_HASH )
+		        ->addPaymentData( $paymentData );
+
+		// convert to XML
+		$xml = $request->toXml();
+
+		// Convert from XML back to PaymentRequest
+
+		/* @var PaymentRequest $fromXmlRequest */
+		$fromXmlRequest = new PaymentRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledReceiptInPaymentRequest( $fromXmlRequest, $this );
+	}
+
+
+	/**
 	 * Tests conversion of {@link PaymentResponse} to and from XML.
 	 */
 	public function testPaymentResponseXml() {
@@ -360,6 +749,44 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
+	 * Tests conversion of {@link PaymentResponse} to and from XML.
+	 */
+
+	public function testPaymentResponseDccInfoXml() {
+		$response = new PaymentResponse();
+
+		$response->setAccount( SampleXmlValidationUtils::DCC_RATE_ACCOUNT_RESPONSE );
+		$response->setResult( SampleXmlValidationUtils::DCC_RATE_RESULT_RESPONSE );
+
+		$response->setCvnResult( SampleXmlValidationUtils::DCC_RATE_CVN_RESULT_RESPONSE );
+		$response->setMerchantId( SampleXmlValidationUtils::DCC_RATE_MERCHANT_ID_RESPONSE );
+		$response->setOrderId( SampleXmlValidationUtils::DCC_RATE_ORDER_ID_RESPONSE );
+		$response->setPaymentsReference( SampleXmlValidationUtils::DCC_RATE_PASREF_RESPONSE );
+		$response->setHash( SampleXmlValidationUtils::DCC_RATE_REQUEST_HASH_RESPONSE );
+		$response->setTimeStamp( SampleXmlValidationUtils::DCC_RATE_TIMESTAMP_RESPONSE );
+
+		$dccInfoResult = new DccInfoResult();
+		$dccInfoResult->setCardHolderAmount( SampleXmlValidationUtils::DCC_RATE_CH_AMOUNT_RESPONSE );
+		$dccInfoResult->setCardHolderCurrency( SampleXmlValidationUtils::DCC_RATE_CH_CURRENCY_RESPONSE );
+		$dccInfoResult->setCardHolderRate( SampleXmlValidationUtils::DCC_RATE_CH_RATE_RESPONSE );
+		$dccInfoResult->setMerchantAmount( SampleXmlValidationUtils::DCC_RATE_MERCHANT_AMOUNT_RESPONSE );
+		$dccInfoResult->setMerchantCurrency( SampleXmlValidationUtils::DCC_RATE_MERCHANT_CURRENCY_RESPONSE );
+
+		$response->setDccInfoResult( $dccInfoResult );
+
+
+		// convert to XML
+		$xml = $response->toXml();
+
+		// Convert from XML back to PaymentResponse
+		/* @var PaymentResponse $fromXmlResponse */
+		$fromXmlResponse = new PaymentResponse();
+		$fromXmlResponse = $fromXmlResponse->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledDCCPaymentResponse( $fromXmlResponse, $this );
+	}
+
+
+	/**
 	 * Tests conversion of {@link PaymentResponse} from XML file
 	 */
 	public function testPaymentResponseXmlFromFile() {
@@ -373,6 +800,24 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$fromXmlResponse = $fromXmlResponse->fromXml( $xml );
 		SampleXmlValidationUtils::checkUnmarshalledPaymentResponse( $fromXmlResponse, $this );
 	}
+
+	/**
+	 * Tests conversion of {@link PaymentResponse} from XML file
+	 */
+
+	public function testPaymentResponseXmlDccInfoFromFile() {
+
+		$path   = SampleXmlValidationUtils::PAYMENT_RESPONSE_DCC_INFO_XML_PATH;
+		$prefix = __DIR__ . '/../../../resources';
+		$xml    = file_get_contents( $prefix . $path );
+
+		//unmarshal back to response
+		/* @var PaymentResponse $fromXmlResponse */
+		$fromXmlResponse = new PaymentResponse();
+		$fromXmlResponse = $fromXmlResponse->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledDCCPaymentResponse( $fromXmlResponse, $this );
+	}
+
 
 	/**
 	 * Tests conversion of {@link PaymentRequest} from XML file.
@@ -410,7 +855,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * Test expected {@link RealexException} when unmarshalling invalid xml.
 	 *
-	 * @expectedException     com\realexpayments\remote\sdk\RealexException
+	 * @expectedException   \com\realexpayments\remote\sdk\RealexException
 	 */
 	public function testFromXmlError() {
 
@@ -583,6 +1028,52 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		SampleXmlValidationUtils::checkUnmarshalledVerifySigRequest( $fromXmlRequest, $this );
 	}
 
+
+	/**
+	 * Tests conversion of {@link ThreeDSecureRequest} card enrolled to and from XML using setters.
+	 */
+
+	public function testThreeDSecureCardEnrolledRequestXmlWithSetters() {
+
+		$request = new ThreeDSecureRequest();
+		$request->setAccount( SampleXmlValidationUtils::CARD_VERIFY_ACCOUNT );
+		$request->setMerchantId( SampleXmlValidationUtils::CARD_VERIFY_MERCHANT_ID );
+
+
+		$paymentData = new PaymentData();
+		$paymentData->addCvnNumber( SampleXmlValidationUtils::CARD_PAYMENT_DATA_CVN );
+		$request->setPaymentData( $paymentData );
+
+		$amount = new Amount();
+		$amount->setAmount( SampleXmlValidationUtils::CARD_VERIFY_AMOUNT );
+		$amount->setCurrency( SampleXmlValidationUtils::CARD_VERIFY_CURRENCY );
+		$request->setAmount( $amount );
+
+
+		$request->setTimeStamp( SampleXmlValidationUtils::CARD_VERIFY_TIMESTAMP );
+		$request->setOrderId( SampleXmlValidationUtils::CARD_VERIFY_ORDER_ID );
+		$request->setPaymentMethod( SampleXmlValidationUtils::CARD_VERIFY_REF );
+		$request->setPayerRef( SampleXmlValidationUtils::CARD_VERIFY_PAYER_REF );
+		$request->setHash( SampleXmlValidationUtils::CARD_VERIFY_REQUEST_HASH );
+		$request->setType( ThreeDSecureType::VERIFY_CARD_ENROLLED );
+
+		$autoSettle = new AutoSettle();
+		$autoSettle->setFlag( SampleXmlValidationUtils::$CARD_VERIFY_AUTO_SETTLE_FLAG->getFlag() );
+
+		$request->setAutoSettle( $autoSettle );
+
+		// convert to XML
+		$xml = $request->toXml();
+
+		// Convert from XML back to PaymentRequest
+
+		/* @var ThreeDSecureRequest $fromXmlRequest */
+		$fromXmlRequest = new ThreeDSecureRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledVerifyCardEnrolledPaymentRequest( $fromXmlRequest, $this );
+	}
+
+
 	/**
 	 * Tests conversion of {@link ThreeDSecureResponse} from XML file for verify enrolled
 	 */
@@ -626,11 +1117,27 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$xml    = file_get_contents( $prefix . $path );
 
 		//unmarshal back to response
-		/* @var ThreeDSecureResponse $fromXmlResponse */
-		$fromXmlResponse = new ThreeDSecureResponse();
-		$fromXmlResponse = $fromXmlResponse->fromXml( $xml );
-		SampleXmlValidationUtils::checkUnmarshalledVerifyEnrolledRequest( $fromXmlResponse, $this );
+		/* @var ThreeDSecureRequest $fromXmlRequest */
+		$fromXmlRequest = new ThreeDSecureRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledVerifyEnrolledRequest( $fromXmlRequest, $this );
 
+	}
+
+	/**
+	 * Tests conversion of {@link ThreeDSecureRequest} from XML file for verify sig.
+	 */
+	public function testThreeDSecureRequestCardEnrolledFromFile() {
+
+		$path   = SampleXmlValidationUtils::CARD_VERIFY_ENROLLED_PAYMENT_REQUEST_XML_PATH;
+		$prefix = __DIR__ . '/../../../resources';
+		$xml    = file_get_contents( $prefix . $path );
+
+		//unmarshal back to response
+		/* @var ThreeDSecureRequest $fromXmlRequest */
+		$fromXmlRequest = new ThreeDSecureRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledVerifyCardEnrolledPaymentRequest( $fromXmlRequest, $this );
 	}
 
 	/**
@@ -652,7 +1159,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * Test expected {@link RealexException} when unmarshalling invalid xml.
 	 *
-	 * @expectedException     com\realexpayments\remote\sdk\RealexException
+	 * @expectedException     \com\realexpayments\remote\sdk\RealexException
 	 */
 	public function testThreeDSecureFromXmlError() {
 
@@ -794,7 +1301,203 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$fromXmlRequest = new PaymentRequest();
 		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
 		SampleXmlValidationUtils::checkUnmarshalledReleasePaymentRequest( $fromXmlRequest, $this );
+	}
 
+	/**
+	 * Tests conversion of {@link PaymentRequest} from XML file for receipt-in payment types.
+	 */
+	public function testPaymentRequestXmlFromFileReceiptIn() {
+
+		$path   = SampleXmlValidationUtils::RECEIPT_IN_PAYMENT_REQUEST_XML_PATH;
+		$prefix = __DIR__ . '/../../../resources';
+		$xml    = file_get_contents( $prefix . $path );
+
+		//unmarshal back to response
+		/* @var PaymentRequest $fromXmlRequest */
+		$fromXmlRequest = new PaymentRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledReceiptInPaymentRequest( $fromXmlRequest, $this );
+	}
+
+	/**
+	 * Tests conversion of {@link PaymentRequest} from XML file for receipt-in payment types.
+	 */
+	public function testPaymentRequestXmlFromFilePaymentOut() {
+
+		$path   = SampleXmlValidationUtils::PAYMENT_OUT_PAYMENT_REQUEST_XML_PATH;
+		$prefix = __DIR__ . '/../../../resources';
+		$xml    = file_get_contents( $prefix . $path );
+
+		//unmarshal back to response
+		/* @var PaymentRequest $fromXmlRequest */
+		$fromXmlRequest = new PaymentRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledPaymentOutPaymentRequest( $fromXmlRequest, $this );
+
+	}
+
+	/**
+	 * Tests conversion of {@link PaymentRequest} from XML file for payer-new payment types.
+	 */
+	public function testPaymentRequestXmlFromFilePayerNew() {
+
+		$path   = SampleXmlValidationUtils::PAYER_NEW_PAYMENT_REQUEST_XML_PATH;
+		$prefix = __DIR__ . '/../../../resources';
+		$xml    = file_get_contents( $prefix . $path );
+
+		//unmarshal back to response
+		/* @var PaymentRequest $fromXmlRequest */
+		$fromXmlRequest = new PaymentRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledPayerNewPaymentRequest( $fromXmlRequest, $this );
+	}
+
+	/**
+	 * Tests conversion of {@link PaymentRequest} from XML file for payer-new payment types.
+	 */
+	public function testPaymentRequestXmlFromFilePayerEdit() {
+
+		$path   = SampleXmlValidationUtils::PAYER_EDIT_PAYMENT_REQUEST_XML_PATH;
+		$prefix = __DIR__ . '/../../../resources';
+		$xml    = file_get_contents( $prefix . $path );
+
+		//unmarshal back to response
+		/* @var PaymentRequest $fromXmlRequest */
+		$fromXmlRequest = new PaymentRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledPayerEditPaymentRequest( $fromXmlRequest, $this );
+
+	}
+
+	/**
+	 * Tests conversion of {@link PaymentRequest} from XML file for payer-new payment types.
+	 */
+	public function testPaymentRequestXmlFromFileCardNew() {
+
+		$path   = SampleXmlValidationUtils::CARD_NEW_PAYMENT_REQUEST_XML_PATH;
+		$prefix = __DIR__ . '/../../../resources';
+		$xml    = file_get_contents( $prefix . $path );
+
+		//unmarshal back to response
+		/* @var PaymentRequest $fromXmlRequest */
+		$fromXmlRequest = new PaymentRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledCardAddPaymentRequest( $fromXmlRequest, $this );
+	}
+
+	/**
+	 * Tests conversion of {@link PaymentRequest} from XML file for payer-new payment types.
+	 */
+	public function testPaymentRequestXmlFromFileCardEditReplaceCard() {
+
+		$path   = SampleXmlValidationUtils::CARD_EDIT_REPLACE_CARD_PAYMENT_REQUEST_XML_PATH;
+		$prefix = __DIR__ . '/../../../resources';
+		$xml    = file_get_contents( $prefix . $path );
+
+		//unmarshal back to response
+		/* @var PaymentRequest $fromXmlRequest */
+		$fromXmlRequest = new PaymentRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledCardEditReplaceCardPaymentRequest( $fromXmlRequest, $this );
+	}
+
+
+	/**
+	 * Tests conversion of {@link PaymentRequest} from XML file for payer-new payment types.
+	 */
+	public function testPaymentRequestXmlFromFileCardEditReplaceIssueNo() {
+
+		$path   = SampleXmlValidationUtils::CARD_EDIT_UPDATE_ISSUE_NO_PAYMENT_REQUEST_XML_PATH;
+		$prefix = __DIR__ . '/../../../resources';
+		$xml    = file_get_contents( $prefix . $path );
+
+		//unmarshal back to response
+		/* @var PaymentRequest $fromXmlRequest */
+		$fromXmlRequest = new PaymentRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledCardEditReplaceIssueNoPaymentRequest( $fromXmlRequest, $this );
+
+	}
+
+	/**
+	 * Tests conversion of {@link PaymentRequest} from XML file for payer-new payment types.
+	 */
+	public function testPaymentRequestXmlFromFileCardEditReplaceCHName() {
+
+		$path   = SampleXmlValidationUtils::CARD_EDIT_UPDATE_CH_NAME_PAYMENT_REQUEST_XML_PATH;
+		$prefix = __DIR__ . '/../../../resources';
+		$xml    = file_get_contents( $prefix . $path );
+
+		//unmarshal back to response
+		/* @var PaymentRequest $fromXmlRequest */
+		$fromXmlRequest = new PaymentRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledCardEditReplaceCHNamePaymentRequest( $fromXmlRequest, $this );
+	}
+
+	/**
+	 * Tests conversion of {@link PaymentRequest} from XML file for payer-new payment types.
+	 */
+	public function testPaymentRequestXmlFromFileCardDelete() {
+
+		$path   = SampleXmlValidationUtils::CARD_DELETE_PAYMENT_REQUEST_XML_PATH;
+		$prefix = __DIR__ . '/../../../resources';
+		$xml    = file_get_contents( $prefix . $path );
+
+		//unmarshal back to response
+		/* @var PaymentRequest $fromXmlRequest */
+		$fromXmlRequest = new PaymentRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledCardDeletePaymentRequest( $fromXmlRequest, $this );
+	}
+
+	/**
+	 * Tests conversion of {@link PaymentRequest} from XML file for dcc rate lookup payment types.
+	 */
+	public function testPaymentRequestXmlFromFileDccLookup() {
+
+		$path   = SampleXmlValidationUtils::DCC_RATE_LOOKUP_PAYMENT_REQUEST_XML_PATH;
+		$prefix = __DIR__ . '/../../../resources';
+		$xml    = file_get_contents( $prefix . $path );
+
+		//unmarshal back to response
+		/* @var PaymentRequest $fromXmlRequest */
+		$fromXmlRequest = new PaymentRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledDccRateLookUpPaymentRequest( $fromXmlRequest, $this );
+	}
+
+	/**
+	 * Tests conversion of {@link PaymentRequest} from XML file for dcc auth payment types.
+	 */
+	public function testPaymentRequestXmlFromFileDccAuth() {
+
+		$path   = SampleXmlValidationUtils::DCC_RATE_AUTH_PAYMENT_REQUEST_XML_PATH;
+		$prefix = __DIR__ . '/../../../resources';
+		$xml    = file_get_contents( $prefix . $path );
+
+		//unmarshal back to response
+		/* @var PaymentRequest $fromXmlRequest */
+		$fromXmlRequest = new PaymentRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledDccAuthLookUpPaymentRequest( $fromXmlRequest, $this );
+
+	}
+
+	/**
+	 * Tests conversion of {@link PaymentRequest} from XML file for receipt-in payment types.
+	 */
+	public function testPaymentRequestXmlFromFileReceiptInOTB() {
+
+		$path   = SampleXmlValidationUtils::RECEIPT_IN_OTB_PAYMENT_REQUEST_XML_PATH;
+		$prefix = __DIR__ . '/../../../resources';
+		$xml    = file_get_contents( $prefix . $path );
+
+		//unmarshal back to response
+		/* @var PaymentRequest $fromXmlRequest */
+		$fromXmlRequest = new PaymentRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledReceiptInOTBPaymentRequest( $fromXmlRequest, $this );
 	}
 
 	/**
@@ -1363,7 +2066,5 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$fromXmlResponse = new PaymentResponse();
 		$fromXmlResponse = $fromXmlResponse->fromXml( $xml );
 		SampleXmlValidationUtils::checkUnmarshalledPaymentResponse( $fromXmlResponse, $this, true );
-
-
 	}
 }

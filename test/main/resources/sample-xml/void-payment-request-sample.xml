@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<request timestamp="20151204142728" type="void">
+<request timestamp="20151204142728" type="void"> 
     <merchantid>thestore</merchantid>
     <account>internet</account>
     <orderid>012bf34b-3ec9-4c9b-b3a5-700f2f28e67f</orderid>

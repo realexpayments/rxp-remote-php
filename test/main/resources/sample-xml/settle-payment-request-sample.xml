@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<request timestamp="20151204133035" type="settle">
+<request timestamp="20151204133035" type="settle"> 
     <merchantid>thestore</merchantid>
     <account>internet</account>
     <orderid>e3cf94c6-f674-4f99-b4db-7541254a8767</orderid>

@@ -110,4 +110,8 @@ class Amount {
 		return $this;
 	}
 
+	public static function GetClassName() {
+		return __CLASS__;
+	}
+
 }

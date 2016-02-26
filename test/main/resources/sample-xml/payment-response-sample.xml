@@ -25,5 +25,5 @@
         <check id="2">199</check>
     </tss>
     <avspostcoderesponse>M</avspostcoderesponse>
-    <avsaddressresponse>P</avsaddressresponse>
+	<avsaddressresponse>P</avsaddressresponse>
 </response>

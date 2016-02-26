@@ -1,0 +1,21 @@
+<request timestamp="20120302172708" type="auth">
+    <merchantid>yourmerchantid</merchantid>
+    <account></account>
+    <orderid>201232-205</orderid>
+    <amount currency="EUR">19000</amount>
+    <card>
+        <number>4111111111111111</number>
+        <expdate>0415</expdate>
+        <chname>Peter Johnson</chname>
+        <type>VISA</type>
+    </card>
+    <autosettle flag="1"/>
+    <dccinfo>
+        <ccp>fexco</ccp>
+        <type>1</type>
+        <rate>0.6868</rate>
+        <ratetype>S</ratetype>
+        <amount currency="GBP">13049</amount>
+    </dccinfo>
+    <sha1hash>116d9e19144cd6cec05a809c6d945582c7f10133</sha1hash>
+</request>
