@@ -7,6 +7,7 @@ namespace com\realexpayments\remote\sdk\domain\threeDSecure\normaliser;
 use com\realexpayments\remote\sdk\domain\threeDSecure\ThreeDSecure;
 use com\realexpayments\remote\sdk\domain\threeDSecure\ThreeDSecureResponse;
 use com\realexpayments\remote\sdk\SafeArrayAccess;
+use com\realexpayments\remote\sdk\utils\NormaliserHelper;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 class ThreeDSecureResponseNormalizer extends AbstractNormalizer {
@@ -129,7 +130,7 @@ class ThreeDSecureResponseNormalizer extends AbstractNormalizer {
 			'xid'       => $threeDSecure->getXid(),
 			'cavv'      => $threeDSecure->getCavv(),
 			'algorithm' => $threeDSecure->getAlgorithm()
-		) );
+		), array( NormaliserHelper::GetClassName(), "filter_data" ) );
 	}
 
 	/**

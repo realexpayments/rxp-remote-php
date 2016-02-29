@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<request timestamp="20151204142728" type="void"> 
+    <merchantid>thestore</merchantid>
+    <account>internet</account>
+    <orderid>012bf34b-3ec9-4c9b-b3a5-700f2f28e67f</orderid>
+    <amount currency="EUR">1000</amount>
+    <pasref>13276780809851</pasref>
+    <authcode>AP12345</authcode>
+    <sha1hash>9f61456cce6c90dcc13281e6b95734f5b91e628f</sha1hash>
+</request>

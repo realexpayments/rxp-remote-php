@@ -47,6 +47,10 @@ class Address {
 	public function __construct() {
 	}
 
+	public static function GetClassName() {
+		return __CLASS__;
+	}
+
 	/**
 	 * @return string Getter for the type
 	 */

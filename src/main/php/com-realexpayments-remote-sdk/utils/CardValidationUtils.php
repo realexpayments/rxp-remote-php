@@ -88,7 +88,7 @@ class CardValidationUtils {
 				return false;
 			}
 		} /* Otherwise the length should be three digits */
-		else if ( strlen( $cvvNumber ) != 3 ) {
+		elseif ( strlen( $cvvNumber ) != 3 ) {
 			return false;
 		}
 
@@ -134,7 +134,7 @@ class CardValidationUtils {
 
 		if ( $year < ( $currentYear % 100 ) ) {
 			return false;
-		} else if ( $year == ( $currentYear % 100 ) && $month < $currentMonth ) {
+		} elseif ( $year == ( $currentYear % 100 ) && $month < $currentMonth ) {
 			return false;
 		}
 

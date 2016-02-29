@@ -21,7 +21,7 @@
     <sha1hash>0ad8a9f121c4041b4b832ae8069e80674269e22f</sha1hash>
     <tss>
         <result>67</result>
-        <check id="1">99</check>test@exam
+        <check id="1">99</check>
         <check id="2">199</check>
     </tss>
 </response>

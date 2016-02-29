@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<request type="release" timestamp="20151204161419">
+    <merchantid>thestore</merchantid>
+    <account>internet</account>
+    <orderid>292af5fa-6cbc-43d5-b2f0-7fd134d78d95</orderid>
+    <pasref>ABC123456</pasref>
+    <sha1hash>eec6d1f5dcc51a6a2d2b59af5d2cdb965806d96c</sha1hash> 
+</request>

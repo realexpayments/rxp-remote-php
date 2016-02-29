@@ -132,7 +132,7 @@ class CardValidationUtilsTest extends \PHPUnit_Framework_TestCase {
 	}
 
 
-	public function testValidExpiryDatePastMonthThisYear() {
+	public function testInvalidExpiryDatePastMonthThisYear() {
 
 		$message = "Correct date MMYY - this month";
 

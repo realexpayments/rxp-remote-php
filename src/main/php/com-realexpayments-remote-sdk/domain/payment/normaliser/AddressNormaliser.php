@@ -5,9 +5,10 @@ namespace com\realexpayments\remote\sdk\domain\payment\normaliser;
 
 
 use com\realexpayments\remote\sdk\domain\payment\Address;
+use com\realexpayments\remote\sdk\utils\NormaliserHelper;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class AddressNormaliser implements NormalizerInterface {
+class AddressNormaliser implements NormalizerInterface{
 
 	/**
 	 * Normalizes an object into a set of arrays/scalars.
@@ -25,7 +26,7 @@ class AddressNormaliser implements NormalizerInterface {
 			'@type'   => $object->getType(),
 			'code'    => $object->getCode(),
 			'country' => $object->getCountry()
-		) );
+		), array( NormaliserHelper::GetClassName(), "filter_data" ) );
 	}
 
 	/**
