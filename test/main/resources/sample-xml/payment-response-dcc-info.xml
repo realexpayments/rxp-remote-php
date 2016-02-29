@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<response timestamp="20120302152632">
+    <merchantid>yourmerchantid</merchantid>
+    <account>internet</account>
+    <orderid>201232-205</orderid>
+    <authcode></authcode>
+    <result>00</result>
+    <cvnresult>U</cvnresult>
+    <batchid></batchid>
+    <message></message>
+    <pasref>10782411922720</pasref>
+    <dccinfo>
+        <cardholdercurrency>GBP</cardholdercurrency>
+        <cardholderamount>13049</cardholderamount>
+        <cardholderrate>0.6868</cardholderrate>
+        <merchantcurrency>EUR</merchantcurrency>
+        <merchantamount>19000</merchantamount>
+    </dccinfo>
+    <sha1hash>9cbaaf034254315ceefa8c680ff8a773c83db140</sha1hash>
+</response>

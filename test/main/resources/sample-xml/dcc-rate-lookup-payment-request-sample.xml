@@ -1,0 +1,18 @@
+<request timestamp="20160205175725" type="dccrate">
+    <merchantid>thestore</merchantid>
+    <account>internet</account>
+    <orderid>292af5fa-6cbc-43d5-b2f0-7fd134d78A80</orderid>
+    <amount currency="EUR">3000</amount>
+    <card>
+        <number>420000000000000000</number>
+        <expdate>0417</expdate>
+        <chname>Joe Smith</chname>
+        <type>VISA</type>
+    </card>
+    <autosettle flag="1"/>
+    <dccinfo>
+        <ccp>fexco</ccp>
+        <type>1</type>
+    </dccinfo>
+    <sha1hash>dbe26dd81f6b39c0ad682bae1b882c9bdb696819</sha1hash>
+</request>

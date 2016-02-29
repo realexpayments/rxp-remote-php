@@ -1,0 +1,16 @@
+<response timestamp="20120926112654">
+	<merchantid>thestore</merchantid>
+	<account>internet</account>
+	<orderid>ORD453-11</orderid>
+	<authcode>79347</authcode>
+	<result>110</result>
+	<message>Not Enrolled</message>
+	<pasref>3737468273643</pasref>
+	<timetaken>54564</timetaken>
+	<authtimetaken>1001</authtimetaken>
+	<pareq>eJxVUttygkAM/ZUdnitZFlBw4na02tE6bR0vD+0bLlHpFFDASv++u6i1</pareq>
+	<url>http://myurl.com</url>
+	<enrolled>N</enrolled>
+	<xid>e9dafe706f7142469c45d4877aaf5984</xid>
+	<sha1hash>e553ff2510dec9bfee79bb0303af337d871c02ad</sha1hash>
+</response>

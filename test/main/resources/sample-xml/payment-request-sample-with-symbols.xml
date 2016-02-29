@@ -30,7 +30,7 @@
     <tssinfo>
         <custnum>cust num $ £</custnum>
         <prodid>prod ID</prodid>
-        <varref>variable ref 1234 $$ ££</varref>
+        <varref>variable ref 1234 $ ££</varref>
         <custipaddress>127.0.0.1</custipaddress>
         <address type="billing">
             <code>21|578</code>

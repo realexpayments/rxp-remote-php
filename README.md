@@ -249,6 +249,279 @@ $request = ( new PaymentRequest() )
 $client   = new RealexClient( "mySecret" );
 $response = $client->send( $request );
 ```
+### Receipt-In
+
+```php
+$paymentData = ( new PaymentData() )
+  	->addCvnNumber("123");
+
+$request = ( new PaymentRequest() )
+ 	->addAccount( "myAccount" )
+ 	->addMerchantId( "myMerchantId" )	
+ 	->addType(PaymentType::RECEIPT_IN)
+ 	->addAmount(100)
+ 	->addCurrency( "EUR" )        
+ 	->addPayerReference("payer ref from customer")
+ 	->addPaymentMethod("payment method ref from customer")
+ 	->addPaymentData($paymentData);
+
+$client   = new RealexClient( "mySecret" );
+$response = $client->send( $request );
+```
+
+### Payment-out
+
+```php
+$request = ( new PaymentRequest() )
+ 	->addAccount( "myAccount" )
+ 	->addMerchantId( "myMerchantId" )	
+ 	->addType(PaymentType::PAYMENT_OUT) 	
+ 	->addAmount(100)
+ 	->addCurrency( "EUR" )        
+ 	->addPayerReference("payer ref from customer")
+ 	->addPaymentMethod("payment method ref from customer")
+ 	->addRefundHash("Hash of rebate password shared with Realex");
+
+$client   = new RealexClient( "mySecret" );
+$response = $client->send( $request );
+```
+
+### Payer-new
+
+```php
+$address = ( new PayerAddress() )
+    ->addLine1("Apt 167 Block 10")
+    ->addLine2("The Hills")
+    ->addLine3("67-69 High St")
+    ->addCity("Hytown")
+    ->addCounty("Dunham")
+    ->addPostcode("3")
+    ->addCountryCode("IE")
+    ->addCountryName("Ireland");
+    
+
+$payer = ( new Payer() )
+    ->addType("Business")
+    ->addRef("smithj01")
+    ->addTitle("Mr")
+    ->addFirstName("John")
+    ->addSurname("Smith")
+    ->addCompany("Acme")
+    ->addAddress($address)
+    ->addHomePhoneNumber("+35317285355")
+    ->addWorkPhoneNumber("+35317433923")
+    ->addFaxPhoneNumber("+35317893248")
+    ->addMobilePhoneNumber("+353873748392")
+    ->addEmail("jsmith@acme.com")
+    ->addComment("Comment1")
+    ->addComment("Comment2");
+
+$request = ( new PaymentRequest() )
+ 	->addAccount( "myAccount" )
+ 	->addMerchantId( "myMerchantId" )	
+ 	->addType(PaymentType::PAYER_NEW)  	
+ 	->addPayer($payer);
+
+$client   = new RealexClient( "mySecret" );
+$response = $client->send( $request );
+```
+
+### Payer-edit
+
+```php
+$address = ( new PayerAddress() )
+    ->addLine1("Apt 167 Block 10")
+    ->addLine2("The Hills")
+    ->addLine3("67-69 High St")
+    ->addCity("Hytown")
+    ->addCounty("Dunham")
+    ->addPostcode("3")
+    ->addCountryCode("IE")
+    ->addCountryName("Ireland");
+    
+
+$payer = ( new Payer() )
+    ->addType("Business")
+    ->addRef("smithj01")
+    ->addTitle("Mr")
+    ->addFirstName("John")
+    ->addSurname("Smith")
+    ->addCompany("Acme")
+    ->addAddress($address)
+    ->addHomePhoneNumber("+35317285355")
+    ->addWorkPhoneNumber("+35317433923")
+    ->addFaxPhoneNumber("+35317893248")
+    ->addMobilePhoneNumber("+353873748392")
+    ->addEmail("jsmith@acme.com")
+    ->addComment("Comment1")
+    ->addComment("Comment2");
+
+$request = ( new PaymentRequest() )
+ 	->addAccount( "myAccount" )
+ 	->addMerchantId( "myMerchantId" )	
+ 	->addType(PaymentType::PAYER_EDIT)  	
+ 	->addPayer($payer);
+
+$client   = new RealexClient( "mySecret" );
+$response = $client->send( $request );
+```
+
+### Card-new
+
+```php
+$card = ( new Card() )
+    ->addReference("visa01")
+    ->addPayerReference("smithj01")
+    ->addNumber("420000000000000000")    
+	->addExpiryDate("0119")	
+	->addCardHolderName("Joe Smith")
+	->addType(CardType::VISA)
+	->addIssueNumber("1");
+
+$request = ( new PaymentRequest() )
+ 	->addAccount( "myAccount" )
+ 	->addMerchantId( "myMerchantId" )	
+ 	->addType(PaymentType::CARD_NEW)  	
+ 	->addPayerReference( "smithj01" )
+ 	->addCard($card);
+
+$client   = new RealexClient( "mySecret" );
+$response = $client->send( $request );
+```
+
+### Card-edit
+
+```php
+$card = ( new Card() )
+    ->addReference("visa01")
+    ->addPayerReference("smithj01")
+    ->addNumber("420000000000000000")    
+	->addExpiryDate("0119")	
+	->addCardHolderName("Joe Smith")
+	->addType(CardType::VISA)
+	->addIssueNumber("1");
+
+$request = ( new PaymentRequest() )
+ 	->addAccount( "myAccount" )
+ 	->addMerchantId( "myMerchantId" )	
+ 	->addType(PaymentType::CARD_UPDATE)  
+ 	->addPayerReference( "smithj01" )
+ 	->addCard($card);
+
+$client   = new RealexClient( "mySecret" );
+$response = $client->send( $request );
+```
+
+
+### Card-delete
+
+```php
+$card = ( new Card() )
+    ->addReference("visa01")
+    ->addPayerReference("smithj01");
+
+$request = ( new PaymentRequest() )
+ 	->addAccount( "myAccount" )
+ 	->addMerchantId( "myMerchantId" )	
+ 	->addType(PaymentType::CARD_CANCEL)  	
+ 	->addCard($card);
+
+$client   = new RealexClient( "mySecret" );
+$response = $client->send( $request );
+```
+
+### Verify Card Enrolled
+
+```php
+$paymentData = new PaymentData()
+  	->addCvnNumber("123");
+
+
+$request = ( new ThreeDSecureRequest() )
+  ->addAccount( "myAccount" )
+  ->addMerchantId( "myMerchantId" )	
+  ->addType(ThreeDSecureType::VERIFY_CARD_ENROLLED)
+  ->addAmount(100)
+  ->addCurrency( "EUR" )        
+  ->addPayerReference("payer ref from customer")
+  ->addPaymentMethod("payment method ref from customer")
+  ->addPaymentData($paymentData)
+  ->addAutoSettle( ( new AutoSettle() )->addFlag( AutoSettleFlag::TRUE ) );
+ 	
+
+$client   = new RealexClient( "mySecret" );
+$response = client.send(request);
+```
+
+### DCC Rate Lookup
+
+```php
+$card = ( new Card() )    
+    ->addNumber("420000000000000000")    
+	->addExpiryDate("0119")	
+	->addCardHolderName("Joe Smith")
+	->addType(CardType::VISA);
+	
+$dccInfo = ( new DccInfo() )
+    ->addDccProcessor("fexco");
+
+$request = ( new PaymentRequest() )
+  ->addAccount( "myAccount" )
+  ->addMerchantId( "myMerchantId" )	
+  ->addType(PaymentType::DCC_RATE_LOOKUP)
+  ->addAmount(100)
+  ->addCurrency( "EUR" )        
+  ->addCard($card)
+  ->addDccInfo($dccInfo);
+
+$client   = new RealexClient( "mySecret" );
+$response = $client->send( $request );
+```
+
+
+### DCC + Auth
+
+```php
+$card = ( new Card() )    
+    ->addNumber("420000000000000000")    
+	->addExpiryDate("0119")	
+	->addCardHolderName("Joe Smith")
+	->addType(CardType::VISA);
+	
+$dccInfo = ( new DccInfo() )
+    ->addDccProcessor("fexco")
+    ->addRate(0.6868)
+    ->addAmount(13049)
+    ->addCurrency("GBP");
+
+$request = ( new PaymentRequest() )
+  ->addAccount( "myAccount" )
+  ->addMerchantId( "myMerchantId" )	
+  ->addType(PaymentType::DCC_AUTH)
+  ->addAmount(19000)
+  ->addCurrency( "EUR" )        
+  ->addCard($card)
+  ->addDccInfo($dccInfo);
+
+$client   = new RealexClient( "mySecret" );
+$response = $client->send( $request );
+```
+
+### RECEIPT-IN OTB
+
+```php 
+$request = ( new PaymentRequest() )
+    ->addAccount( "myAccount" )
+	->addMerchantId( "myMerchantId" )	
+	->addType(PaymentType::RECEIPT_IN_OTB)
+	->addPayerReference("payer ref from customer")
+    ->addPaymentMethod("payment method ref from customer");
+	
+$client   = new RealexClient( "mySecret" );
+$response = $client->send( $request );	
+```
+
+
 
 ## License
 

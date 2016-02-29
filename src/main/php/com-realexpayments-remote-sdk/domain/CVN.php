@@ -59,6 +59,10 @@ class CVN {
 	public function __construct() {
 	}
 
+	public static function GetClassName() {
+		return __CLASS__;
+	}
+
 
 	/**
 	 * Getter for the verification number.

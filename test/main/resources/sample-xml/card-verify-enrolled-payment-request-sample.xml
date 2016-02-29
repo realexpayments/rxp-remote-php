@@ -1,0 +1,15 @@
+<request timestamp="20160202175725" type="realvault-3ds-verifyenrolled">
+    <merchantid>thestore</merchantid>
+    <account>internet</account>
+    <orderid>292af5fa-6cbc-43d5-b2f0-7fd134d78A18</orderid>
+    <amount currency="EUR">3000</amount>
+    <payerref>smithj01</payerref>
+    <paymentmethod>visa01</paymentmethod>
+    <autosettle flag="1" />
+    <paymentdata>
+        <cvn>
+            <number>123</number>
+        </cvn>
+    </paymentdata>
+    <sha1hash>85cae325d558aad444341b69c1350c929738ce60</sha1hash>
+</request>

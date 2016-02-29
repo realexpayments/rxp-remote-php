@@ -72,9 +72,27 @@ class Card {
 	private $cvn;
 
 	/**
+	 * @var String The reference for this card (Card Storage)
+	 *
+	 * This must be unique within the Payer record if you are adding multiple
+	 * cards, but it does not need to be unique in relation to other Payers.
+	 */
+	private $reference;
+
+	/**
+	 * @var String The payer ref for this customer  (Card Storage)
+	 *
+	 */
+	private $payerReference;
+
+	/**
 	 * Card constructor.
 	 */
 	public function __construct() {
+	}
+
+	public static function GetClassName() {
+		return __CLASS__;
 	}
 
 	/**
@@ -179,6 +197,42 @@ class Card {
 	 */
 	public function setCvn( $cvn ) {
 		$this->cvn = $cvn;
+	}
+
+	/**
+	 * Getter for reference
+	 *
+	 * @return String
+	 */
+	public function getReference() {
+		return $this->reference;
+	}
+
+	/**
+	 * Setter for reference
+	 *
+	 * @param String $reference
+	 */
+	public function setReference( $reference ) {
+		$this->reference = $reference;
+	}
+
+	/**
+	 * Getter for payerReference
+	 *
+	 * @return String
+	 */
+	public function getPayerReference() {
+		return $this->payerReference;
+	}
+
+	/**
+	 * Setter for payerReference
+	 *
+	 * @param String $payerReference
+	 */
+	public function setPayerReference( $payerReference ) {
+		$this->payerReference = $payerReference;
 	}
 
 	/**
@@ -306,6 +360,32 @@ class Card {
 		return $this;
 	}
 
+	/**
+	 * Helper method for adding a payerReference
+	 *
+	 * @param String $payerReference
+	 *
+	 * @return Card
+	 */
+	public function addPayerReference( $payerReference ) {
+		$this->payerReference = $payerReference;
+
+		return $this;
+	}
+
+	/**
+	 * Helper method for adding a reference
+	 *
+	 * @param String $reference
+	 *
+	 * @return Card
+	 */
+	public function addReference( $reference ) {
+		$this->reference = $reference;
+
+		return $this;
+	}
+
 
 	/**
 	 * Get a sanitised version of the card number displaying only the first six and last four digits.
@@ -320,5 +400,4 @@ class Card {
 
 		return $result;
 	}
-
 }
