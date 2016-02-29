@@ -79,6 +79,119 @@ use com\realexpayments\remote\sdk\utils\XmlUtils;
  * </pre></code></p>
  *
  *
+ * <p>
+ * Example SETTLE
+ * <p>
+ * <p><code><pre>
+ * $request = ( new PaymentRequest() )
+ *    ->addAccount( "myAccount" )
+ *    ->addMerchantId( "myMerchantId" )
+ *    ->addType( PaymentType::SETTLE )
+ *    ->addOrderId("Order ID from original transaction")
+ *    ->addAmount( 1001 )
+ *    ->addCurrency( "EUR" )
+ *    ->addPaymentsReference("pasref from original transaction")
+ *    ->addAuthCode("Auth code from original transaction");
+ * </pre></code></p>
+ *
+ * <p>
+ * Example Void
+ * <p>
+ * <p><code><pre>
+ *
+ * $request = ( new PaymentRequest() )
+ *    ->addAccount( "myAccount" )
+ *    ->addMerchantId( "myMerchantId" )
+ *    ->addType( PaymentType::VOID )
+ *    ->addOrderId("Order ID from original transaction")
+ *    ->addPaymentsReference("pasref from original transaction")
+ *    ->addAuthCode("Auth code from original transaction");
+ *
+ * </pre></code></p>
+ *
+ * <p>
+ * Example REBATE
+ * <p>
+ * <p><code><pre>
+ * $request = ( new PaymentRequest() )
+ *    ->addAccount( "myAccount" )
+ *    ->addMerchantId( "myMerchantId" )
+ *    ->addType( PaymentType::REBATE )
+ *    ->addOrderId("Order ID from original transaction")
+ *    ->addAmount( 1001 )
+ *    ->addCurrency( "EUR" )
+ *    ->addPaymentsReference("pasref from original transaction")
+ *    ->addAuthCode("Auth code from original transaction")
+ *    ->addRefundHash("Hash of rebate password shared with Realex");
+ *
+ * </pre></code></p>
+ *
+ * <p>
+ * Example OTB
+ * <p>
+ * <p><code><pre>
+ *
+ * $card = ( new Card() )
+ *    ->addExpiryDate( "1220" )
+ *    ->addNumber( "4263971921001307" )
+ *    ->addType( CardType::VISA )
+ *    ->addCardHolderName( "Joe Smith" );
+ *    ->addCvn( "123" )
+ *    ->addCvnPresenceIndicator( PresenceIndicator::CVN_PRESENT )
+ *
+ * $request = ( new PaymentRequest() )
+ *    ->addAccount( "myAccount" )
+ *    ->addMerchantId( "myMerchantId" )
+ *    ->addType( PaymentType::OTB )
+ *    ->addCard( $card );
+ *
+ * </pre></code></p>
+ *
+ * <p>
+ * Example Credit
+ * <p>
+ * <p><code><pre>
+ *
+ * $request = ( new PaymentRequest() )
+ *    ->addAccount( "myAccount" )
+ *    ->addMerchantId( "myMerchantId" )
+ *    ->addType( PaymentType::CREDIT )
+ *    ->addAmount( 1001 )
+ *    ->addCurrency( "EUR" )
+ *    ->addPaymentsReference("Pasref from original transaction")
+ *    ->addAuthCode("Auth code from original transaction")
+ *    ->addRefundHash("Hash of credit password shared with Realex");
+ *
+ * </pre></code></p>
+ *
+ * <p>
+ * Example Hold
+ * <p>
+ * <p><code><pre>
+ *
+ * $request = ( new PaymentRequest() )
+ *    ->addAccount( "myAccount" )
+ *    ->addMerchantId( "myMerchantId" )
+ *    ->addType( PaymentType::HOLD )
+ *    ->addOrderId("Order ID from original transaction")
+ *    ->addPaymentsReference("Pasref from original transaction");
+ *
+ * </pre></code></p>
+ *
+ * <p>
+ * Example Release
+ * <p>
+ * <p><code><pre>
+ *
+ * $request = ( new PaymentRequest() )
+ *    ->addAccount( "myAccount" )
+ *    ->addMerchantId( "myMerchantId" )
+ *    ->addType( PaymentType::RELEASE )
+ *    ->addOrderId("Order ID from original transaction")
+ *    ->addPaymentsReference("Pasref from original transaction");
+ *
+ * </pre></code></p>
+ *
  * @author vicpada
  * @package com\realexpayments\remote\sdk\domain\payment
  */
@@ -993,6 +1106,15 @@ class PaymentRequest implements iRequest {
 			          . $orderId
 			          . "..."
 			          . $token;
+		} else if ( $this->type == PaymentType::OTB ) {
+			$toHash = $timeStamp
+			          . "."
+			          . $merchantId
+			          . "."
+			          . $orderId
+			          . "."
+			          . $cardNumber;
+
 		} else {
 			$toHash = $timeStamp
 			          . "."
