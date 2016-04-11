@@ -230,6 +230,7 @@ $request = ( new PaymentRequest() )
 	->addMerchantId( "myMerchantId" )	
 	->addType( PaymentType::HOLD )
 	->addOrderId("Order ID from original transaction")
+	->addReasonCode( ReasonCode::FRAUD)
 	->addPaymentsReference("Pasref from original transaction");
 
 $client   = new RealexClient( "mySecret" );
@@ -244,6 +245,7 @@ $request = ( new PaymentRequest() )
 	->addMerchantId( "myMerchantId" )	
 	->addType( PaymentType::RELEASE )
 	->addOrderId("Order ID from original transaction")
+	->addReasonCode( ReasonCode::FRAUD)
 	->addPaymentsReference("Pasref from original transaction");
 
 $client   = new RealexClient( "mySecret" );
