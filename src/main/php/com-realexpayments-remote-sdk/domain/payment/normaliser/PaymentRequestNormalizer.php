@@ -61,7 +61,9 @@ class PaymentRequestNormalizer extends AbstractNormalizer{
 		        ->addPayerReference( $array['payerref'] )
 		        ->addPaymentMethod( $array['paymentmethod'] )
 		        ->addPaymentData( $this->denormalizePaymentData( $array ) )
-		        ->addPayer( $this->denormalizePayer( $array ) );
+		        ->addPayer( $this->denormalizePayer( $array ) )
+				->addReasonCode($array['reasoncode']);
+
 
 		$request->setCard( $this->denormaliseCard( $array ) );
 
@@ -301,6 +303,7 @@ class PaymentRequestNormalizer extends AbstractNormalizer{
 					'paymentdata'   => $object->getPaymentData(),
 					'payer'         => $object->getPayer(),
 					'dccinfo'       => $object->getDccInfo(),
+					'reasoncode'       => $object->getReasonCode(),
 				), array( NormaliserHelper::GetClassName(), "filter_data" ) );
 	}
 

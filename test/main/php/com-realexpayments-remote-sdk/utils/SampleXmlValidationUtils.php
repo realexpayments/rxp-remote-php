@@ -9,6 +9,7 @@ use com\realexpayments\remote\sdk\domain\payment\AutoSettleFlag;
 use com\realexpayments\remote\sdk\domain\payment\PaymentRequest;
 use com\realexpayments\remote\sdk\domain\payment\PaymentResponse;
 use com\realexpayments\remote\sdk\domain\payment\PaymentType;
+use com\realexpayments\remote\sdk\domain\payment\ReasonCode;
 use com\realexpayments\remote\sdk\domain\payment\RecurringFlag;
 use com\realexpayments\remote\sdk\domain\payment\RecurringSequence;
 use com\realexpayments\remote\sdk\domain\payment\RecurringType;
@@ -288,6 +289,7 @@ class SampleXmlValidationUtils {
 	const HOLD_PASREF = "ABC123456";
 	const HOLD_ORDER_ID = "292af5fa-6cbc-43d5-b2f0-7fd134d78d95";
 	const HOLD_REQUEST_HASH = "eec6d1f5dcc51a6a2d2b59af5d2cdb965806d96c";
+	const HOLD_REASON_CODE = ReasonCode::FRAUD;
 
 	//release fields
 	const RELEASE_TIMESTAMP = "20151204161419";
@@ -296,6 +298,7 @@ class SampleXmlValidationUtils {
 	const RELEASE_PASREF = "ABC123456";
 	const RELEASE_ORDER_ID = "292af5fa-6cbc-43d5-b2f0-7fd134d78d95";
 	const RELEASE_REQUEST_HASH = "eec6d1f5dcc51a6a2d2b59af5d2cdb965806d96c";
+	const RELEASE_REASON_CODE = ReasonCode::OUT_OF_STOCK;
 
 	// receipt-in fields
 	const RECEIPT_IN_TIMESTAMP = "20160119171625";
@@ -515,7 +518,7 @@ class SampleXmlValidationUtils {
 		self::$AUTH_MOBILE_AUTO_SETTLE_FLAG = new AutoSettleFlag( AutoSettleFlag::TRUE );
 		self::$OTB_AUTO_SETTLE_FLAG         = new AutoSettleFlag( AutoSettleFlag::TRUE );
 		self::$CARD_VERIFY_AUTO_SETTLE_FLAG = new AutoSettleFlag( AutoSettleFlag::TRUE );
-		self::$RECEIPT_IN_AUTO_SETTLE_FLAG = new AutoSettleFlag( AutoSettleFlag::TRUE );
+		self::$RECEIPT_IN_AUTO_SETTLE_FLAG  = new AutoSettleFlag( AutoSettleFlag::TRUE );
 
 	}
 
@@ -770,9 +773,10 @@ class SampleXmlValidationUtils {
 
 		$testCase->assertEquals( self::HOLD_ACCOUNT, $fromXmlRequest->getAccount() );
 		$testCase->assertEquals( self::HOLD_MERCHANT_ID, $fromXmlRequest->getMerchantId() );
-		$testCase->assertEquals( self::HOLD_TIMESTAMP, $fromXmlRequest->getTimeStamp() );
+		$testCase->assertEquals( self::HOLD_TIMESTAMP, $fromXmlRequest->getTimestamp() );
 		$testCase->assertEquals( self::HOLD_ORDER_ID, $fromXmlRequest->getOrderId() );
 		$testCase->assertEquals( self::HOLD_REQUEST_HASH, $fromXmlRequest->getHash() );
+		$testCase->assertEquals( self::HOLD_REASON_CODE, $fromXmlRequest->getReasonCode() );
 		$testCase->assertEquals( self::HOLD_PASREF, $fromXmlRequest->getPaymentsReference() );
 	}
 
@@ -789,8 +793,9 @@ class SampleXmlValidationUtils {
 
 		$testCase->assertEquals( self::RELEASE_ACCOUNT, $fromXmlRequest->getAccount() );
 		$testCase->assertEquals( self::RELEASE_MERCHANT_ID, $fromXmlRequest->getMerchantId() );
-		$testCase->assertEquals( self::RELEASE_TIMESTAMP, $fromXmlRequest->getTimeStamp() );
+		$testCase->assertEquals( self::RELEASE_TIMESTAMP, $fromXmlRequest->getTimestamp() );
 		$testCase->assertEquals( self::RELEASE_ORDER_ID, $fromXmlRequest->getOrderId() );
+		$testCase->assertEquals( self::RELEASE_REASON_CODE, $fromXmlRequest->getReasonCode() );
 		$testCase->assertEquals( self::RELEASE_REQUEST_HASH, $fromXmlRequest->getHash() );
 		$testCase->assertEquals( self::RELEASE_PASREF, $fromXmlRequest->getPaymentsReference() );
 	}
@@ -806,7 +811,7 @@ class SampleXmlValidationUtils {
 		$testCase->assertEquals( PaymentType::RECEIPT_IN, $fromXmlRequest->getType() );
 		$testCase->assertEquals( self::RECEIPT_IN_ACCOUNT, $fromXmlRequest->getAccount() );
 		$testCase->assertEquals( self::RECEIPT_IN_MERCHANT_ID, $fromXmlRequest->getMerchantId() );
-		$testCase->assertEquals( self::RECEIPT_IN_TIMESTAMP, $fromXmlRequest->getTimeStamp() );
+		$testCase->assertEquals( self::RECEIPT_IN_TIMESTAMP, $fromXmlRequest->getTimestamp() );
 		$testCase->assertEquals( self::RECEIPT_IN_ORDER_ID, $fromXmlRequest->getOrderId() );
 		$testCase->assertEquals( self::RECEIPT_IN_REQUEST_HASH, $fromXmlRequest->getHash() );
 		$testCase->assertEquals( self::RECEIPT_IN_PAYER, $fromXmlRequest->getPayerRef() );
@@ -827,7 +832,7 @@ class SampleXmlValidationUtils {
 		$testCase->assertEquals( PaymentType::PAYMENT_OUT, $fromXmlRequest->getType() );
 		$testCase->assertEquals( self::PAYMENT_OUT_ACCOUNT, $fromXmlRequest->getAccount() );
 		$testCase->assertEquals( self::PAYMENT_OUT_MERCHANT_ID, $fromXmlRequest->getMerchantId() );
-		$testCase->assertEquals( self::PAYMENT_OUT_TIMESTAMP, $fromXmlRequest->getTimeStamp() );
+		$testCase->assertEquals( self::PAYMENT_OUT_TIMESTAMP, $fromXmlRequest->getTimestamp() );
 		$testCase->assertEquals( self::PAYMENT_OUT_ORDER_ID, $fromXmlRequest->getOrderId() );
 		$testCase->assertEquals( self::PAYMENT_OUT_REQUEST_HASH, $fromXmlRequest->getHash() );
 		$testCase->assertEquals( self::PAYMENT_OUT_PAYER, $fromXmlRequest->getPayerRef() );
@@ -848,7 +853,7 @@ class SampleXmlValidationUtils {
 		$testCase->assertEquals( PaymentType::PAYER_NEW, $fromXmlRequest->getType() );
 		$testCase->assertEquals( self::PAYER_NEW_ACCOUNT, $fromXmlRequest->getAccount() );
 		$testCase->assertEquals( self::PAYER_NEW_MERCHANT_ID, $fromXmlRequest->getMerchantId() );
-		$testCase->assertEquals( self::PAYER_NEW_TIMESTAMP, $fromXmlRequest->getTimeStamp() );
+		$testCase->assertEquals( self::PAYER_NEW_TIMESTAMP, $fromXmlRequest->getTimestamp() );
 		$testCase->assertEquals( self::PAYER_NEW_ORDER_ID, $fromXmlRequest->getOrderId() );
 		$testCase->assertEquals( self::PAYER_NEW_REQUEST_HASH, $fromXmlRequest->getHash() );
 
@@ -894,7 +899,7 @@ class SampleXmlValidationUtils {
 		$testCase->assertEquals( PaymentType::PAYER_EDIT, $fromXmlRequest->getType() );
 		$testCase->assertEquals( self::PAYER_EDIT_ACCOUNT, $fromXmlRequest->getAccount() );
 		$testCase->assertEquals( self::PAYER_EDIT_MERCHANT_ID, $fromXmlRequest->getMerchantId() );
-		$testCase->assertEquals( self::PAYER_EDIT_TIMESTAMP, $fromXmlRequest->getTimeStamp() );
+		$testCase->assertEquals( self::PAYER_EDIT_TIMESTAMP, $fromXmlRequest->getTimestamp() );
 		$testCase->assertEquals( self::PAYER_EDIT_ORDER_ID, $fromXmlRequest->getOrderId() );
 		$testCase->assertEquals( self::PAYER_EDIT_REQUEST_HASH, $fromXmlRequest->getHash() );
 
@@ -940,7 +945,7 @@ class SampleXmlValidationUtils {
 		$testCase->assertEquals( PaymentType::CARD_NEW, $fromXmlRequest->getType() );
 		$testCase->assertEquals( self::CARD_ADD_ACCOUNT, $fromXmlRequest->getAccount() );
 		$testCase->assertEquals( self::CARD_ADD_MERCHANT_ID, $fromXmlRequest->getMerchantId() );
-		$testCase->assertEquals( self::CARD_ADD_TIMESTAMP, $fromXmlRequest->getTimeStamp() );
+		$testCase->assertEquals( self::CARD_ADD_TIMESTAMP, $fromXmlRequest->getTimestamp() );
 		$testCase->assertEquals( self::CARD_ADD_ORDER_ID, $fromXmlRequest->getOrderId() );
 		$testCase->assertEquals( self::CARD_ADD_REQUEST_HASH, $fromXmlRequest->getHash() );
 
@@ -965,7 +970,7 @@ class SampleXmlValidationUtils {
 		$testCase->assertEquals( PaymentType::CARD_UPDATE, $fromXmlRequest->getType() );
 		$testCase->assertEquals( self::CARD_UPDATE_ACCOUNT, $fromXmlRequest->getAccount() );
 		$testCase->assertEquals( self::CARD_UPDATE_MERCHANT_ID, $fromXmlRequest->getMerchantId() );
-		$testCase->assertEquals( self::CARD_UPDATE_TIMESTAMP, $fromXmlRequest->getTimeStamp() );
+		$testCase->assertEquals( self::CARD_UPDATE_TIMESTAMP, $fromXmlRequest->getTimestamp() );
 		$testCase->assertEquals( self::CARD_UPDATE_REQUEST_HASH, $fromXmlRequest->getHash() );
 
 		$testCase->assertEquals( self::CARD_UPDATE_PAYER_REF, $fromXmlRequest->getCard()->getPayerReference() );
@@ -989,7 +994,7 @@ class SampleXmlValidationUtils {
 		$testCase->assertEquals( PaymentType::CARD_UPDATE, $fromXmlRequest->getType() );
 		$testCase->assertEquals( self::CARD_UPDATE_ACCOUNT, $fromXmlRequest->getAccount() );
 		$testCase->assertEquals( self::CARD_UPDATE_MERCHANT_ID, $fromXmlRequest->getMerchantId() );
-		$testCase->assertEquals( self::CARD_UPDATE_TIMESTAMP, $fromXmlRequest->getTimeStamp() );
+		$testCase->assertEquals( self::CARD_UPDATE_TIMESTAMP, $fromXmlRequest->getTimestamp() );
 		$testCase->assertEquals( self::CARD_UPDATE_ISSUE_NO_REQUEST_HASH, $fromXmlRequest->getHash() );
 
 		$testCase->assertEquals( self::CARD_UPDATE_PAYER_REF, $fromXmlRequest->getCard()->getPayerReference() );
@@ -1012,7 +1017,7 @@ class SampleXmlValidationUtils {
 		$testCase->assertEquals( PaymentType::CARD_UPDATE, $fromXmlRequest->getType() );
 		$testCase->assertEquals( self::CARD_UPDATE_ACCOUNT, $fromXmlRequest->getAccount() );
 		$testCase->assertEquals( self::CARD_UPDATE_MERCHANT_ID, $fromXmlRequest->getMerchantId() );
-		$testCase->assertEquals( self::CARD_UPDATE_TIMESTAMP, $fromXmlRequest->getTimeStamp() );
+		$testCase->assertEquals( self::CARD_UPDATE_TIMESTAMP, $fromXmlRequest->getTimestamp() );
 		$testCase->assertEquals( self::CARD_UPDATE_CH_NAME_REQUEST_HASH, $fromXmlRequest->getHash() );
 
 		$testCase->assertEquals( self::CARD_UPDATE_PAYER_REF, $fromXmlRequest->getCard()->getPayerReference() );
@@ -1034,7 +1039,7 @@ class SampleXmlValidationUtils {
 		$testCase->assertEquals( PaymentType::CARD_CANCEL, $fromXmlRequest->getType() );
 		$testCase->assertEquals( self::CARD_DELETE_ACCOUNT, $fromXmlRequest->getAccount() );
 		$testCase->assertEquals( self::CARD_DELETE_MERCHANT_ID, $fromXmlRequest->getMerchantId() );
-		$testCase->assertEquals( self::CARD_DELETE_TIMESTAMP, $fromXmlRequest->getTimeStamp() );
+		$testCase->assertEquals( self::CARD_DELETE_TIMESTAMP, $fromXmlRequest->getTimestamp() );
 		$testCase->assertEquals( self::CARD_DELETE_REQUEST_HASH, $fromXmlRequest->getHash() );
 
 		$testCase->assertEquals( self::CARD_DELETE_PAYER_REF, $fromXmlRequest->getCard()->getPayerReference() );
@@ -1054,7 +1059,7 @@ class SampleXmlValidationUtils {
 		$testCase->assertEquals( PaymentType::DCC_RATE_LOOKUP, $fromXmlRequest->getType() );
 		$testCase->assertEquals( self::DCC_RATE_ACCOUNT, $fromXmlRequest->getAccount() );
 		$testCase->assertEquals( self::DCC_RATE_MERCHANT_ID, $fromXmlRequest->getMerchantId() );
-		$testCase->assertEquals( self::DCC_RATE_TIMESTAMP, $fromXmlRequest->getTimeStamp() );
+		$testCase->assertEquals( self::DCC_RATE_TIMESTAMP, $fromXmlRequest->getTimestamp() );
 		$testCase->assertEquals( self::DCC_RATE_REQUEST_HASH, $fromXmlRequest->getHash() );
 
 		$testCase->assertEquals( self::DCC_RATE_CARD_NUMBER, $fromXmlRequest->getCard()->getNumber() );
@@ -1081,7 +1086,7 @@ class SampleXmlValidationUtils {
 		$testCase->assertEquals( PaymentType::DCC_AUTH, $fromXmlRequest->getType() );
 		$testCase->assertEquals( self::DCC_AUTH_ACCOUNT, $fromXmlRequest->getAccount() );
 		$testCase->assertEquals( self::DCC_AUTH_MERCHANT_ID, $fromXmlRequest->getMerchantId() );
-		$testCase->assertEquals( self::DCC_AUTH_TIMESTAMP, $fromXmlRequest->getTimeStamp() );
+		$testCase->assertEquals( self::DCC_AUTH_TIMESTAMP, $fromXmlRequest->getTimestamp() );
 		$testCase->assertEquals( self::DCC_AUTH_REQUEST_HASH, $fromXmlRequest->getHash() );
 
 		$testCase->assertEquals( self::DCC_AUTH_CARD_NUMBER, $fromXmlRequest->getCard()->getNumber() );
@@ -1113,7 +1118,7 @@ class SampleXmlValidationUtils {
 		$testCase->assertEquals( PaymentType::RECEIPT_IN_OTB, $fromXmlRequest->getType() );
 		$testCase->assertEquals( self::RECEIPT_IN_OTB_ACCOUNT, $fromXmlRequest->getAccount() );
 		$testCase->assertEquals( self::RECEIPT_IN_OTB_MERCHANT_ID, $fromXmlRequest->getMerchantId() );
-		$testCase->assertEquals( self::RECEIPT_IN_OTB_TIMESTAMP, $fromXmlRequest->getTimeStamp() );
+		$testCase->assertEquals( self::RECEIPT_IN_OTB_TIMESTAMP, $fromXmlRequest->getTimestamp() );
 		$testCase->assertEquals( self::RECEIPT_IN_OTB_ORDER_ID, $fromXmlRequest->getOrderId() );
 		$testCase->assertEquals( self::RECEIPT_IN_OTB_REQUEST_HASH, $fromXmlRequest->getHash() );
 		$testCase->assertEquals( self::RECEIPT_IN_OTB_PAYER, $fromXmlRequest->getPayerRef() );
@@ -1146,7 +1151,7 @@ class SampleXmlValidationUtils {
 		$testCase->assertEquals( self:: AMOUNT, $fromXmlRequest->getAmount()->getAmount() );
 		$testCase->assertEquals( self::CURRENCY, $fromXmlRequest->getAmount()->getCurrency() );
 		$testCase->assertEquals( self::$AUTO_SETTLE_FLAG->getFlag(), $fromXmlRequest->getAutoSettle()->getFlag() );
-		$testCase->assertEquals( self::TIMESTAMP, $fromXmlRequest->getTimeStamp() );
+		$testCase->assertEquals( self::TIMESTAMP, $fromXmlRequest->getTimestamp() );
 		$testCase->assertEquals( self::CHANNEL, $fromXmlRequest->getChannel() );
 		$testCase->assertEquals( self::ORDER_ID, $fromXmlRequest->getOrderId() );
 		$testCase->assertEquals( self::REQUEST_HASH, $fromXmlRequest->getHash() );

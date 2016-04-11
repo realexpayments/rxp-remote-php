@@ -177,6 +177,7 @@ use com\realexpayments\remote\sdk\utils\XmlUtils;
  *    ->addMerchantId( "myMerchantId" )
  *    ->addType( PaymentType::HOLD )
  *    ->addOrderId("Order ID from original transaction")
+ *    ->addReasonCode( ReasonCode::FRAUD)
  *    ->addPaymentsReference("Pasref from original transaction");
  *
  * </pre></code></p>
@@ -191,6 +192,7 @@ use com\realexpayments\remote\sdk\utils\XmlUtils;
  *    ->addMerchantId( "myMerchantId" )
  *    ->addType( PaymentType::RELEASE )
  *    ->addOrderId("Order ID from original transaction")
+ *    ->addReasonCode( ReasonCode::FRAUD)
  *    ->addPaymentsReference("Pasref from original transaction");
  *
  * </pre></code></p>
@@ -618,6 +620,17 @@ class PaymentRequest implements iRequest {
 	 * @var DccInfo {@link DccInfo} information to be used DCC Rate look up transactions
 	 */
 	private $dccInfo;
+
+	/**
+	 * @var string This is a code used to identify the reason
+	 *            for a transaction action. It is an optional
+	 *            field but if populated it must contain a
+	 *            value that is allowed for that transaction
+	 *            type.
+	 *          If no value is supplied, the default reason
+	 *            code NOTGIVEN will be applied to the holdrequest
+	 */
+	private $reasonCode;
 
 
 	/**
@@ -1084,6 +1097,24 @@ class PaymentRequest implements iRequest {
 		$this->dccInfo = $dccInfo;
 	}
 
+	/**
+	 * Getter for reason code
+	 *
+	 * @return string
+	 */
+	public function getReasonCode() {
+		return $this->reasonCode;
+	}
+
+	/**
+	 * Setter for reason code
+	 *
+	 * @param string $reasonCode
+	 */
+	public function setReasonCode( $reasonCode ) {
+		$this->reasonCode = $reasonCode;
+	}
+
 
 	/**
 	 * Helper method for adding TSS info
@@ -1455,6 +1486,20 @@ class PaymentRequest implements iRequest {
 
 
 	/**
+	 * Helper method for adding a reason code
+	 *
+	 * @param string $reasonCode
+	 *
+	 * @return PaymentRequest
+	 */
+	public function addReasonCode( $reasonCode ) {
+		$this->reasonCode = $reasonCode;
+
+		return $this;
+	}
+
+
+	/**
 	 * {@inheritdoc}
 	 */
 	public function toXml() {
@@ -1634,7 +1679,7 @@ class PaymentRequest implements iRequest {
 			          . "."
 			          . $cardNumber;
 
-		} elseif ( $this->type == PaymentType::CARD_CANCEL) {
+		} elseif ( $this->type == PaymentType::CARD_CANCEL ) {
 			$toHash = $timeStamp
 			          . "."
 			          . $merchantId
@@ -1643,7 +1688,7 @@ class PaymentRequest implements iRequest {
 			          . "."
 			          . $cardRef;
 
-		} elseif ( $this->type == PaymentType::RECEIPT_IN_OTB) {
+		} elseif ( $this->type == PaymentType::RECEIPT_IN_OTB ) {
 			$toHash = $timeStamp
 			          . "."
 			          . $merchantId
