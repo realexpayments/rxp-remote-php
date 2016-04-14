@@ -16,8 +16,10 @@ class ReasonCode extends EnumBase {
 	const FRAUD = "FRAUD";
 	const OUT_OF_STOCK = "OUTOFSTOCK";
 	const OTHER = "OTHER";
+	const FALSE_POSITIVE = "FALSEPOSITIVE";
+	const IN_STOCK = "INSTOCK";
 	const NOT_GIVEN = "NOTGIVEN";
-
+	
 	/**
 	 * @var string The payment type String value
 	 */
