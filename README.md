@@ -383,8 +383,7 @@ $card = ( new Card() )
 $request = ( new PaymentRequest() )
  	->addAccount( "myAccount" )
  	->addMerchantId( "myMerchantId" )	
- 	->addType(PaymentType::CARD_NEW)  	
- 	->addPayerReference( "smithj01" )
+ 	->addType(PaymentType::CARD_NEW) 	
  	->addCard($card);
 
 $client   = new RealexClient( "mySecret" );
