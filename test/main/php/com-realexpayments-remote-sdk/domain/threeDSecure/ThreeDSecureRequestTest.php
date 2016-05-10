@@ -62,7 +62,7 @@ class ThreeDSecureRequestTest extends \PHPUnit_Framework_TestCase {
 	public function testVerifyCardEnrolledHashGeneration() {
 
 		$request = new ThreeDSecureRequest();
-		$request->addType( ThreeDSecureType::VERIFY_CARD_ENROLLED )
+		$request->addType( ThreeDSecureType::VERIFY_STORED_CARD_ENROLLED )
 		        ->addTimeStamp( SampleXmlValidationUtils::CARD_VERIFY_TIMESTAMP )
 		        ->addMerchantId( SampleXmlValidationUtils::CARD_VERIFY_MERCHANT_ID )
 		        ->addOrderId( SampleXmlValidationUtils::CARD_VERIFY_ORDER_ID )

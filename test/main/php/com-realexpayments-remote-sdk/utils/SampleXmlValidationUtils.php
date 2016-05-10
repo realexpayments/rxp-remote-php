@@ -1401,7 +1401,7 @@ class SampleXmlValidationUtils {
 
 		$testCase->assertNotNull( $fromXmlRequest );
 
-		$testCase->assertEquals( ThreeDSecureType::VERIFY_CARD_ENROLLED, $fromXmlRequest->getType() );
+		$testCase->assertEquals( ThreeDSecureType::VERIFY_STORED_CARD_ENROLLED, $fromXmlRequest->getType() );
 		$testCase->assertEquals( self::CARD_VERIFY_ACCOUNT, $fromXmlRequest->getAccount() );
 		$testCase->assertEquals( self::CARD_VERIFY_MERCHANT_ID, $fromXmlRequest->getMerchantId() );
 		$testCase->assertEquals( self::CARD_VERIFY_TIMESTAMP, $fromXmlRequest->getTimeStamp() );

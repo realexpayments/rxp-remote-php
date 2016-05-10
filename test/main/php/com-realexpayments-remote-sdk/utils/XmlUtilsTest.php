@@ -1055,7 +1055,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$request->setPaymentMethod( SampleXmlValidationUtils::CARD_VERIFY_REF );
 		$request->setPayerRef( SampleXmlValidationUtils::CARD_VERIFY_PAYER_REF );
 		$request->setHash( SampleXmlValidationUtils::CARD_VERIFY_REQUEST_HASH );
-		$request->setType( ThreeDSecureType::VERIFY_CARD_ENROLLED );
+		$request->setType( ThreeDSecureType::VERIFY_STORED_CARD_ENROLLED );
 
 		$autoSettle = new AutoSettle();
 		$autoSettle->setFlag( SampleXmlValidationUtils::$CARD_VERIFY_AUTO_SETTLE_FLAG->getFlag() );

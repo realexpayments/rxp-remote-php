@@ -719,7 +719,7 @@ class ThreeDSecureRequest implements iRequest {
 		$toHash = "";
 
 
-		if ( $this->type == ThreeDSecureType::VERIFY_CARD_ENROLLED ) {
+		if ( $this->type == ThreeDSecureType::VERIFY_STORED_CARD_ENROLLED ) {
 			$toHash = $timeStamp
 			          . "."
 			          . $merchantId
