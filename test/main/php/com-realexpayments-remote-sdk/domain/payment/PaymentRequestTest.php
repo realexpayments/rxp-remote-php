@@ -476,4 +476,61 @@ class PaymentRequestTest extends \PHPUnit_Framework_TestCase {
 
 		$this->assertEquals( SampleXmlValidationUtils::RECEIPT_IN_OTB_REQUEST_HASH, $request->getHash() );
 	}
+
+	/**
+	 * Tests the reasons code
+	 */
+	public function testAddFraudReason() {
+		$request =  new PaymentRequest() ;
+
+		$request ->addAccount( "myAccount" )
+		->addMerchantId( "myMerchantId" )
+		->addType( PaymentType::RELEASE )
+		->addOrderId("Order ID from original transaction")
+		->addReasonCode( ReasonCode::FRAUD)
+		->addPaymentsReference("Pasref from original transaction");
+
+
+		$this->assertEquals($request->getReasonCode(), ReasonCode::FRAUD );
+	}
+
+	/**
+	 * Tests the reasons code
+	 */
+	public function testAddFraudReasonNotEmpty() {
+		$request =  new PaymentRequest() ;
+
+		$request ->addAccount( "myAccount" )
+			->addMerchantId( "myMerchantId" )
+			->addType( PaymentType::RELEASE )
+			->addOrderId("Order ID from original transaction")
+			->addReasonCode( ReasonCode::FRAUD)
+			->addPaymentsReference("Pasref from original transaction");
+
+		$this->assertNotEmpty($request->getReasonCode() );
+	}
+
+	/**
+	 * Tests the reasons code
+	 */
+	public function testAddFraudReasonNotEmpty2() {
+		$request =  new PaymentRequest() ;
+
+		$this->assertEmpty($request->getReasonCode() );
+		$request->addReasonCode( ReasonCode::FRAUD);
+		$this->assertNotEmpty($request->getReasonCode() );
+
+	}
+
+	/**
+	 * Tests the reasons code
+	 */
+	public function testAddFraudReasonChanging() {
+		$request =  new PaymentRequest() ;
+		$request->addReasonCode( ReasonCode::FALSE_POSITIVE);
+		$request->setReasonCode( ReasonCode::FRAUD);
+
+		$this->assertEquals($request->getReasonCode(), ReasonCode::FRAUD );
+	}
+
 }

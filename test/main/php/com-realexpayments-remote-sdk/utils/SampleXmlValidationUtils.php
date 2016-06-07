@@ -1417,6 +1417,32 @@ class SampleXmlValidationUtils {
 	}
 
 
+	/**
+	 * Check all fields match expected values.
+	 *
+	 * @param PaymentRequest $fromXmlRequest
+	 * @param PHPUnit_Framework_TestCase $testCase
+	 */
+	public static function checkUnmarshalledRequestCodeResponse( PaymentRequest $fromXmlRequest, PHPUnit_Framework_TestCase $testCase, $assertTrue = true ) {
+
+		$testCase->assertNotNull( $fromXmlRequest );
+
+		$testCase->assertEquals( PaymentType::HOLD, $fromXmlRequest->getType() );
+
+		$testCase->assertEquals( self::HOLD_ACCOUNT, $fromXmlRequest->getAccount() );
+		$testCase->assertEquals( self::HOLD_MERCHANT_ID, $fromXmlRequest->getMerchantId() );
+		$testCase->assertEquals( self::HOLD_TIMESTAMP, $fromXmlRequest->getTimestamp() );
+		$testCase->assertEquals( self::HOLD_ORDER_ID, $fromXmlRequest->getOrderId() );
+		$testCase->assertEquals( self::HOLD_REQUEST_HASH, $fromXmlRequest->getHash() );
+		
+		if($assertTrue)
+			$testCase->assertEquals(ReasonCode::FRAUD, $fromXmlRequest->getReasonCode() );
+		else
+			$testCase->assertNotEquals(ReasonCode::FRAUD, $fromXmlRequest->getReasonCode() );
+
+
+
+	}
 }
 
 SampleXmlValidationUtils::Init();

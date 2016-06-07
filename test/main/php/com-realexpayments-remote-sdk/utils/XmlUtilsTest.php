@@ -23,6 +23,7 @@ use com\realexpayments\remote\sdk\domain\payment\Mpi;
 use com\realexpayments\remote\sdk\domain\payment\PaymentRequest;
 use com\realexpayments\remote\sdk\domain\payment\PaymentResponse;
 use com\realexpayments\remote\sdk\domain\payment\PaymentType;
+use com\realexpayments\remote\sdk\domain\payment\ReasonCode;
 use com\realexpayments\remote\sdk\domain\payment\Recurring;
 use com\realexpayments\remote\sdk\domain\payment\RecurringFlag;
 use com\realexpayments\remote\sdk\domain\payment\RecurringType;
@@ -2066,5 +2067,67 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$fromXmlResponse = new PaymentResponse();
 		$fromXmlResponse = $fromXmlResponse->fromXml( $xml );
 		SampleXmlValidationUtils::checkUnmarshalledPaymentResponse( $fromXmlResponse, $this, true );
+	}
+
+
+	/**
+	 * Tests Fraud Code Request Type
+	 */
+	public function testPaymentRequestCodeXmlFromCode() {
+		$path   = SampleXmlValidationUtils::HOLD_PAYMENT_REQUEST_XML_PATH;
+		$prefix = __DIR__ . '/../../../resources';
+		$xml    = file_get_contents( $prefix . $path );
+
+		//unmarshal back to response
+		/* @var PaymentResponse $fromXmlResponse */
+		$fromXmlResponse = new PaymentRequest();
+		$fromXmlResponse = $fromXmlResponse->fromXML( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledRequestCodeResponse( $fromXmlResponse, $this );
+	}
+
+	/**
+	 * Tests Fraud Code Request Type
+	 */
+	public function testPaymentRequestCodeXmlFromFile() {
+		$paymentRequest = new PaymentRequest();
+		$paymentRequest->addAccount(SampleXmlValidationUtils::HOLD_ACCOUNT);
+		$paymentRequest->addMerchantId(SampleXmlValidationUtils::HOLD_MERCHANT_ID);
+		$paymentRequest->addTimestamp(SampleXmlValidationUtils::HOLD_TIMESTAMP);
+		$paymentRequest->addOrderId(SampleXmlValidationUtils::HOLD_ORDER_ID);
+		$paymentRequest->addHash(SampleXmlValidationUtils::HOLD_REQUEST_HASH);
+		$paymentRequest->addType(PaymentType::HOLD);
+		$paymentRequest->addReasonCode(ReasonCode::FRAUD);
+
+		//marshal to XML
+		$xml = $paymentRequest->toXml();
+
+		//unmarshal back to response
+		/* @var PaymentResponse $fromXmlResponse */
+		$fromXmlResponse = new PaymentRequest();
+		$fromXmlResponse = $fromXmlResponse->fromXML( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledRequestCodeResponse( $fromXmlResponse, $this );
+	}
+
+	/**
+	 * Tests Fraud Code Request Type
+	 */
+	public function testPaymentRequestCodeXmlFromFileFailed() {
+		$paymentRequest = new PaymentRequest();
+		$paymentRequest->addAccount(SampleXmlValidationUtils::HOLD_ACCOUNT);
+		$paymentRequest->addMerchantId(SampleXmlValidationUtils::HOLD_MERCHANT_ID);
+		$paymentRequest->addTimestamp(SampleXmlValidationUtils::HOLD_TIMESTAMP);
+		$paymentRequest->addOrderId(SampleXmlValidationUtils::HOLD_ORDER_ID);
+		$paymentRequest->addHash(SampleXmlValidationUtils::HOLD_REQUEST_HASH);
+		$paymentRequest->addType(PaymentType::HOLD);
+		$paymentRequest->addReasonCode('fraud filter');
+
+		//marshal to XML
+		$xml = $paymentRequest->toXml();
+
+		//unmarshal back to response
+		/* @var PaymentResponse $fromXmlResponse */
+		$fromXmlResponse = new PaymentRequest();
+		$fromXmlResponse = $fromXmlResponse->fromXML( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledRequestCodeResponse( $fromXmlResponse, $this,false );
 	}
 }
