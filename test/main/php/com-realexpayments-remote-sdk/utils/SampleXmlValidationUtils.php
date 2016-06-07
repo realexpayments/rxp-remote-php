@@ -1423,7 +1423,7 @@ class SampleXmlValidationUtils {
 	 * @param PaymentRequest $fromXmlRequest
 	 * @param PHPUnit_Framework_TestCase $testCase
 	 */
-	public static function checkUnmarshalledRequestCodeResponse( PaymentRequest $fromXmlRequest, PHPUnit_Framework_TestCase $testCase, $assertTrue = true ) {
+	public static function checkUnmarshalledRequestCodeResponse( PaymentRequest $fromXmlRequest, PHPUnit_Framework_TestCase $testCase,$reason, $assertTrue = true ) {
 
 		$testCase->assertNotNull( $fromXmlRequest );
 
@@ -1436,7 +1436,7 @@ class SampleXmlValidationUtils {
 		$testCase->assertEquals( self::HOLD_REQUEST_HASH, $fromXmlRequest->getHash() );
 		
 		if($assertTrue)
-			$testCase->assertEquals(ReasonCode::FRAUD, $fromXmlRequest->getReasonCode() );
+			$testCase->assertEquals($reason, $fromXmlRequest->getReasonCode() );
 		else
 			$testCase->assertNotEquals(ReasonCode::FRAUD, $fromXmlRequest->getReasonCode() );
 

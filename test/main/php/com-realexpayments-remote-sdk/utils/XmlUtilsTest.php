@@ -837,6 +837,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 
 	}
 
+
 	/**
 	 * Tests conversion of {@link PaymentResponse} from XML file with unknown element.
 	 */
@@ -1286,6 +1287,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		SampleXmlValidationUtils::checkUnmarshalledHoldPaymentRequest( $fromXmlRequest, $this );
 
 	}
+	
 
 	/**
 	 * Tests conversion of {@link PaymentRequest} from XML file for release payment types.
@@ -1303,6 +1305,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
 		SampleXmlValidationUtils::checkUnmarshalledReleasePaymentRequest( $fromXmlRequest, $this );
 	}
+
 
 	/**
 	 * Tests conversion of {@link PaymentRequest} from XML file for receipt-in payment types.
@@ -2073,7 +2076,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * Tests Fraud Code Request Type
 	 */
-	public function testPaymentRequestCodeXmlFromCode() {
+	public function testPaymentRequestCodeXmlFromFile() {
 		$path   = SampleXmlValidationUtils::HOLD_PAYMENT_REQUEST_XML_PATH;
 		$prefix = __DIR__ . '/../../../resources';
 		$xml    = file_get_contents( $prefix . $path );
@@ -2082,13 +2085,13 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		/* @var PaymentResponse $fromXmlResponse */
 		$fromXmlResponse = new PaymentRequest();
 		$fromXmlResponse = $fromXmlResponse->fromXML( $xml );
-		SampleXmlValidationUtils::checkUnmarshalledRequestCodeResponse( $fromXmlResponse, $this );
+		SampleXmlValidationUtils::checkUnmarshalledRequestCodeResponse( $fromXmlResponse, $this , ReasonCode::FRAUD);
 	}
 
 	/**
 	 * Tests Fraud Code Request Type
 	 */
-	public function testPaymentRequestCodeXmlFromFile() {
+	public function testPaymentRequestCodeXmlFromCode() {
 		$paymentRequest = new PaymentRequest();
 		$paymentRequest->addAccount(SampleXmlValidationUtils::HOLD_ACCOUNT);
 		$paymentRequest->addMerchantId(SampleXmlValidationUtils::HOLD_MERCHANT_ID);
@@ -2096,22 +2099,34 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$paymentRequest->addOrderId(SampleXmlValidationUtils::HOLD_ORDER_ID);
 		$paymentRequest->addHash(SampleXmlValidationUtils::HOLD_REQUEST_HASH);
 		$paymentRequest->addType(PaymentType::HOLD);
-		$paymentRequest->addReasonCode(ReasonCode::FRAUD);
 
-		//marshal to XML
-		$xml = $paymentRequest->toXml();
+		$reasons = array(
+			ReasonCode::FRAUD,
+			ReasonCode::FALSE_POSITIVE,
+			ReasonCode::IN_STOCK,
+			ReasonCode::NOT_GIVEN,
+			ReasonCode::OTHER,
+			ReasonCode::OUT_OF_STOCK
+		);
 
-		//unmarshal back to response
-		/* @var PaymentResponse $fromXmlResponse */
-		$fromXmlResponse = new PaymentRequest();
-		$fromXmlResponse = $fromXmlResponse->fromXML( $xml );
-		SampleXmlValidationUtils::checkUnmarshalledRequestCodeResponse( $fromXmlResponse, $this );
+		foreach ($reasons as $reason) {
+			$paymentRequest->setReasonCode($reason);
+
+			//marshal to XML
+			$xml = $paymentRequest->toXml();
+
+			//unmarshal back to response
+			/* @var PaymentResponse $fromXmlResponse */
+			$fromXmlResponse = new PaymentRequest();
+			$fromXmlResponse = $fromXmlResponse->fromXML($xml);
+			SampleXmlValidationUtils::checkUnmarshalledRequestCodeResponse($fromXmlResponse, $this,$reason);
+		}
 	}
 
 	/**
 	 * Tests Fraud Code Request Type
 	 */
-	public function testPaymentRequestCodeXmlFromFileFailed() {
+	public function testPaymentRequestCodeXmlFromCodeFailed() {
 		$paymentRequest = new PaymentRequest();
 		$paymentRequest->addAccount(SampleXmlValidationUtils::HOLD_ACCOUNT);
 		$paymentRequest->addMerchantId(SampleXmlValidationUtils::HOLD_MERCHANT_ID);
@@ -2119,15 +2134,27 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$paymentRequest->addOrderId(SampleXmlValidationUtils::HOLD_ORDER_ID);
 		$paymentRequest->addHash(SampleXmlValidationUtils::HOLD_REQUEST_HASH);
 		$paymentRequest->addType(PaymentType::HOLD);
-		$paymentRequest->addReasonCode('fraud filter');
+		$paymentRequest->addReasonCode('fake reason');
 
-		//marshal to XML
-		$xml = $paymentRequest->toXml();
+		$reasons = array(
+			ReasonCode::FRAUD,
+			ReasonCode::FALSE_POSITIVE,
+			ReasonCode::IN_STOCK,
+			ReasonCode::NOT_GIVEN,
+			ReasonCode::OTHER,
+			ReasonCode::OUT_OF_STOCK
+		);
 
-		//unmarshal back to response
-		/* @var PaymentResponse $fromXmlResponse */
-		$fromXmlResponse = new PaymentRequest();
-		$fromXmlResponse = $fromXmlResponse->fromXML( $xml );
-		SampleXmlValidationUtils::checkUnmarshalledRequestCodeResponse( $fromXmlResponse, $this,false );
+		foreach ($reasons as $reason) {
+
+			//marshal to XML
+			$xml = $paymentRequest->toXml();
+
+			//unmarshal back to response
+			/* @var PaymentResponse $fromXmlResponse */
+			$fromXmlResponse = new PaymentRequest();
+			$fromXmlResponse = $fromXmlResponse->fromXML( $xml );
+			SampleXmlValidationUtils::checkUnmarshalledRequestCodeResponse( $fromXmlResponse, $this,$reason,false );
+		}
 	}
 }
