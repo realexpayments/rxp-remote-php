@@ -533,4 +533,47 @@ class PaymentRequestTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals($request->getReasonCode(), ReasonCode::FRAUD );
 	}
 
+	/**
+	 * Tests the hash calculation for a card-update transaction.
+	 */
+	public function testDccRealVault() {
+
+		// add dccinfo. Note that the type is not set as it is already defaulted to 1
+		$dccInfo = ( new DccInfo() );
+		$dccInfo->addDccProcessor( SampleXmlValidationUtils::DCC_REAL_VAULT_DCC_CCP );
+
+
+		$request = new PaymentRequest();
+		$request
+			->addType( PaymentType::REALVAULT_DCCRATE )
+			->addTimeStamp( SampleXmlValidationUtils::DCC_REAL_VAULT_TIMESTAMP )
+			->addMerchantId( SampleXmlValidationUtils::DCC_REAL_VAULT_MERCHANT_ID )
+			->addAmount( SampleXmlValidationUtils::DCC_REAL_VAULT_AMOUNT )
+			->addCurrency( SampleXmlValidationUtils::DCC_REAL_VAULT_CURRENCY )
+			->addOrderId( SampleXmlValidationUtils::DCC_REAL_VAULT_ORDER_ID )
+			->addDccInfo( $dccInfo );
+
+
+		$this->assertEquals( SampleXmlValidationUtils::REALVAULT_DCCRATE, $request->getType() );
+	}
+
+	/**
+	 * Tests the hash calculation for a realvault payment.
+	 */
+	public function testRealVaultHashGeneration() {
+		$request = new PaymentRequest();
+		$request
+			->addType( PaymentType::REALVAULT_DCCRATE )
+			->addTimeStamp( SampleXmlValidationUtils::DCC_REAL_VAULT_TIMESTAMP )
+			->addMerchantId( SampleXmlValidationUtils::DCC_REAL_VAULT_MERCHANT_ID )
+			->addAmount( SampleXmlValidationUtils::DCC_REAL_VAULT_AMOUNT )
+			->addCurrency( SampleXmlValidationUtils::DCC_REAL_VAULT_CURRENCY )
+			->addOrderId( SampleXmlValidationUtils::DCC_REAL_VAULT_ORDER_ID )
+			->addPayerReference(SampleXmlValidationUtils::DCC_REAL_VAULT_PAYREF);
+
+		$request->hash( SampleXmlValidationUtils::SECRET );
+
+		$this->assertEquals( SampleXmlValidationUtils::DCC_REAL_VAULT_REQUEST_HASH, $request->getHash() );
+	}
+
 }

@@ -65,6 +65,7 @@ class SampleXmlValidationUtils {
 	const DCC_RATE_LOOKUP_PAYMENT_REQUEST_XML_PATH = "/sample-xml/dcc-rate-lookup-payment-request-sample.xml";
 	const DCC_RATE_AUTH_PAYMENT_REQUEST_XML_PATH = "/sample-xml/dcc-rate-auth-payment-request-sample.xml";
 	const RECEIPT_IN_OTB_PAYMENT_REQUEST_XML_PATH = "/sample-xml/receipt-in-otb-payment-request-sample.xml";
+	const DCC_REAL_VAULT_REQUEST_XML_PATH = "/sample-xml/realvault-dccrate-request.xml";
 
 
 	//Card
@@ -456,6 +457,24 @@ class SampleXmlValidationUtils {
 	const DCC_RATE_CURRENCY = "EUR";
 	const DCC_RATE_CCP = "fexco";
 	const DCC_RATE_TYPE = "1";
+
+	//dcc realvaulr
+	const REALVAULT_DCCRATE = PaymentType::REALVAULT_DCCRATE;
+	const DCC_REAL_VAULT_TIMESTAMP = "20140520151742";
+	const DCC_REAL_VAULT_MERCHANT_ID = "yourmerchantid";
+	const DCC_REAL_VAULT_ACCOUNT = "internet";
+	const DCC_REAL_VAULT_ORDER_ID = "transaction01";
+	const DCC_REAL_VAULT_CURRENCY = "EUR";
+	const DCC_REAL_VAULT_AMOUNT = "9999";
+	const DCC_REAL_VAULT_PAYREF = "smith01";
+	const DCC_REAL_VAULT_PAYMENT_METHOD = "visa01";
+	const DCC_REAL_VAULT_DCC_CCP = "fexco";
+	const DCC_REAL_VAULT_DCC_TYPE = "1";
+	const DCC_REAL_VAULT_REQUEST_HASH = "500a6c67d7ec3e196b60efdfb4cdc5ab8366416a";
+	const DCC_REAL_VAULT_COMMENT_1 = "";
+	const DCC_REAL_VAULT_COMMENT_2 = "";
+
+
 
 	// dcc info lookup response
 	const DCC_RATE_TIMESTAMP_RESPONSE = "20120302152632";
@@ -1439,8 +1458,34 @@ class SampleXmlValidationUtils {
 			$testCase->assertEquals($reason, $fromXmlRequest->getReasonCode() );
 		else
 			$testCase->assertNotEquals(ReasonCode::FRAUD, $fromXmlRequest->getReasonCode() );
+	}
 
+	/**
+	 * Check all fields match expected values.
+	 *
+	 * @param PaymentRequest $fromXmlRequest
+	 * @param PHPUnit_Framework_TestCase $testCase
+	 */
+	public static function checkUnmarshalledDccRealVaultPaymentRequest( PaymentRequest $fromXmlRequest, PHPUnit_Framework_TestCase $testCase ) {
+		$testCase->assertNotNull( $fromXmlRequest );
 
+		$testCase->assertEquals( self::REALVAULT_DCCRATE, $fromXmlRequest->getType() );
+		$testCase->assertEquals( self::DCC_REAL_VAULT_ACCOUNT, $fromXmlRequest->getAccount() );
+		$testCase->assertEquals( self::DCC_REAL_VAULT_MERCHANT_ID, $fromXmlRequest->getMerchantId() );
+		$testCase->assertEquals( self::DCC_REAL_VAULT_TIMESTAMP, $fromXmlRequest->getTimestamp() );
+		$testCase->assertEquals( self::DCC_REAL_VAULT_REQUEST_HASH, $fromXmlRequest->getHash() );
+
+		$testCase->assertEquals( self::DCC_REAL_VAULT_ORDER_ID, $fromXmlRequest->getOrderId() );
+		$testCase->assertEquals( self::DCC_REAL_VAULT_AMOUNT, $fromXmlRequest->getAmount()->getAmount() );
+		$testCase->assertEquals( self::DCC_REAL_VAULT_CURRENCY, $fromXmlRequest->getAmount()->getCurrency() );
+		$testCase->assertEquals( self::DCC_REAL_VAULT_DCC_CCP, $fromXmlRequest->getDccInfo()->getDccProcessor() );
+		$testCase->assertEquals( self::DCC_REAL_VAULT_DCC_TYPE, $fromXmlRequest->getDccInfo()->getType() );
+
+		$testCase->assertEquals( self::DCC_REAL_VAULT_COMMENT_1, $fromXmlRequest->getComments()->get(0)->getComment() );
+		$testCase->assertEquals( self::DCC_REAL_VAULT_COMMENT_2, $fromXmlRequest->getComments()->get(1)->getComment() );
+
+		$testCase->assertEquals( self::DCC_REAL_VAULT_PAYREF, $fromXmlRequest->getPayerRef() );
+		$testCase->assertEquals( self::DCC_REAL_VAULT_PAYMENT_METHOD, $fromXmlRequest->getPaymentMethod() );
 
 	}
 }

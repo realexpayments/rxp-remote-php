@@ -1623,7 +1623,7 @@ class PaymentRequest implements iRequest {
 			          . "."
 			          . $cardNumber;
 
-		} elseif ( $this->type == PaymentType::RECEIPT_IN || $this->type == PaymentType::PAYMENT_OUT ) {
+		} elseif ( $this->type == PaymentType::RECEIPT_IN || $this->type == PaymentType::PAYMENT_OUT || $this->type == PaymentType::REALVAULT_DCCRATE ) {
 			$toHash = $timeStamp
 			          . "."
 			          . $merchantId

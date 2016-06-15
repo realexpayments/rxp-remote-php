@@ -1469,7 +1469,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$fromXmlRequest = new PaymentRequest();
 		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
 		SampleXmlValidationUtils::checkUnmarshalledDccRateLookUpPaymentRequest( $fromXmlRequest, $this );
-	}
+	}	
 
 	/**
 	 * Tests conversion of {@link PaymentRequest} from XML file for dcc auth payment types.
@@ -2156,5 +2156,20 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 			$fromXmlResponse = $fromXmlResponse->fromXML( $xml );
 			SampleXmlValidationUtils::checkUnmarshalledRequestCodeResponse( $fromXmlResponse, $this,$reason,false );
 		}
+	}
+
+	/**
+	 * Tests conversion of {@link PaymentRequest} from XML file for dcc realvault payment types.
+	 */
+	public function testPaymentRequestXmlFromFileDccRealVault() {
+		$path   = SampleXmlValidationUtils::DCC_REAL_VAULT_REQUEST_XML_PATH;
+		$prefix = __DIR__ . '/../../../resources';
+		$xml    = file_get_contents( $prefix . $path );
+
+		//unmarshal back to response
+		/* @var PaymentRequest $fromXmlRequest */
+		$fromXmlRequest = new PaymentRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledDccRealVaultPaymentRequest( $fromXmlRequest, $this );
 	}
 }

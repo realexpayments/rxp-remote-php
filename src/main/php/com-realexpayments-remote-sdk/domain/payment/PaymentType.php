@@ -32,6 +32,7 @@ class PaymentType extends EnumBase {
 	const DCC_RATE_LOOKUP = "dccrate";
 	const DCC_AUTH = "auth";
 	const RECEIPT_IN_OTB = "receipt-in-otb";
+	const REALVAULT_DCCRATE = "realvault-dccrate";
 
 	/**
 	 * @var string The payment type String value
