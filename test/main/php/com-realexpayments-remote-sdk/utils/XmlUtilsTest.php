@@ -2172,4 +2172,37 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
 		SampleXmlValidationUtils::checkUnmarshalledDccRealVaultPaymentRequest( $fromXmlRequest, $this );
 	}
+
+	/**
+	 * Tests conversion of {@link PaymentRequest} from XML file for hold payment types.
+	 */
+	public function testPaymentRequestXmlFromFileHoldReasonCodeHold() {
+
+		$path   = SampleXmlValidationUtils::HOLD_PAYMENT_REASON_REQUEST_XML_PATH;
+		$prefix = __DIR__ . '/../../../resources';
+		$xml    = file_get_contents( $prefix . $path );
+
+		//unmarshal back to request
+		/* @var PaymentRequest $fromXmlRequest */
+		$fromXmlRequest = new PaymentRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledHoldReasonHoldPaymentRequest( $fromXmlRequest, $this );
+
+	}
+	/**
+	 * Tests conversion of {@link PaymentRequest} from XML file for hold payment types.
+	 */
+	public function testPaymentRequestXmlFromFileHoldReasonCodeRelease() {
+
+		$path   = SampleXmlValidationUtils::RELEASE_PAYMENT_REASON_REQUEST_XML_PATH;
+		$prefix = __DIR__ . '/../../../resources';
+		$xml    = file_get_contents( $prefix . $path );
+
+		//unmarshal back to request
+		/* @var PaymentRequest $fromXmlRequest */
+		$fromXmlRequest = new PaymentRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledHoldReasonRequestPaymentRequest( $fromXmlRequest, $this );
+
+	}
 }
