@@ -559,7 +559,7 @@ class PaymentRequest implements iRequest {
 	private $refundHash;
 
 	/**
-	 * @var string Fraud filter flag
+	 * @var FraudFilter Object Fraud filter mode
 	 *
 	 */
 	private $fraudFilter;
@@ -1357,11 +1357,11 @@ class PaymentRequest implements iRequest {
 	/**
 	 * Helper method for adding a fraudFilter
 	 *
-	 * @param string $fraudFilter
+	 * @param FraudFilter $fraudFilter
 	 *
 	 * @return PaymentRequest
 	 */
-	public function addFraudFilter( $fraudFilter ) {
+	public function addFraudFilter( FraudFilter $fraudFilter ) {
 		$this->fraudFilter = $fraudFilter;
 
 		return $this;

@@ -6,6 +6,9 @@ namespace com\realexpayments\remote\sdk\utils;
 use com\realexpayments\remote\sdk\domain\CardType;
 use com\realexpayments\remote\sdk\domain\payment\AddressType;
 use com\realexpayments\remote\sdk\domain\payment\AutoSettleFlag;
+use com\realexpayments\remote\sdk\domain\payment\FraudFilter;
+use com\realexpayments\remote\sdk\domain\payment\FraudFilterMode;
+use com\realexpayments\remote\sdk\domain\payment\FraudFilterType;
 use com\realexpayments\remote\sdk\domain\payment\PaymentRequest;
 use com\realexpayments\remote\sdk\domain\payment\PaymentResponse;
 use com\realexpayments\remote\sdk\domain\payment\PaymentType;
@@ -32,6 +35,8 @@ class SampleXmlValidationUtils {
 	const PAYMENT_RESPONSE_XML_PATH_UNKNOWN_ELEMENT = "/sample-xml/payment-response-sample-unknown-element.xml";
 	const PAYMENT_REQUEST_WITH_SYMBOLS_XML_PATH = "/sample-xml/payment-request-sample-with-symbols.xml";
 	const PAYMENT_RESPONSE_DCC_INFO_XML_PATH = "/sample-xml/payment-response-dcc-info.xml";
+	const PAYMENT_RESPONSE_WITH_FRAUD_FILTER_XML_PATH = "/sample-xml/payment-response-fraud.xml";
+
 
 
 	//3DSecure sample XML
@@ -104,7 +109,7 @@ class SampleXmlValidationUtils {
 	const COMMENT1_WITH_SYMBOLS = "a-z A-Z 0-9 ' \", + “” ._ - & \\ / @ ! ? % ( )* : £ $ & € # [ ] | = ;ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷ø¤ùúûüýþÿŒŽšœžŸ¥";
 	const COMMENT2_WITH_SYMBOLS = "comment 2 £";
 	const REFUND_HASH = "hjfdg78h34tyvklasjr89t";
-	const FRAUD_FILTER = "fraud filter";
+	static $FRAUD_FILTER;
 	const CUSTOMER_NUMBER = "cust num";
 	const CUSTOMER_NUMBER_WITH_SYMBOLS = "cust num $ £";
 	const PRODUCT_ID = "prod ID";
@@ -526,6 +531,21 @@ class SampleXmlValidationUtils {
 	const RECEIPT_IN_OTB_CVN = "123";
 	const RECEIPT_IN_OTB_REQUEST_HASH = "ceeeb16edfeda0dc919db1be1b0e9db7b01b24cf";
 
+	const FRAUD_FILTER_MODE = FraudFilterMode::ACTIVE;
+	const FRAUD_FILTER_RESULT = "BLOCK";
+	const FRAUD_FILTER_RULE_1_ID = "e5964ac0-ace0-477a-98ef-f467772d6a76";
+	const FRAUD_FILTER_RULE_1_NAME = "ScreenedCardNumber";
+	const FRAUD_FILTER_RULE_1_VALUE = "PASS";
+	const FRAUD_FILTER_RULE_2_ID = "234mk2k3-ace0-477a-98ef-qe782bqa5f4s";
+	const FRAUD_FILTER_RULE_2_NAME = "GeoShipBillCo";
+	const FRAUD_FILTER_RULE_2_VALUE = "HOLD";
+	const FRAUD_FILTER_RULE_3_ID = "d6y38qk3-ace0-477a-98ef-23kjh234i5o2";
+	const FRAUD_FILTER_RULE_3_NAME = "PtrnCardNumName";
+	const FRAUD_FILTER_RULE_3_VALUE = "BLOCK";
+	const FRAUD_FILTER_RULE_4_ID = "234mk2k3-ace0-477a-98ef-8h9jn34nj456";
+	const FRAUD_FILTER_RULE_4_NAME = "VelCardNum24h";
+	const FRAUD_FILTER_RULE_4_VALUE = "HOLD";
+
 
 	static function Init() {
 		self::$CARD_CVN_PRESENCE            = new PresenceIndicator( PresenceIndicator::CVN_PRESENT );
@@ -540,6 +560,8 @@ class SampleXmlValidationUtils {
 		self::$OTB_AUTO_SETTLE_FLAG         = new AutoSettleFlag( AutoSettleFlag::TRUE );
 		self::$CARD_VERIFY_AUTO_SETTLE_FLAG = new AutoSettleFlag( AutoSettleFlag::TRUE );
 		self::$RECEIPT_IN_AUTO_SETTLE_FLAG  = new AutoSettleFlag( AutoSettleFlag::TRUE );
+		self::$FRAUD_FILTER                 = new FraudFilterMode( FraudFilterMode::PASSIVE );
+
 
 	}
 
@@ -621,7 +643,7 @@ class SampleXmlValidationUtils {
 		$testCase->assertEquals( self::PASREF, $fromXmlRequest->getPaymentsReference() );
 		$testCase->assertEquals( self::AUTH_CODE, $fromXmlRequest->getAuthCode() );
 		$testCase->assertEquals( self::REFUND_HASH, $fromXmlRequest->getRefundHash() );
-		$testCase->assertEquals( self::FRAUD_FILTER, $fromXmlRequest->getFraudFilter() );
+		$testCase->assertEquals( self::$FRAUD_FILTER->getMode(), $fromXmlRequest->getFraudFilter()->getMode() );
 
 		$testCase->assertEquals( self::$RECURRING_FLAG->getRecurringFlag(), $fromXmlRequest->getRecurring()->getFlag() );
 		$testCase->assertEquals( self::$RECURRING_TYPE->getType(), $fromXmlRequest->getRecurring()->getType() );
@@ -1223,7 +1245,7 @@ class SampleXmlValidationUtils {
 		$testCase->assertEquals( self::PASREF, $fromXmlRequest->getPaymentsReference() );
 		$testCase->assertEquals( self::AUTH_CODE, $fromXmlRequest->getAuthCode() );
 		$testCase->assertEquals( self::REFUND_HASH, $fromXmlRequest->getRefundHash() );
-		$testCase->assertEquals( self::FRAUD_FILTER, $fromXmlRequest->getFraudFilter() );
+		$testCase->assertEquals( self::$FRAUD_FILTER->getMode(), $fromXmlRequest->getFraudFilter()->getMode() );
 
 		$testCase->assertEquals( self::$RECURRING_FLAG->getRecurringFlag(), $fromXmlRequest->getRecurring()->getFlag() );
 		$testCase->assertEquals( self::$RECURRING_TYPE->getType(), $fromXmlRequest->getRecurring()->getType() );
@@ -1530,6 +1552,34 @@ class SampleXmlValidationUtils {
 		$testCase->assertEquals( self::DCC_REAL_VAULT_PAYMENT_METHOD, $fromXmlRequest->getPaymentMethod() );
 
 	}
+
+	/**
+	 *  Check all fields match expected values.
+	 *
+	 * @param PaymentResponse $fromXmlResponse
+	 * @param PHPUnit_Framework_TestCase $testCase
+	 */
+	public static function checkUnmarshalledPaymentResponseWithFraudFilter( PaymentResponse $fromXmlResponse, PHPUnit_Framework_TestCase $testCase, $ignoreTssChecks = false ) {
+
+		$fraudFilter = $fromXmlResponse->getFraudFilter();
+		$rules = $fraudFilter->getRules();
+
+		$testCase->assertEquals( self::FRAUD_FILTER_MODE, $fraudFilter->getMode());
+		$testCase->assertEquals( self::FRAUD_FILTER_RESULT, $fraudFilter->getResult());
+		$testCase->assertEquals( self::FRAUD_FILTER_RULE_1_ID, $rules->get(0)->getId());
+		$testCase->assertEquals( self::FRAUD_FILTER_RULE_1_NAME, $rules->get(0)->getName());
+		$testCase->assertEquals( self::FRAUD_FILTER_RULE_1_VALUE, $rules->get(0)->getValue());
+
+		$testCase->assertEquals( self::FRAUD_FILTER_RULE_2_ID, $rules->get(1)->getId());
+		$testCase->assertEquals( self::FRAUD_FILTER_RULE_2_NAME, $rules->get(1)->getName());
+		$testCase->assertEquals( self::FRAUD_FILTER_RULE_2_VALUE, $rules->get(1)->getValue());
+
+		$testCase->assertEquals( self::FRAUD_FILTER_RULE_3_ID, $rules->get(2)->getId());
+		$testCase->assertEquals( self::FRAUD_FILTER_RULE_3_NAME, $rules->get(2)->getName());
+		$testCase->assertEquals( self::FRAUD_FILTER_RULE_3_VALUE, $rules->get(2)->getValue());
+
+	}
+
 }
 
 SampleXmlValidationUtils::Init();

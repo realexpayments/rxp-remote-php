@@ -5,7 +5,7 @@ namespace com\realexpayments\remote\sdk\domain\payment;
 
 
 use com\realexpayments\remote\sdk\EnumBase;
-
+	
 class AutoSettleFlag extends EnumBase {
 	const TRUE = "1";
 	const FALSE = "0";
