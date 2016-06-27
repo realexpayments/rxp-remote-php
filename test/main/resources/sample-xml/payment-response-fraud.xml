@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<response timestamp="20150224160453">
+    <merchantid>testMerchant</merchantid>
+    <account>internet</account>
+    <orderid>OrderOne</orderid>
+    <authcode>071757</authcode>
+    <result>00</result>
+    <cvnresult>M</cvnresult>
+    <avspostcoderesponse>U</avspostcoderesponse>
+    <avsaddressresponse>U</avsaddressresponse>
+    <batchid>3452232</batchid>
+    <message>(00)AUTH CODE 071757</message>
+    <pasref>14247938905185175</pasref>
+    <timetaken>2</timetaken>
+    <authtimetaken>2</authtimetaken>
+    <cardissuer>
+        <bank/>
+        <country/>
+        <countrycode/>
+        <region/>
+    </cardissuer>
+    <fraudfilter mode="ACTIVE">
+        <result>BLOCK</result>
+        <rule id="e5964ac0-ace0-477a-98ef-f467772d6a76"
+              name="ScreenedCardNumber">PASS</rule>
+        <rule id="234mk2k3-ace0-477a-98ef-qe782bqa5f4s"
+              name="GeoShipBillCo">HOLD</rule>
+        <rule id="d6y38qk3-ace0-477a-98ef-23kjh234i5o2"
+              name="PtrnCardNumName">BLOCK</rule>
+        <rule id="234mk2k3-ace0-477a-98ef-8h9jn34nj456"
+              name="VelCardNum24h">HOLD</rule>
+    </fraudfilter>
+    <sha1hash>bd5550299e4508873a2cf6e435ad74a5455ad648</sha1hash>
+</response>

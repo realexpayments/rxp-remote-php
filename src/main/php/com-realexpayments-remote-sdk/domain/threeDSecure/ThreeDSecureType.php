@@ -20,7 +20,7 @@ class ThreeDSecureType extends EnumBase{
 
 	const VERIFY_SIG = "3ds-verifysig";
 
-	const VERIFY_CARD_ENROLLED = "realvault-3ds-verifyenrolled";
+	const VERIFY_STORED_CARD_ENROLLED  = "realvault-3ds-verifyenrolled";
 
 	/**
 	 * @var string The ThreeDSecure type String value

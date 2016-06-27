@@ -175,6 +175,13 @@ class PaymentResponse implements iResponse {
 	 */
 	private $dccInfoResult;
 
+
+	/**
+	 * @var FraudFilter
+	 *
+	 */
+	private $fraudFilter;
+
 	/**
 	 * PaymentResponse constructor.
 	 */
@@ -601,6 +608,24 @@ class PaymentResponse implements iResponse {
 	 */
 	public function setDccInfoResult( $dccInfoResult ) {
 		$this->dccInfoResult = $dccInfoResult;
+	}
+
+	/**
+	 * Getter for fraudFilter
+	 *
+	 * @return fraudFilter
+	 */
+	public function getFraudFilter() {
+		return $this->fraudFilter;
+	}
+
+	/**
+	 * Setter for fraudFilter
+	 *
+	 * @param FraudFilter $fraudFilter
+	 */
+	public function setFraudFilter( $fraudFilter ) {
+		$this->fraudFilter = $fraudFilter;
 	}
 
 

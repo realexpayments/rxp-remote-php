@@ -25,7 +25,7 @@
     <pasref>3737468273643</pasref>
     <authcode>79347</authcode>
     <refundhash>hjfdg78h34tyvklasjr89t</refundhash>
-    <fraudfilter>fraud filter</fraudfilter>
+    <fraudfilter mode="PASSIVE"/>
     <recurring flag="1" sequence="first" type="fixed"/>
     <tssinfo>
         <custnum>cust num</custnum>
