@@ -1,0 +1,18 @@
+<request type="realvault-dccrate" timestamp="20140520151742">
+    <merchantid>yourmerchantid</merchantid>
+    <account>internet</account>
+    <orderid>transaction01</orderid>
+    <amount currency="EUR">9999</amount>
+    <payerref>smith01</payerref>
+    <paymentmethod>visa01</paymentmethod>
+    <dccinfo>
+        <ccp>fexco</ccp>
+        <type>1</type>
+    </dccinfo>
+    <md5hash />
+    <sha1hash>500a6c67d7ec3e196b60efdfb4cdc5ab8366416a</sha1hash>
+    <comments>
+        <comment id="1" />
+        <comment id="2" />
+    </comments>
+</request>

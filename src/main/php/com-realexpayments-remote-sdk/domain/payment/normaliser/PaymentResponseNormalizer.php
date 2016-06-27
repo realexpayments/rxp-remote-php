@@ -6,6 +6,9 @@ namespace com\realexpayments\remote\sdk\domain\payment\normaliser;
 
 use com\realexpayments\remote\sdk\domain\DccInfoResult;
 use com\realexpayments\remote\sdk\domain\payment\CardIssuer;
+use com\realexpayments\remote\sdk\domain\payment\FraudFilter;
+use com\realexpayments\remote\sdk\domain\payment\FraudFilterRule;
+use com\realexpayments\remote\sdk\domain\payment\FraudFilterRuleCollection;
 use com\realexpayments\remote\sdk\domain\payment\PaymentResponse;
 use com\realexpayments\remote\sdk\domain\payment\TssResult;
 use com\realexpayments\remote\sdk\domain\payment\TssResultCheck;
@@ -49,7 +52,8 @@ class PaymentResponseNormalizer extends AbstractNormalizer {
 		$response->setCardIssuer( $this->denormaliseCardIssuer( $array ) );
 		$response->setDccInfoResult(
 			$this->serializer->denormalize( $array['dccinfo'], DccInfoResult::GetClassName(), $format, $context )
-		);
+					);
+		$response->setFraudFilter($this->denormaliseFraudFilter($array));
 
 
 		return $response;
@@ -112,6 +116,46 @@ class PaymentResponseNormalizer extends AbstractNormalizer {
 		return $tss;
 	}
 
+	private function denormaliseFraudFilter( \ArrayAccess $array ) {
+
+		$fraudFilterData = $array['fraudfilter'];
+
+		if ( ! isset( $fraudFilterData ) || ! is_array( $fraudFilterData ) ) {
+			return null;
+		}
+
+		$data = new SafeArrayAccess( $fraudFilterData );
+
+		$ffr = new FraudFilter();
+		$ffr->setMode( $data['@mode'] );
+		$ffr->setResult( $data['result'] );
+
+		$rules    = $data['rule'];
+		$ffrRules = new FraudFilterRuleCollection();
+
+		if ( ! empty( $rules ) ) {
+			// Ensure that $rules is an array of results
+			if ( isset( $rules['@id'] ) ) {
+				$rules = array( 0 => $rules );
+			}
+
+			foreach ( $rules as $ffrRule ) {
+				$ffrRule = new SafeArrayAccess( $ffrRule );
+
+				$tmpRule = new FraudFilterRule();
+				$tmpRule->setId( $ffrRule['@id'] );
+				$tmpRule->setName( $ffrRule['@name'] );
+				$tmpRule->setValue( $ffrRule['#'] );
+
+				$ffrRules->add($tmpRule);
+			}
+		}
+
+		$ffr->setRules( $ffrRules );
+
+		return $ffr;
+	}
+
 	/**
 	 * Checks whether the given class is supported for denormalization by this normalizer.
 	 *
@@ -161,7 +205,8 @@ class PaymentResponseNormalizer extends AbstractNormalizer {
 				'tss'                 => $this->normaliseTss( $object ),
 				'avspostcoderesponse' => $object->getAvsPostcodeResponse(),
 				'avsaddressresponse'  => $object->getAvsAddressResponse(),
-				'dccinfo'             => $object->getDccInfoResult()
+				'dccinfo'             => $object->getDccInfoResult(),
+				'fraudfilter'                 => $this->normaliseFraudFilter( $object )
 
 			), array( NormaliserHelper::GetClassName(), "filter_data" ) );
 	}
@@ -208,10 +253,29 @@ class PaymentResponseNormalizer extends AbstractNormalizer {
 		);
 	}
 
+	private function normaliseFraudFilter( PaymentResponse $response ) {
+		$ff = $response->getFraudFilter();
+		if ( is_null( $ff ) || $this->fraudfilter_is_empty( $response ) ) {
+			return array();
+		}
+
+		return array(
+			'mode' => $ff->getMode(),
+			'result' => $ff->getResult(),
+			'rule'  => $ff->getRules()
+		);
+	}
+
 	private function tss_is_empty( PaymentResponse $response ) {
 		return
 			$response->getTssResult()->getResult() == null &&
 			$response->getTssResult()->getChecks() == null;
+	}
+
+	private function fraudfilter_is_empty( PaymentResponse $response ) {
+		return
+			$response->getFraudFilter()->getResult() == null &&
+			$response->getFraudFilter()->getRules() == null;
 	}
 
 }

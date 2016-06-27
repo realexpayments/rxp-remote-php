@@ -19,10 +19,12 @@ use com\realexpayments\remote\sdk\domain\payment\AutoSettle;
 use com\realexpayments\remote\sdk\domain\payment\CardIssuer;
 use com\realexpayments\remote\sdk\domain\payment\Comment;
 use com\realexpayments\remote\sdk\domain\payment\CommentCollection;
+use com\realexpayments\remote\sdk\domain\payment\FraudFilter;
 use com\realexpayments\remote\sdk\domain\payment\Mpi;
 use com\realexpayments\remote\sdk\domain\payment\PaymentRequest;
 use com\realexpayments\remote\sdk\domain\payment\PaymentResponse;
 use com\realexpayments\remote\sdk\domain\payment\PaymentType;
+use com\realexpayments\remote\sdk\domain\payment\ReasonCode;
 use com\realexpayments\remote\sdk\domain\payment\Recurring;
 use com\realexpayments\remote\sdk\domain\payment\RecurringFlag;
 use com\realexpayments\remote\sdk\domain\payment\RecurringType;
@@ -96,6 +98,10 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		          ->addSequence( SampleXmlValidationUtils::$RECURRING_SEQUENCE )
 		          ->addType( SampleXmlValidationUtils::$RECURRING_TYPE );
 
+		$fraudFilter = new FraudFilter();
+		$fraudFilter->addMode(SampleXmlValidationUtils::$FRAUD_FILTER );
+
+
 		$request = new PaymentRequest();
 		$request
 			->addAccount( SampleXmlValidationUtils::ACCOUNT )
@@ -114,7 +120,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 			->addPaymentsReference( SampleXmlValidationUtils::PASREF )
 			->addAuthCode( SampleXmlValidationUtils::AUTH_CODE )
 			->addRefundHash( SampleXmlValidationUtils::REFUND_HASH )
-			->addFraudFilter( SampleXmlValidationUtils::FRAUD_FILTER )
+			->addFraudFilter( $fraudFilter )
 			->addRecurring( $recurring )
 			->addTssInfo( $tssInfo )
 			->addMpi( $mpi );
@@ -177,6 +183,9 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		          ->addSequence( SampleXmlValidationUtils::$RECURRING_SEQUENCE->getSequence() )
 		          ->addType( SampleXmlValidationUtils::$RECURRING_TYPE->getType() );
 
+		$fraudFilter = new FraudFilter();
+		$fraudFilter->addMode(SampleXmlValidationUtils::$FRAUD_FILTER );
+
 		$request = new PaymentRequest();
 		$request
 			->addAccount( SampleXmlValidationUtils::ACCOUNT )
@@ -195,7 +204,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 			->addPaymentsReference( SampleXmlValidationUtils::PASREF )
 			->addAuthCode( SampleXmlValidationUtils::AUTH_CODE )
 			->addRefundHash( SampleXmlValidationUtils::REFUND_HASH )
-			->addFraudFilter( SampleXmlValidationUtils::FRAUD_FILTER )
+			->addFraudFilter( $fraudFilter )
 			->addRecurring( $recurring )
 			->addTssInfo( $tssInfo )
 			->addMpi( $mpi );
@@ -262,7 +271,10 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$request->setPaymentsReference( SampleXmlValidationUtils::PASREF );
 		$request->setAuthCode( SampleXmlValidationUtils::AUTH_CODE );
 		$request->setRefundHash( SampleXmlValidationUtils::REFUND_HASH );
-		$request->setFraudFilter( SampleXmlValidationUtils::FRAUD_FILTER );
+		$fraudFilter = new FraudFilter();
+		$fraudFilter->addMode(SampleXmlValidationUtils::$FRAUD_FILTER );
+
+		$request->setFraudFilter( $fraudFilter );
 
 		$recurring = new Recurring();
 		$recurring->setFlag( SampleXmlValidationUtils::$RECURRING_FLAG->getRecurringFlag() );
@@ -836,6 +848,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 
 	}
 
+
 	/**
 	 * Tests conversion of {@link PaymentResponse} from XML file with unknown element.
 	 */
@@ -1285,6 +1298,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		SampleXmlValidationUtils::checkUnmarshalledHoldPaymentRequest( $fromXmlRequest, $this );
 
 	}
+	
 
 	/**
 	 * Tests conversion of {@link PaymentRequest} from XML file for release payment types.
@@ -1302,6 +1316,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
 		SampleXmlValidationUtils::checkUnmarshalledReleasePaymentRequest( $fromXmlRequest, $this );
 	}
+
 
 	/**
 	 * Tests conversion of {@link PaymentRequest} from XML file for receipt-in payment types.
@@ -1465,7 +1480,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$fromXmlRequest = new PaymentRequest();
 		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
 		SampleXmlValidationUtils::checkUnmarshalledDccRateLookUpPaymentRequest( $fromXmlRequest, $this );
-	}
+	}	
 
 	/**
 	 * Tests conversion of {@link PaymentRequest} from XML file for dcc auth payment types.
@@ -1549,6 +1564,9 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		          ->addSequence( SampleXmlValidationUtils::$RECURRING_SEQUENCE->getSequence() )
 		          ->addType( SampleXmlValidationUtils::$RECURRING_TYPE->getType() );
 
+		$fraudFilter = new FraudFilter();
+		$fraudFilter->addMode(SampleXmlValidationUtils::$FRAUD_FILTER );
+
 		$request = new PaymentRequest();
 		$request
 			->addAccount( SampleXmlValidationUtils::ACCOUNT )
@@ -1567,7 +1585,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 			->addPaymentsReference( SampleXmlValidationUtils::PASREF )
 			->addAuthCode( SampleXmlValidationUtils::AUTH_CODE )
 			->addRefundHash( SampleXmlValidationUtils::REFUND_HASH )
-			->addFraudFilter( SampleXmlValidationUtils::FRAUD_FILTER )
+			->addFraudFilter( $fraudFilter )
 			->addRecurring( $recurring )
 			->addTssInfo( $tssInfo )
 			->addMpi( $mpi );
@@ -1638,6 +1656,10 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		          ->addSequence( SampleXmlValidationUtils::$RECURRING_SEQUENCE->getSequence() )
 		          ->addType( SampleXmlValidationUtils::$RECURRING_TYPE->getType() );
 
+		$fraudFilter = new FraudFilter();
+		$fraudFilter->addMode(SampleXmlValidationUtils::$FRAUD_FILTER);
+
+
 		$request = new PaymentRequest();
 		$request
 			->addAccount( SampleXmlValidationUtils::ACCOUNT )
@@ -1656,7 +1678,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 			->addPaymentsReference( SampleXmlValidationUtils::PASREF )
 			->addAuthCode( SampleXmlValidationUtils::AUTH_CODE )
 			->addRefundHash( SampleXmlValidationUtils::REFUND_HASH )
-			->addFraudFilter( SampleXmlValidationUtils::FRAUD_FILTER )
+			->addFraudFilter( $fraudFilter )
 			->addRecurring( $recurring )
 			->addTssInfo( $tssInfo )
 			->addMpi( $mpi );
@@ -1727,6 +1749,9 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		          ->addSequence( SampleXmlValidationUtils::$RECURRING_SEQUENCE->getSequence() )
 		          ->addType( $recurringType );
 
+		$fraudFilter = new FraudFilter();
+		$fraudFilter->addMode(SampleXmlValidationUtils::$FRAUD_FILTER);
+
 		$request = new PaymentRequest();
 		$request
 			->addAccount( SampleXmlValidationUtils::ACCOUNT )
@@ -1745,7 +1770,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 			->addPaymentsReference( SampleXmlValidationUtils::PASREF )
 			->addAuthCode( SampleXmlValidationUtils::AUTH_CODE )
 			->addRefundHash( SampleXmlValidationUtils::REFUND_HASH )
-			->addFraudFilter( SampleXmlValidationUtils::FRAUD_FILTER )
+			->addFraudFilter( $fraudFilter )
 			->addRecurring( $recurring )
 			->addTssInfo( $tssInfo )
 			->addMpi( $mpi );
@@ -1817,6 +1842,10 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		          ->addSequence( SampleXmlValidationUtils::$RECURRING_SEQUENCE )
 		          ->addType( SampleXmlValidationUtils::$RECURRING_TYPE );
 
+		$fraudFilter = new FraudFilter();
+		$fraudFilter->addMode(SampleXmlValidationUtils::$FRAUD_FILTER);
+
+
 		$request = new PaymentRequest();
 		$request
 			->addAccount( SampleXmlValidationUtils::ACCOUNT )
@@ -1835,7 +1864,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 			->addPaymentsReference( SampleXmlValidationUtils::PASREF )
 			->addAuthCode( SampleXmlValidationUtils::AUTH_CODE )
 			->addRefundHash( SampleXmlValidationUtils::REFUND_HASH )
-			->addFraudFilter( SampleXmlValidationUtils::FRAUD_FILTER )
+			->addFraudFilter( $fraudFilter )
 			->addRecurring( $recurring )
 			->addTssInfo( $tssInfo )
 			->addMpi( $mpi );
@@ -1917,6 +1946,10 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		          ->addSequence( SampleXmlValidationUtils::$RECURRING_SEQUENCE )
 		          ->addType( SampleXmlValidationUtils::$RECURRING_TYPE );
 
+		$fraudFilter = new FraudFilter();
+		$fraudFilter->addMode(SampleXmlValidationUtils::$FRAUD_FILTER);
+
+
 		$expectedCurrency = null;
 		$request          = new PaymentRequest();
 		$request
@@ -1936,7 +1969,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 			->addPaymentsReference( SampleXmlValidationUtils::PASREF )
 			->addAuthCode( SampleXmlValidationUtils::AUTH_CODE )
 			->addRefundHash( SampleXmlValidationUtils::REFUND_HASH )
-			->addFraudFilter( SampleXmlValidationUtils::FRAUD_FILTER )
+			->addFraudFilter( $fraudFilter )
 			->addRecurring( $recurring )
 			->addTssInfo( $tssInfo )
 			->addMpi( $mpi );
@@ -2066,5 +2099,154 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$fromXmlResponse = new PaymentResponse();
 		$fromXmlResponse = $fromXmlResponse->fromXml( $xml );
 		SampleXmlValidationUtils::checkUnmarshalledPaymentResponse( $fromXmlResponse, $this, true );
+	}
+
+
+	/**
+	 * Tests Fraud Code Request Type
+	 */
+	public function testPaymentRequestCodeXmlFromFile() {
+		$path   = SampleXmlValidationUtils::HOLD_PAYMENT_REQUEST_XML_PATH;
+		$prefix = __DIR__ . '/../../../resources';
+		$xml    = file_get_contents( $prefix . $path );
+
+		//unmarshal back to response
+		/* @var PaymentResponse $fromXmlResponse */
+		$fromXmlResponse = new PaymentRequest();
+		$fromXmlResponse = $fromXmlResponse->fromXML( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledRequestCodeResponse( $fromXmlResponse, $this , ReasonCode::FRAUD);
+	}
+
+	/**
+	 * Tests Fraud Code Request Type
+	 */
+	public function testPaymentRequestCodeXmlFromCode() {
+		$paymentRequest = new PaymentRequest();
+		$paymentRequest->addAccount(SampleXmlValidationUtils::HOLD_ACCOUNT);
+		$paymentRequest->addMerchantId(SampleXmlValidationUtils::HOLD_MERCHANT_ID);
+		$paymentRequest->addTimestamp(SampleXmlValidationUtils::HOLD_TIMESTAMP);
+		$paymentRequest->addOrderId(SampleXmlValidationUtils::HOLD_ORDER_ID);
+		$paymentRequest->addHash(SampleXmlValidationUtils::HOLD_REQUEST_HASH);
+		$paymentRequest->addType(PaymentType::HOLD);
+
+		$reasons = array(
+			ReasonCode::FRAUD,
+			ReasonCode::FALSE_POSITIVE,
+			ReasonCode::IN_STOCK,
+			ReasonCode::NOT_GIVEN,
+			ReasonCode::OTHER,
+			ReasonCode::OUT_OF_STOCK
+		);
+
+		foreach ($reasons as $reason) {
+			$paymentRequest->setReasonCode($reason);
+
+			//marshal to XML
+			$xml = $paymentRequest->toXml();
+
+			//unmarshal back to response
+			/* @var PaymentResponse $fromXmlResponse */
+			$fromXmlResponse = new PaymentRequest();
+			$fromXmlResponse = $fromXmlResponse->fromXML($xml);
+			SampleXmlValidationUtils::checkUnmarshalledRequestCodeResponse($fromXmlResponse, $this,$reason);
+		}
+	}
+
+	/**
+	 * Tests Fraud Code Request Type
+	 */
+	public function testPaymentRequestCodeXmlFromCodeFailed() {
+		$paymentRequest = new PaymentRequest();
+		$paymentRequest->addAccount(SampleXmlValidationUtils::HOLD_ACCOUNT);
+		$paymentRequest->addMerchantId(SampleXmlValidationUtils::HOLD_MERCHANT_ID);
+		$paymentRequest->addTimestamp(SampleXmlValidationUtils::HOLD_TIMESTAMP);
+		$paymentRequest->addOrderId(SampleXmlValidationUtils::HOLD_ORDER_ID);
+		$paymentRequest->addHash(SampleXmlValidationUtils::HOLD_REQUEST_HASH);
+		$paymentRequest->addType(PaymentType::HOLD);
+		$paymentRequest->addReasonCode('fake reason');
+
+		$reasons = array(
+			ReasonCode::FRAUD,
+			ReasonCode::FALSE_POSITIVE,
+			ReasonCode::IN_STOCK,
+			ReasonCode::NOT_GIVEN,
+			ReasonCode::OTHER,
+			ReasonCode::OUT_OF_STOCK
+		);
+
+		foreach ($reasons as $reason) {
+
+			//marshal to XML
+			$xml = $paymentRequest->toXml();
+
+			//unmarshal back to response
+			/* @var PaymentResponse $fromXmlResponse */
+			$fromXmlResponse = new PaymentRequest();
+			$fromXmlResponse = $fromXmlResponse->fromXML( $xml );
+			SampleXmlValidationUtils::checkUnmarshalledRequestCodeResponse( $fromXmlResponse, $this,$reason,false );
+		}
+	}
+
+	/**
+	 * Tests conversion of {@link PaymentRequest} from XML file for dcc realvault payment types.
+	 */
+	public function testPaymentRequestXmlFromFileDccRealVault() {
+		$path   = SampleXmlValidationUtils::DCC_REAL_VAULT_REQUEST_XML_PATH;
+		$prefix = __DIR__ . '/../../../resources';
+		$xml    = file_get_contents( $prefix . $path );
+
+		//unmarshal back to response
+		/* @var PaymentRequest $fromXmlRequest */
+		$fromXmlRequest = new PaymentRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledDccRealVaultPaymentRequest( $fromXmlRequest, $this );
+	}
+
+	/**
+	 * Tests conversion of {@link PaymentRequest} from XML file for hold payment types.
+	 */
+	public function testPaymentRequestXmlFromFileHoldReasonCodeHold() {
+
+		$path   = SampleXmlValidationUtils::HOLD_PAYMENT_REASON_REQUEST_XML_PATH;
+		$prefix = __DIR__ . '/../../../resources';
+		$xml    = file_get_contents( $prefix . $path );
+
+		//unmarshal back to request
+		/* @var PaymentRequest $fromXmlRequest */
+		$fromXmlRequest = new PaymentRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledHoldReasonHoldPaymentRequest( $fromXmlRequest, $this );
+
+	}
+	/**
+	 * Tests conversion of {@link PaymentRequest} from XML file for hold payment types.
+	 */
+	public function testPaymentRequestXmlFromFileHoldReasonCodeRelease() {
+
+		$path   = SampleXmlValidationUtils::RELEASE_PAYMENT_REASON_REQUEST_XML_PATH;
+		$prefix = __DIR__ . '/../../../resources';
+		$xml    = file_get_contents( $prefix . $path );
+
+		//unmarshal back to request
+		/* @var PaymentRequest $fromXmlRequest */
+		$fromXmlRequest = new PaymentRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledHoldReasonRequestPaymentRequest( $fromXmlRequest, $this );
+
+	}
+
+	/**
+	 * Tests conversion of {@link PaymentResponse} from XML file
+	 */
+	public function testPaymentResponseWithFraudFilterXmlFromFile() {
+		$path   = SampleXmlValidationUtils::PAYMENT_RESPONSE_WITH_FRAUD_FILTER_XML_PATH;
+		$prefix = __DIR__ . '/../../../resources';
+		$xml    = file_get_contents( $prefix . $path );
+
+		//unmarshal back to response
+		/* @var PaymentResponse $fromXmlResponse */
+		$fromXmlResponse = new PaymentResponse();
+		$fromXmlResponse = $fromXmlResponse->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledPaymentResponseWithFraudFilter( $fromXmlResponse, $this );
 	}
 }

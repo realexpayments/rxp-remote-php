@@ -10,6 +10,7 @@ use com\realexpayments\remote\sdk\domain\DccInfo;
 use com\realexpayments\remote\sdk\domain\Payer;
 use com\realexpayments\remote\sdk\domain\payment\Address;
 use com\realexpayments\remote\sdk\domain\payment\AutoSettle;
+use com\realexpayments\remote\sdk\domain\payment\FraudFilter;
 use com\realexpayments\remote\sdk\domain\payment\Comment;
 use com\realexpayments\remote\sdk\domain\payment\CommentCollection;
 use com\realexpayments\remote\sdk\domain\payment\Mpi;
@@ -55,7 +56,6 @@ class PaymentRequestNormalizer extends AbstractNormalizer{
 		        ->addPaymentsReference( $array['pasref'] )
 		        ->addAuthCode( $array['authcode'] )
 		        ->addRefundHash( $array['refundhash'] )
-		        ->addFraudFilter( $array['fraudfilter'] )
 		        ->addMobile( $array['mobile'] )
 		        ->addToken( $array['token'] )
 		        ->addPayerReference( $array['payerref'] )
@@ -71,6 +71,11 @@ class PaymentRequestNormalizer extends AbstractNormalizer{
 		$autoSettle = $this->denormaliseAutoSettle( $array );
 		if ( $autoSettle != null ) {
 			$request->addAutoSettle( $autoSettle );
+		}
+
+		$fraudFilter = $this->denormaliseFraudFilter( $array );
+		if ( $fraudFilter != null ) {
+			$request->addFraudFilter( $fraudFilter );
 		}
 
 
@@ -135,6 +140,11 @@ class PaymentRequestNormalizer extends AbstractNormalizer{
 	private function denormaliseAutoSettle( \ArrayAccess $array ) {
 
 		return $this->serializer->denormalize( $array['autosettle'], AutoSettle::GetClassName(), $this->format, $this->context );
+	}
+
+	private function denormaliseFraudFilter( \ArrayAccess $array ) {
+
+		return $this->serializer->denormalize( $array['fraudfilter'], FraudFilter::GetClassName(), $this->format, $this->context );
 	}
 
 	private function denormaliseRecurring( \ArrayAccess $array ) {
@@ -317,7 +327,7 @@ class PaymentRequestNormalizer extends AbstractNormalizer{
 		return array_filter( array(
 			'@flag'     => $recurring->getFlag(),
 			'@sequence' => $recurring->getSequence(),
-			'@type'     => $recurring->getType()
+			'@type'     => $recurring->getType(),
 		), array( NormaliserHelper::GetClassName(), "filter_data" ) );
 	}
 
@@ -368,6 +378,7 @@ class PaymentRequestNormalizer extends AbstractNormalizer{
 		       $request->getMpi()->getXid() == null &&
 		       $request->getMpi()->getEci() == null;
 	}
+
 
 	/**
 	 * Checks whether the given class is supported for normalization by this normalizer.
