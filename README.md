@@ -508,7 +508,7 @@ $client   = new RealexClient( "mySecret" );
 $response = $client->send( $request );
 ```
 
-### RECEIPT-IN OTB
+### Receipt-in OTB
 
 ```php 
 $request = ( new PaymentRequest() )
@@ -522,7 +522,84 @@ $client   = new RealexClient( "mySecret" );
 $response = $client->send( $request );	
 ```
 
+### DCC Real Vault
 
+```php 
+$card = ( new Card() )    
+    ->addNumber("420000000000000000")    
+	->addExpiryDate("0119")	
+	->addCardHolderName("Joe Smith")
+	->addType(CardType::VISA);
+	
+$dccInfo = ( new DccInfo() )
+    ->addDccProcessor("fexco")
+    ->addRate(0.6868)
+    ->addAmount(13049)
+    ->addCurrency("GBP");
+
+$request = ( new PaymentRequest() )
+  ->addAccount( "myAccount" )
+  ->addMerchantId( "myMerchantId" )	
+  ->addType(PaymentType::REALVAULT_DCCRATE)
+  ->addAmount(19000)
+  ->addCurrency( "EUR" )        
+  ->addCard($card)
+  ->addDccInfo($dccInfo);
+
+$client   = new RealexClient( "mySecret" );
+$response = $client->send( $request );
+```
+
+### Fraud Filter Request
+
+```php 
+$fraudFilter = new FraudFilter();
+$fraudFilter->addMode(FraudFilterMode::ACTIVE);
+
+$card = ( new Card() )    
+    ->addNumber("420000000000000000")    
+	->addExpiryDate("0119")	
+	->addCardHolderName("Joe Smith")
+	->addType(CardType::VISA);
+	
+$autoSettle = new AutoSettle();
+$autoSettle->addFlag(AutoSettleFlag::TRUE);
+	
+$request = ( new PaymentRequest() )
+    ->addType( PaymentType::AUTH )
+    ->addCard( $card )
+    ->addAccount( "myAccount" )
+    ->addMerchantId( "myMerchantId" )
+    ->addAmount( 1000 )
+    ->addCurrency( "EUR" )
+    ->addOrderId("myOrderId")
+    ->addAutoSettle( $autoSettle)
+    ->addFraudFilter($fraudFilter);
+
+	
+$client   = new RealexClient( "mySecret" );
+$response = $client->send( $request );	
+```
+
+### Fraud Filter Response
+
+```php 
+// request is fraud filter
+$response = $client->send( $request );	
+
+$mode = $response->getFraudFilter()->getMode();
+$result = $response->getFraudFilter()->getResult();
+//array of FraudFilterResultRule
+$rules = $response->getFraudFilter()->getRules();
+foreach($rules as $rule)
+{
+    echo $rule->getId();
+    echo $rule->getName();
+    echo $rule->getValue();
+}
+//or
+echo $rules->get(0)->getId();
+```
 
 ## License
 
