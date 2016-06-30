@@ -446,6 +446,81 @@ use com\realexpayments\remote\sdk\utils\XmlUtils;
  *    ->addPaymentMethod("payment method ref from customer")
  *    ->addPaymentData($paymentData);
  * </pre></code></p>
+ *
+ * <p>
+ * Example DCC Real Vault:
+ * </p>
+ * <p><code><pre>
+ * $card = ( new Card() )
+ *    ->addNumber("420000000000000000")
+ *    ->addExpiryDate("0119")
+ *    ->addCardHolderName("Joe Smith")
+ *    ->addType(CardType::VISA);
+ *
+ * $dccInfo = ( new DccInfo() )
+ *    ->addDccProcessor("fexco")
+ *    ->addRate(0.6868)
+ *    ->addAmount(13049)
+ *    ->addCurrency("GBP");
+ *
+ * $request = ( new PaymentRequest() )
+ *    ->addAccount( "myAccount" )
+ *    ->addMerchantId( "myMerchantId" )
+ *    ->addType(PaymentType::REALVAULT_DCCRATE)
+ *    ->addAmount(19000)
+ *    ->addCurrency( "EUR" )
+ *    ->addCard($card)
+ *    ->addDccInfo($dccInfo);
+ * </pre></code></p>
+ *
+ * <p>
+ * Example Fraud Filter Request:
+ * </p>
+ * <p><code><pre>
+ * $fraudFilter = new FraudFilter();
+ * $fraudFilter->addMode(FraudFilterMode::ACTIVE);
+ *
+ * $card = ( new Card() )
+ *    ->addNumber("420000000000000000")
+ *    ->addExpiryDate("0119")
+ *    ->addCardHolderName("Joe Smith")
+ *    ->addType(CardType::VISA);
+ *
+ * $autoSettle = new AutoSettle();
+ * $autoSettle->addFlag(AutoSettleFlag::TRUE);
+ *
+ * $request = ( new PaymentRequest() )
+ *    ->addType( PaymentType::AUTH )
+ *    ->addCard( $card )
+ *    ->addAccount( "myAccount" )
+ *    ->addMerchantId( "myMerchantId" )
+ *    ->addAmount( 1000 )
+ *    ->addCurrency( "EUR" )
+ *    ->addOrderId("myOrderId")
+ *    ->addAutoSettle( $autoSettle)
+ *    ->addFraudFilter($fraudFilter);
+ * </pre></code></p>
+ *
+ * <p>
+ * Example Fraud Filter Response:
+ * </p>
+ * <p><code><pre>
+ * $response = $client->send( $request );
+ *
+ * $mode = $response->getFraudFilter()->getMode();
+ * $result = $response->getFraudFilter()->getResult();
+ * //array of FraudFilterResultRule
+ * $rules = $response->getFraudFilter()->getRules();
+ * foreach($rules as $rule)
+ * {
+ *    echo $rule->getId();
+ *    echo $rule->getName();
+ *    echo $rule->getValue();
+ * }
+ * //or
+ * echo $rules->get(0)->getId();
+ * </pre></code></p>
+
  * @author vicpada
  * @package com\realexpayments\remote\sdk\domain\payment
  */
@@ -623,12 +698,11 @@ class PaymentRequest implements iRequest {
 
 	/**
 	 * @var string This is a code used to identify the reason
-	 *            for a transaction action. It is an optional
-	 *            field but if populated it must contain a
-	 *            value that is allowed for that transaction
-	 *            type.
-	 *          If no value is supplied, the default reason
-	 *            code NOTGIVEN will be applied to the holdrequest
+	 * for a transaction action. It is an optional
+	 * field but if populated it must contain a
+	 * value that is allowed for that transaction type.
+	 * If no value is supplied, the default reason
+	 * code NOTGIVEN will be applied to the holdrequest
 	 */
 	private $reasonCode;
 
