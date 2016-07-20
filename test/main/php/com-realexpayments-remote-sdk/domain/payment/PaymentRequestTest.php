@@ -545,7 +545,7 @@ class PaymentRequestTest extends \PHPUnit_Framework_TestCase {
 
 		$request = new PaymentRequest();
 		$request
-			->addType( PaymentType::REALVAULT_DCCRATE )
+			->addType( PaymentType::STORED_CARD_DCC_RATE )
 			->addTimeStamp( SampleXmlValidationUtils::DCC_REAL_VAULT_TIMESTAMP )
 			->addMerchantId( SampleXmlValidationUtils::DCC_REAL_VAULT_MERCHANT_ID )
 			->addAmount( SampleXmlValidationUtils::DCC_REAL_VAULT_AMOUNT )
@@ -554,7 +554,7 @@ class PaymentRequestTest extends \PHPUnit_Framework_TestCase {
 			->addDccInfo( $dccInfo );
 
 
-		$this->assertEquals( SampleXmlValidationUtils::REALVAULT_DCCRATE, $request->getType() );
+		$this->assertEquals( SampleXmlValidationUtils::STORED_CARD_DCC_RATE, $request->getType() );
 	}
 
 	/**
@@ -563,7 +563,7 @@ class PaymentRequestTest extends \PHPUnit_Framework_TestCase {
 	public function testRealVaultHashGeneration() {
 		$request = new PaymentRequest();
 		$request
-			->addType( PaymentType::REALVAULT_DCCRATE )
+			->addType( PaymentType::STORED_CARD_DCC_RATE )
 			->addTimeStamp( SampleXmlValidationUtils::DCC_REAL_VAULT_TIMESTAMP )
 			->addMerchantId( SampleXmlValidationUtils::DCC_REAL_VAULT_MERCHANT_ID )
 			->addAmount( SampleXmlValidationUtils::DCC_REAL_VAULT_AMOUNT )

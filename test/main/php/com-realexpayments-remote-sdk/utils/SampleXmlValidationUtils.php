@@ -466,7 +466,7 @@ class SampleXmlValidationUtils {
 	const DCC_RATE_TYPE = "1";
 
 	//dcc realvaulr
-	const REALVAULT_DCCRATE = PaymentType::REALVAULT_DCCRATE;
+	const STORED_CARD_DCC_RATE = PaymentType::STORED_CARD_DCC_RATE;
 	const DCC_REAL_VAULT_TIMESTAMP = "20140520151742";
 	const DCC_REAL_VAULT_MERCHANT_ID = "yourmerchantid";
 	const DCC_REAL_VAULT_ACCOUNT = "internet";
@@ -1533,7 +1533,7 @@ class SampleXmlValidationUtils {
 	public static function checkUnmarshalledDccRealVaultPaymentRequest( PaymentRequest $fromXmlRequest, PHPUnit_Framework_TestCase $testCase ) {
 		$testCase->assertNotNull( $fromXmlRequest );
 
-		$testCase->assertEquals( self::REALVAULT_DCCRATE, $fromXmlRequest->getType() );
+		$testCase->assertEquals( self::STORED_CARD_DCC_RATE, $fromXmlRequest->getType() );
 		$testCase->assertEquals( self::DCC_REAL_VAULT_ACCOUNT, $fromXmlRequest->getAccount() );
 		$testCase->assertEquals( self::DCC_REAL_VAULT_MERCHANT_ID, $fromXmlRequest->getMerchantId() );
 		$testCase->assertEquals( self::DCC_REAL_VAULT_TIMESTAMP, $fromXmlRequest->getTimestamp() );
