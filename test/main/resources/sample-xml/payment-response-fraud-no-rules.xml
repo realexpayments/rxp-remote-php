@@ -19,16 +19,9 @@
         <countrycode/>
         <region/>
     </cardissuer>
-    <fraudresponse mode='PASSIVE'>
-        <result>PASS</result>
-        <rules>
-            <rule name='Customer IP List' id='478a55db-5430-4c2a-afca-7dde181eb9f4'>
-                <action>PASS</action>
-            </rule>
-            <rule name='Card Numbers' id='cf609cf9-9e5a-4700-ac69-8aa09c119305'>
-                <action>PASS</action>
-            </rule>
-        </rules>
+    <fraudresponse mode="ACTIVE">
+        <result>NOT_EXECUTED</result>
+        <rules/>
     </fraudresponse>
     <sha1hash>bd5550299e4508873a2cf6e435ad74a5455ad648</sha1hash>
 </response>
