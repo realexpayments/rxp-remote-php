@@ -158,7 +158,7 @@ use com\realexpayments\remote\sdk\utils\XmlUtils;
  * $request = ( new PaymentRequest() )
  *    ->addAccount( "myAccount" )
  *    ->addMerchantId( "myMerchantId" )
- *    ->addType( PaymentType::CREDIT )
+ *    ->addType( PaymentType::REFUND )
  *    ->addAmount( 1001 )
  *    ->addCurrency( "EUR" )
  *    ->addPaymentsReference("Pasref from original transaction")
@@ -448,7 +448,7 @@ use com\realexpayments\remote\sdk\utils\XmlUtils;
  * </pre></code></p>
  *
  * <p>
- * Example DCC Real Vault:
+ * Example Stored Card Dcc Rate:
  * </p>
  * <p><code><pre>
  * $card = ( new Card() )
