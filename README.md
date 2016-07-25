@@ -205,13 +205,13 @@ $client   = new RealexClient( "mySecret" );
 $response = $client->send( $request );	
 ```
 
-### Credit
+### Refund
 
 ```php
 $request = ( new PaymentRequest() )
 	->addAccount( "myAccount" )
 	->addMerchantId( "myMerchantId" )	
-	->addType( PaymentType::CREDIT )
+	->addType( PaymentType::REFUND )
 	->addAmount( 1001 )           
 	->addCurrency( "EUR" )                  
 	->addPaymentsReference("Pasref from original transaction")
@@ -522,7 +522,7 @@ $client   = new RealexClient( "mySecret" );
 $response = $client->send( $request );	
 ```
 
-### DCC Real Vault
+### DCC Stored Card Dcc Rate
 
 ```php 
 $card = ( new Card() )    
@@ -540,7 +540,7 @@ $dccInfo = ( new DccInfo() )
 $request = ( new PaymentRequest() )
   ->addAccount( "myAccount" )
   ->addMerchantId( "myMerchantId" )	
-  ->addType(PaymentType::REALVAULT_DCCRATE)
+  ->addType(PaymentType::STORED_CARD_DCC_RATE)
   ->addAmount(19000)
   ->addCurrency( "EUR" )        
   ->addCard($card)

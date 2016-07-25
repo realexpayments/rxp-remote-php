@@ -217,12 +217,12 @@ class PaymentRequestTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testCreditHashGeneration() {
 		$request = new PaymentRequest();
-		$request->addType( PaymentType::CREDIT )->addTimeStamp( SampleXmlValidationUtils::CREDIT_TIMESTAMP )->addMerchantId( SampleXmlValidationUtils::CREDIT_MERCHANT_ID )
-		        ->addOrderId( SampleXmlValidationUtils::CREDIT_ORDER_ID )->addPaymentsReference( SampleXmlValidationUtils::CREDIT_PASREF )->addAuthCode( SampleXmlValidationUtils::CREDIT_AUTH_CODE )
-		        ->addAmount( SampleXmlValidationUtils::CREDIT_AMOUNT )->addCurrency( SampleXmlValidationUtils::CREDIT_CURRENCY )->addRefundHash( SampleXmlValidationUtils::CREDIT_REFUND_HASH );
+		$request->addType( PaymentType::REFUND )->addTimeStamp( SampleXmlValidationUtils::REFUND_TIMESTAMP )->addMerchantId( SampleXmlValidationUtils::REFUND_MERCHANT_ID )
+		        ->addOrderId( SampleXmlValidationUtils::REFUND_ORDER_ID )->addPaymentsReference( SampleXmlValidationUtils::REFUND_PASREF )->addAuthCode( SampleXmlValidationUtils::REFUND_AUTH_CODE )
+		        ->addAmount( SampleXmlValidationUtils::REFUND_AMOUNT )->addCurrency( SampleXmlValidationUtils::REFUND_CURRENCY )->addRefundHash( SampleXmlValidationUtils::REFUND_REFUND_HASH );
 		$request->hash( SampleXmlValidationUtils::SECRET );
 
-		$this->assertEquals( SampleXmlValidationUtils::CREDIT_REQUEST_HASH, $request->getHash() );
+		$this->assertEquals( SampleXmlValidationUtils::REFUND_REQUEST_HASH, $request->getHash() );
 	}
 
 	/**
@@ -443,7 +443,6 @@ class PaymentRequestTest extends \PHPUnit_Framework_TestCase {
 
 		$request = new PaymentRequest();
 		$request
-			->addType( PaymentType::DCC_AUTH )
 			->addTimeStamp( SampleXmlValidationUtils::DCC_AUTH_TIMESTAMP )
 			->addMerchantId( SampleXmlValidationUtils::DCC_AUTH_MERCHANT_ID )
 			->addAmount( SampleXmlValidationUtils::DCC_AUTH_AMOUNT )
@@ -536,44 +535,44 @@ class PaymentRequestTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * Tests the hash calculation for a card-update transaction.
 	 */
-	public function testDccRealVault() {
+	public function testDccStoredCard() {
 
 		// add dccinfo. Note that the type is not set as it is already defaulted to 1
 		$dccInfo = ( new DccInfo() );
-		$dccInfo->addDccProcessor( SampleXmlValidationUtils::DCC_REAL_VAULT_DCC_CCP );
+		$dccInfo->addDccProcessor( SampleXmlValidationUtils::STORED_CARD_DCC_RATE_DCC_CCP );
 
 
 		$request = new PaymentRequest();
 		$request
-			->addType( PaymentType::REALVAULT_DCCRATE )
-			->addTimeStamp( SampleXmlValidationUtils::DCC_REAL_VAULT_TIMESTAMP )
-			->addMerchantId( SampleXmlValidationUtils::DCC_REAL_VAULT_MERCHANT_ID )
-			->addAmount( SampleXmlValidationUtils::DCC_REAL_VAULT_AMOUNT )
-			->addCurrency( SampleXmlValidationUtils::DCC_REAL_VAULT_CURRENCY )
-			->addOrderId( SampleXmlValidationUtils::DCC_REAL_VAULT_ORDER_ID )
+			->addType( PaymentType::STORED_CARD_DCC_RATE )
+			->addTimeStamp( SampleXmlValidationUtils::STORED_CARD_DCC_RATE_TIMESTAMP )
+			->addMerchantId( SampleXmlValidationUtils::STORED_CARD_DCC_RATE_MERCHANT_ID )
+			->addAmount( SampleXmlValidationUtils::STORED_CARD_DCC_RATE_AMOUNT )
+			->addCurrency( SampleXmlValidationUtils::STORED_CARD_DCC_RATE_CURRENCY )
+			->addOrderId( SampleXmlValidationUtils::STORED_CARD_DCC_RATE_ORDER_ID )
 			->addDccInfo( $dccInfo );
 
 
-		$this->assertEquals( SampleXmlValidationUtils::REALVAULT_DCCRATE, $request->getType() );
+		$this->assertEquals( SampleXmlValidationUtils::STORED_CARD_DCC_RATE, $request->getType() );
 	}
 
 	/**
-	 * Tests the hash calculation for a realvault payment.
+	 * Tests the hash calculation for a stored card dcc rate payment.
 	 */
-	public function testRealVaultHashGeneration() {
+	public function testStoredCardDccRateHashGeneration() {
 		$request = new PaymentRequest();
 		$request
-			->addType( PaymentType::REALVAULT_DCCRATE )
-			->addTimeStamp( SampleXmlValidationUtils::DCC_REAL_VAULT_TIMESTAMP )
-			->addMerchantId( SampleXmlValidationUtils::DCC_REAL_VAULT_MERCHANT_ID )
-			->addAmount( SampleXmlValidationUtils::DCC_REAL_VAULT_AMOUNT )
-			->addCurrency( SampleXmlValidationUtils::DCC_REAL_VAULT_CURRENCY )
-			->addOrderId( SampleXmlValidationUtils::DCC_REAL_VAULT_ORDER_ID )
-			->addPayerReference(SampleXmlValidationUtils::DCC_REAL_VAULT_PAYREF);
+			->addType( PaymentType::STORED_CARD_DCC_RATE )
+			->addTimeStamp( SampleXmlValidationUtils::STORED_CARD_DCC_RATE_TIMESTAMP )
+			->addMerchantId( SampleXmlValidationUtils::STORED_CARD_DCC_RATE_MERCHANT_ID )
+			->addAmount( SampleXmlValidationUtils::STORED_CARD_DCC_RATE_AMOUNT )
+			->addCurrency( SampleXmlValidationUtils::STORED_CARD_DCC_RATE_CURRENCY )
+			->addOrderId( SampleXmlValidationUtils::STORED_CARD_DCC_RATE_ORDER_ID )
+			->addPayerReference(SampleXmlValidationUtils::STORED_CARD_DCC_RATE_PAYREF);
 
 		$request->hash( SampleXmlValidationUtils::SECRET );
 
-		$this->assertEquals( SampleXmlValidationUtils::DCC_REAL_VAULT_REQUEST_HASH, $request->getHash() );
+		$this->assertEquals( SampleXmlValidationUtils::STORED_CARD_DCC_RATE_REQUEST_HASH, $request->getHash() );
 	}
 
 }

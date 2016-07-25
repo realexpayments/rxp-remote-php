@@ -112,7 +112,7 @@ class PaymentRequestNormalizer extends AbstractNormalizer{
 	private function denormaliseComments( \ArrayAccess $array ) {
 		$comments = $array['comments'];
 
-		if ( ! isset( $comments ) ) {
+		if ( ! isset( $comments ) || !is_array($comments)) {
 			return null;
 		}
 
@@ -126,6 +126,8 @@ class PaymentRequestNormalizer extends AbstractNormalizer{
 
 		$commentCollection = new CommentCollection();
 		foreach ( $comments as $comment ) {
+
+
 			$commentObject = new Comment();
 			$commentObject->addId( $comment["@id"] )
 			              ->addComment( $comment["#"] );
