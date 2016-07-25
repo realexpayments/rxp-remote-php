@@ -17,6 +17,8 @@ use com\realexpayments\remote\sdk\domain\payment\normaliser\CvnNumberNormaliser;
 use com\realexpayments\remote\sdk\domain\payment\normaliser\DccInfoNormalizer;
 use com\realexpayments\remote\sdk\domain\payment\normaliser\DccInfoResultNormalizer;
 use com\realexpayments\remote\sdk\domain\payment\normaliser\FraudFilterNormalizer;
+use com\realexpayments\remote\sdk\domain\payment\normaliser\FraudFilterRuleCollectionNormalizer;
+use com\realexpayments\remote\sdk\domain\payment\normaliser\FraudFilterRuleNormalizer;
 use com\realexpayments\remote\sdk\domain\payment\normaliser\PayerAddressNormalizer;
 use com\realexpayments\remote\sdk\domain\payment\normaliser\PayerNormalizer;
 use com\realexpayments\remote\sdk\domain\payment\normaliser\PaymentDataNormalizer;
@@ -161,7 +163,9 @@ class XmlUtils {
 			new PhoneNumbersNormalizer(),
 			new DccInfoResultNormalizer(),
 			new AutoSettleNormalizer(),
-			new FraudFilterNormalizer()
+			new FraudFilterNormalizer(),
+            new FraudFilterRuleCollectionNormalizer(),
+            new FraudFilterRuleNormalizer()
 			//new ObjectNormalizer()
 		);
 		self::$marshallers[ MessageType::PAYMENT ] = new Serializer( $normalizers, $encoders );
@@ -182,9 +186,12 @@ class XmlUtils {
 			new PaymentDataNormalizer(),
 			new CvnNumberNormaliser(),
 			new AutoSettleNormalizer(),
-			new FraudFilterNormalizer()
+			new FraudFilterNormalizer(),
+            new FraudFilterRuleCollectionNormalizer(),
+            new FraudFilterRuleNormalizer()
 
-			//new  ObjectNormalizer()
+
+            //new  ObjectNormalizer()
 		);
 		self::$marshallers[ MessageType::THREE_D_SECURE ] = new Serializer( $normalizers, $encoders );
 

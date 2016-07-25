@@ -19,8 +19,6 @@ class ReasonCode extends EnumBase {
 	const FALSE_POSITIVE = "FALSEPOSITIVE";
 	const IN_STOCK = "INSTOCK";
 	const NOT_GIVEN = "NOTGIVEN";
-	const HOLD = "HOLD";
-	const RELEASE = "RELEASE";
 	
 	/**
 	 * @var string The payment type String value
