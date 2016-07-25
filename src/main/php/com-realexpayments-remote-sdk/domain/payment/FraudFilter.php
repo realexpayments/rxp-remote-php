@@ -170,7 +170,7 @@ class FraudFilter {
 				$result .= "-";
 				$result .= $rule->getName();
 				$result .= "-";
-		 		$result .= $rule->getValue();
+		 		$result .= $rule->getAction();
 				$result .= ";";
 			}
 		}
