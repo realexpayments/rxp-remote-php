@@ -19,7 +19,7 @@ class PaymentType extends EnumBase {
 	const VOID = "void";
 	const REBATE = "rebate";
 	const OTB = "otb";
-	const CREDIT = "credit";
+	const REFUND = "credit";
 	const HOLD = "hold";
 	const RELEASE = "release";
 	const RECEIPT_IN = "receipt-in";
@@ -30,9 +30,8 @@ class PaymentType extends EnumBase {
 	const CARD_UPDATE = "card-update-card";
 	const CARD_CANCEL = "card-cancel-card";
 	const DCC_RATE_LOOKUP = "dccrate";
-	const DCC_AUTH = "auth";
 	const RECEIPT_IN_OTB = "receipt-in-otb";
-	const REALVAULT_DCCRATE = "realvault-dccrate";
+	const STORED_CARD_DCC_RATE = "realvault-dccrate";
 
 	/**
 	 * @var string The payment type String value

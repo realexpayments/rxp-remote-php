@@ -17,6 +17,7 @@ class FraudFilterResult extends EnumBase {
 	const HOLD = "HOLD";
 	const BLOCK = "BLOCK";
 	const NOT_SUPPORTED = "NOT SUPPORTED";
+	const NOT_EXECUTED = "NOT_EXECUTED";
 
 
 	/**

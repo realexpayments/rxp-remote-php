@@ -6,13 +6,14 @@ namespace com\realexpayments\remote\sdk\domain\payment\normaliser;
 
 use com\realexpayments\remote\sdk\domain\payment\AutoSettle;
 use com\realexpayments\remote\sdk\domain\payment\FraudFilter;
+use com\realexpayments\remote\sdk\domain\payment\FraudFilterRuleCollection;
 use com\realexpayments\remote\sdk\SafeArrayAccess;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use com\realexpayments\remote\sdk\utils\NormaliserHelper;
 
 
-class FraudFilterNormalizer implements NormalizerInterface, DenormalizerInterface {
+class FraudFilterRuleCollectionNormalizer implements NormalizerInterface, DenormalizerInterface {
 
 	/**
 	 * Normalizes an object into a set of arrays/scalars.
@@ -26,13 +27,12 @@ class FraudFilterNormalizer implements NormalizerInterface, DenormalizerInterfac
 	public function normalize( $object, $format = null, array $context = array() ) {
 		/** @var FraudFilter $object */
 
-		if ( is_null( $object ) || is_null( $object->getMode() ) ) {
+		if ( is_null( $object )  ) {
 			return array();
 		}
 
-
         return array_filter( array(
-            '@mode' => $object->getMode(),
+			'rule' => $object->getRules(),
         ), array( NormaliserHelper::GetClassName(), "filter_data" ) );
 	}
 
@@ -45,7 +45,7 @@ class FraudFilterNormalizer implements NormalizerInterface, DenormalizerInterfac
 	 * @return bool
 	 */
 	public function supportsNormalization( $data, $format = null ) {
-		if ( $format == "xml" && $data instanceof FraudFilter ) {
+		if ( $format == "xml" && $data instanceof FraudFilterRuleCollection ) {
 			return true;
 		}
 		return false;
@@ -68,11 +68,11 @@ class FraudFilterNormalizer implements NormalizerInterface, DenormalizerInterfac
 
 		$data = new SafeArrayAccess( $data );
 
-		$fraudFilter = new FraudFilter();
+		$fraudFilterRuleCollection = new FraudFilterRuleCollection();
 
-		$fraudFilter->addMode($data['@mode']);
+        $fraudFilterRuleCollection->setRules($data['rules']);
 
-		return $fraudFilter;
+		return $fraudFilterRuleCollection;
 	}
 
 	/**
@@ -85,7 +85,7 @@ class FraudFilterNormalizer implements NormalizerInterface, DenormalizerInterfac
 	 * @return bool
 	 */
 	public function supportsDenormalization( $data, $type, $format = null ) {
-		if ( $format == "xml" && $type == FraudFilter::GetClassName()) {
+		if ( $format == "xml" && $type == FraudFilterRuleCollection::GetClassName()) {
 			return true;
 		}
 		return false;
