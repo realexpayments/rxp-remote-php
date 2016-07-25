@@ -31,13 +31,13 @@ class FraudFilter {
 	private $mode;
 
 	/**
-	 * @var string The result of the fraudfilter request
+	 * @var string The result of the fraud filter request
 	 *
 	 */
 	private $result;
 
 	/**
-	 * @var FraudFilterResultCheck[] The list of fraudfilter check results.
+	 * @var FraudFilterRuleCollection The list of fraud filter rules.
 	 *
 	 */
 	private $rules;
@@ -121,7 +121,7 @@ class FraudFilter {
 	/**
 	 * Getter for checks
 	 *
-	 * @return FraudFilterResultRule[]
+	 * @return FraudFilterRuleCollection
 	 */
 	public function getRules() {
 		return $this->rules;
@@ -130,7 +130,7 @@ class FraudFilter {
 	/**
 	 * Setter for checks
 	 *
-	 * @param FraudFilterResultRule[] $rules
+	 * @param FraudFilterRuleCollection $rules
 	 */
 	public function setRules( $rules ) {
 		$this->rules = $rules;
@@ -139,7 +139,7 @@ class FraudFilter {
 	/**
 	 * Setter for checks
 	 *
-	 * @param FraudFilterResultRule[] $rules
+	 * @param FraudFilterRuleCollection $rules
 	 * @return  FraudFilter
 	 */
 	public function addRules( $rules ) {
@@ -163,6 +163,9 @@ class FraudFilter {
 		if(is_array($rules)){
 			foreach($this->getRules() as $rule)
 			{
+				/**
+				 * @var FraudFilterRule $rule
+				 */
 				$result .= $rule->getId();
 				$result .= "-";
 				$result .= $rule->getName();

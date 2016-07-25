@@ -418,7 +418,6 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$request = new PaymentRequest();
 		$request->setAccount( SampleXmlValidationUtils::DCC_AUTH_ACCOUNT );
 		$request->setMerchantId( SampleXmlValidationUtils::DCC_AUTH_MERCHANT_ID );
-		$request->setType( PaymentType::DCC_AUTH );
 
 		$card = new Card();
 		$card->setExpiryDate( SampleXmlValidationUtils::DCC_AUTH_CARD_EXPIRY_DATE );
@@ -2105,7 +2104,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * Tests Fraud Code Request Type
 	 */
-	public function testPaymentRequestCodeXmlFromFile() {
+	public function testPaymentRequestFraudReasonCodeXmlFromFile() {
 		$path   = SampleXmlValidationUtils::HOLD_PAYMENT_REQUEST_XML_PATH;
 		$prefix = __DIR__ . '/../../../resources';
 		$xml    = file_get_contents( $prefix . $path );
@@ -2118,9 +2117,9 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * Tests Fraud Code Request Type
+	 * Tests all reasons code cases
 	 */
-	public function testPaymentRequestCodeXmlFromCode() {
+	public function testPaymentRequestAllReasonCodeXmlFromCode() {
 		$paymentRequest = new PaymentRequest();
 		$paymentRequest->addAccount(SampleXmlValidationUtils::HOLD_ACCOUNT);
 		$paymentRequest->addMerchantId(SampleXmlValidationUtils::HOLD_MERCHANT_ID);
@@ -2153,7 +2152,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * Tests Fraud Code Request Type
+	 * Tests Fake reason code
 	 */
 	public function testPaymentRequestCodeXmlFromCodeFailed() {
 		$paymentRequest = new PaymentRequest();
@@ -2188,10 +2187,10 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * Tests conversion of {@link PaymentRequest} from XML file for dcc realvault payment types.
+	 * Tests conversion of {@link PaymentRequest} from XML file for stored card dcc rate payment types.
 	 */
-	public function testPaymentRequestXmlFromFileDccRealVault() {
-		$path   = SampleXmlValidationUtils::DCC_REAL_VAULT_REQUEST_XML_PATH;
+	public function testPaymentRequestXmlFromFileDccStoredCard() {
+		$path   = SampleXmlValidationUtils::DCC_STORED_CARD_REQUEST_XML_PATH;
 		$prefix = __DIR__ . '/../../../resources';
 		$xml    = file_get_contents( $prefix . $path );
 
@@ -2199,7 +2198,7 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		/* @var PaymentRequest $fromXmlRequest */
 		$fromXmlRequest = new PaymentRequest();
 		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
-		SampleXmlValidationUtils::checkUnmarshalledDccRealVaultPaymentRequest( $fromXmlRequest, $this );
+		SampleXmlValidationUtils::checkUnmarshalledDccStoreCardPaymentRequest( $fromXmlRequest, $this );
 	}
 
 	/**
@@ -2218,8 +2217,25 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		SampleXmlValidationUtils::checkUnmarshalledHoldReasonHoldPaymentRequest( $fromXmlRequest, $this );
 
 	}
+
 	/**
-	 * Tests conversion of {@link PaymentRequest} from XML file for hold payment types.
+	 * Tests conversion of {@link PaymentRequest} from XML file for false positive reason code.
+	 */
+	public function testPaymentRequestXmlFromFileFalsePositiveReasonCodeHold() {
+
+		$path   = SampleXmlValidationUtils::HOLD_PAYMENT_REASON_FALSE_REQUEST_XML_PATH;
+		$prefix = __DIR__ . '/../../../resources';
+		$xml    = file_get_contents( $prefix . $path );
+
+		//unmarshal back to request
+		/* @var PaymentRequest $fromXmlRequest */
+		$fromXmlRequest = new PaymentRequest();
+		$fromXmlRequest = $fromXmlRequest->fromXml( $xml );
+		SampleXmlValidationUtils::checkUnmarshalledHoldReasonHoldPaymentRequest( $fromXmlRequest, $this );
+
+	}
+	/**
+	 * Tests conversion of {@link PaymentRequest} from XML file for release payment types.
 	 */
 	public function testPaymentRequestXmlFromFileHoldReasonCodeRelease() {
 
@@ -2249,4 +2265,20 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$fromXmlResponse = $fromXmlResponse->fromXml( $xml );
 		SampleXmlValidationUtils::checkUnmarshalledPaymentResponseWithFraudFilter( $fromXmlResponse, $this );
 	}
+
+    /**
+     * Tests conversion of {@link PaymentResponse} from XML file
+     */
+    public function testPaymentResponseWithFraudFilterNoRulesXmlFromFile() {
+        $path   = SampleXmlValidationUtils::PAYMENT_RESPONSE_WITH_FRAUD_FILTER_NO_RULES_XML_PATH;
+        $prefix = __DIR__ . '/../../../resources';
+        $xml    = file_get_contents( $prefix . $path );
+
+        //unmarshal back to response
+        /* @var PaymentResponse $fromXmlResponse */
+        $fromXmlResponse = new PaymentResponse();
+        $fromXmlResponse = $fromXmlResponse->fromXml( $xml );
+        SampleXmlValidationUtils::checkUnmarshalledPaymentResponseWithFraudFilterNoRules( $fromXmlResponse, $this );
+    }
+
 }

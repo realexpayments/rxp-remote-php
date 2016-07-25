@@ -8,6 +8,7 @@ use com\realexpayments\remote\sdk\domain\payment\AddressType;
 use com\realexpayments\remote\sdk\domain\payment\AutoSettleFlag;
 use com\realexpayments\remote\sdk\domain\payment\FraudFilter;
 use com\realexpayments\remote\sdk\domain\payment\FraudFilterMode;
+use com\realexpayments\remote\sdk\domain\payment\FraudFilterResult;
 use com\realexpayments\remote\sdk\domain\payment\FraudFilterType;
 use com\realexpayments\remote\sdk\domain\payment\PaymentRequest;
 use com\realexpayments\remote\sdk\domain\payment\PaymentResponse;
@@ -36,6 +37,7 @@ class SampleXmlValidationUtils {
 	const PAYMENT_REQUEST_WITH_SYMBOLS_XML_PATH = "/sample-xml/payment-request-sample-with-symbols.xml";
 	const PAYMENT_RESPONSE_DCC_INFO_XML_PATH = "/sample-xml/payment-response-dcc-info.xml";
 	const PAYMENT_RESPONSE_WITH_FRAUD_FILTER_XML_PATH = "/sample-xml/payment-response-fraud.xml";
+	const PAYMENT_RESPONSE_WITH_FRAUD_FILTER_NO_RULES_XML_PATH = "/sample-xml/payment-response-fraud-no-rules.xml";
 
 
 
@@ -57,6 +59,7 @@ class SampleXmlValidationUtils {
 	const CREDIT_PAYMENT_REQUEST_XML_PATH = "/sample-xml/credit-payment-request-sample.xml";
 	const HOLD_PAYMENT_REQUEST_XML_PATH = "/sample-xml/hold-payment-request-sample.xml";
 	const HOLD_PAYMENT_REASON_REQUEST_XML_PATH = "/sample-xml/hold-payment-reason-hold-request.xml";
+	const HOLD_PAYMENT_REASON_FALSE_REQUEST_XML_PATH = "/sample-xml/hold-payment-reason-falsepositive-request.xml";
 	const RELEASE_PAYMENT_REASON_REQUEST_XML_PATH = "/sample-xml/hold-payment-reason-release-request.xml";
 	const RELEASE_PAYMENT_REQUEST_XML_PATH = "/sample-xml/release-payment-request-sample.xml";
 	const RECEIPT_IN_PAYMENT_REQUEST_XML_PATH = "/sample-xml/receipt-in-payment-request-sample.xml";
@@ -72,7 +75,7 @@ class SampleXmlValidationUtils {
 	const DCC_RATE_LOOKUP_PAYMENT_REQUEST_XML_PATH = "/sample-xml/dcc-rate-lookup-payment-request-sample.xml";
 	const DCC_RATE_AUTH_PAYMENT_REQUEST_XML_PATH = "/sample-xml/dcc-rate-auth-payment-request-sample.xml";
 	const RECEIPT_IN_OTB_PAYMENT_REQUEST_XML_PATH = "/sample-xml/receipt-in-otb-payment-request-sample.xml";
-	const DCC_REAL_VAULT_REQUEST_XML_PATH = "/sample-xml/realvault-dccrate-request.xml";
+	const DCC_STORED_CARD_REQUEST_XML_PATH = "/sample-xml/storedcard-dccrate-request.xml";
 
 
 	//Card
@@ -278,17 +281,17 @@ class SampleXmlValidationUtils {
 	const OTB_ORDER_ID = "3be87fe9-db95-470f-ab04-b82f965f5b17";
 	const OTB_REQUEST_HASH = "c05460fa3d195c1ee6ac97d3594e8cace4449cb2";
 
-	//credit fields
-	const CREDIT_TIMESTAMP = "20151204145825";
-	const CREDIT_MERCHANT_ID = "thestore";
-	const CREDIT_ACCOUNT = "internet";
-	const CREDIT_PASREF = "13276780809852";
-	const CREDIT_AUTH_CODE = "AP12346";
-	const CREDIT_AMOUNT = "3000";
-	const CREDIT_CURRENCY = "EUR";
-	const CREDIT_ORDER_ID = "6df026a7-15d6-4b92-86e1-9f7b2b1d97c5";
-	const CREDIT_REFUND_HASH = "52ed08590ab0bb6c2e5e4c9584aca0f6e9635a3a";
-	const CREDIT_REQUEST_HASH = "c1319b2999608fcfa3e71d583627affaeb25d961";
+	//refund fields
+	const REFUND_TIMESTAMP = "20151204145825";
+	const REFUND_MERCHANT_ID = "thestore";
+	const REFUND_ACCOUNT = "internet";
+	const REFUND_PASREF = "13276780809852";
+	const REFUND_AUTH_CODE = "AP12346";
+	const REFUND_AMOUNT = "3000";
+	const REFUND_CURRENCY = "EUR";
+	const REFUND_ORDER_ID = "6df026a7-15d6-4b92-86e1-9f7b2b1d97c5";
+	const REFUND_REFUND_HASH = "52ed08590ab0bb6c2e5e4c9584aca0f6e9635a3a";
+	const REFUND_REQUEST_HASH = "c1319b2999608fcfa3e71d583627affaeb25d961";
 
 	//hold fields
 	const HOLD_TIMESTAMP = "20151204161419";
@@ -465,21 +468,21 @@ class SampleXmlValidationUtils {
 	const DCC_RATE_CCP = "fexco";
 	const DCC_RATE_TYPE = "1";
 
-	//dcc realvaulr
+	//dcc STORED_CARD_DCC_RATE
 	const STORED_CARD_DCC_RATE = PaymentType::STORED_CARD_DCC_RATE;
-	const DCC_REAL_VAULT_TIMESTAMP = "20140520151742";
-	const DCC_REAL_VAULT_MERCHANT_ID = "yourmerchantid";
-	const DCC_REAL_VAULT_ACCOUNT = "internet";
-	const DCC_REAL_VAULT_ORDER_ID = "transaction01";
-	const DCC_REAL_VAULT_CURRENCY = "EUR";
-	const DCC_REAL_VAULT_AMOUNT = "9999";
-	const DCC_REAL_VAULT_PAYREF = "smith01";
-	const DCC_REAL_VAULT_PAYMENT_METHOD = "visa01";
-	const DCC_REAL_VAULT_DCC_CCP = "fexco";
-	const DCC_REAL_VAULT_DCC_TYPE = "1";
-	const DCC_REAL_VAULT_REQUEST_HASH = "500a6c67d7ec3e196b60efdfb4cdc5ab8366416a";
-	const DCC_REAL_VAULT_COMMENT_1 = "";
-	const DCC_REAL_VAULT_COMMENT_2 = "";
+	const STORED_CARD_DCC_RATE_TIMESTAMP = "20140520151742";
+	const STORED_CARD_DCC_RATE_MERCHANT_ID = "yourmerchantid";
+	const STORED_CARD_DCC_RATE_ACCOUNT = "internet";
+	const STORED_CARD_DCC_RATE_ORDER_ID = "transaction01";
+	const STORED_CARD_DCC_RATE_CURRENCY = "EUR";
+	const STORED_CARD_DCC_RATE_AMOUNT = "9999";
+	const STORED_CARD_DCC_RATE_PAYREF = "smith01";
+	const STORED_CARD_DCC_RATE_PAYMENT_METHOD = "visa01";
+	const STORED_CARD_DCC_RATE_DCC_CCP = "fexco";
+	const STORED_CARD_DCC_RATE_DCC_TYPE = "1";
+	const STORED_CARD_DCC_RATE_REQUEST_HASH = "500a6c67d7ec3e196b60efdfb4cdc5ab8366416a";
+	const STORED_CARD_DCC_RATE_COMMENT_1 = "";
+	const STORED_CARD_DCC_RATE_COMMENT_2 = "";
 
 
 
@@ -531,20 +534,31 @@ class SampleXmlValidationUtils {
 	const RECEIPT_IN_OTB_CVN = "123";
 	const RECEIPT_IN_OTB_REQUEST_HASH = "ceeeb16edfeda0dc919db1be1b0e9db7b01b24cf";
 
-	const FRAUD_FILTER_MODE = FraudFilterMode::ACTIVE;
-	const FRAUD_FILTER_RESULT = "BLOCK";
-	const FRAUD_FILTER_RULE_1_ID = "e5964ac0-ace0-477a-98ef-f467772d6a76";
-	const FRAUD_FILTER_RULE_1_NAME = "ScreenedCardNumber";
-	const FRAUD_FILTER_RULE_1_VALUE = "PASS";
-	const FRAUD_FILTER_RULE_2_ID = "234mk2k3-ace0-477a-98ef-qe782bqa5f4s";
-	const FRAUD_FILTER_RULE_2_NAME = "GeoShipBillCo";
-	const FRAUD_FILTER_RULE_2_VALUE = "HOLD";
-	const FRAUD_FILTER_RULE_3_ID = "d6y38qk3-ace0-477a-98ef-23kjh234i5o2";
-	const FRAUD_FILTER_RULE_3_NAME = "PtrnCardNumName";
-	const FRAUD_FILTER_RULE_3_VALUE = "BLOCK";
-	const FRAUD_FILTER_RULE_4_ID = "234mk2k3-ace0-477a-98ef-8h9jn34nj456";
-	const FRAUD_FILTER_RULE_4_NAME = "VelCardNum24h";
-	const FRAUD_FILTER_RULE_4_VALUE = "HOLD";
+    //fraud filter
+	const FRAUD_FILTER_MODE = FraudFilterMode::PASSIVE;
+	const FRAUD_FILTER_RESULT = "PASS";
+	const FRAUD_FILTER_RULE_1_ID = "478a55db-5430-4c2a-afca-7dde181eb9f4";
+	const FRAUD_FILTER_RULE_1_NAME = "Customer IP List";
+	const FRAUD_FILTER_RULE_1_ACTION = "PASS";
+	const FRAUD_FILTER_RULE_2_ID = "cf609cf9-9e5a-4700-ac69-8aa09c119305";
+	const FRAUD_FILTER_RULE_2_NAME = "Card Numbers";
+	const FRAUD_FILTER_RULE_2_ACTION = "PASS";
+    const FRAUD_FILTER_TIMESTAMP = "20150224160453";
+    const FRAUD_FILTER_MERCHANT_ID = "testMerchant";
+    const FRAUD_FILTER_ACCOUNT = "internet";
+    const FRAUD_FILTER_ORDER_ID = "OrderOne";
+    const FRAUD_FILTER_AUTH_CODE = "071757";
+    const FRAUD_FILTER_RESULTT= "00";
+    const FRAUD_FILTER_CVN_RESULT = "M";
+    const FRAUD_FILTER_AVS_POST = "U";
+    const FRAUD_FILTER_AVS_ADD = "U";
+    const FRAUD_FILTER_BATCH_ID = "3452232";
+    const FRAUD_FILTER_MESSAGE = "(00)AUTH CODE 071757";
+    const FRAUD_FILTER_PAS_REF = "14247938905185175";
+    const FRAUD_FILTER_TIME_TAKEN = "2";
+    const FRAUD_FILTER_AUTH_TIME = "2";
+    const FRAUD_FILTER_HASH = "bd5550299e4508873a2cf6e435ad74a5455ad648";
+
 
 
 	static function Init() {
@@ -789,18 +803,18 @@ class SampleXmlValidationUtils {
 	public static function checkUnmarshalledCreditPaymentRequest( PaymentRequest $fromXmlRequest, PHPUnit_Framework_TestCase $testCase ) {
 
 		$testCase->assertNotNull( $fromXmlRequest );
-		$testCase->assertEquals( PaymentType::CREDIT, $fromXmlRequest->getType() );
+		$testCase->assertEquals( PaymentType::REFUND, $fromXmlRequest->getType() );
 
-		$testCase->assertEquals( self::CREDIT_ACCOUNT, $fromXmlRequest->getAccount() );
-		$testCase->assertEquals( self::CREDIT_MERCHANT_ID, $fromXmlRequest->getMerchantId() );
-		$testCase->assertEquals( self::CREDIT_TIMESTAMP, $fromXmlRequest->getTimeStamp() );
-		$testCase->assertEquals( self::CREDIT_ORDER_ID, $fromXmlRequest->getOrderId() );
-		$testCase->assertEquals( self::CREDIT_REQUEST_HASH, $fromXmlRequest->getHash() );
-		$testCase->assertEquals( self::CREDIT_AMOUNT, $fromXmlRequest->getAmount()->getAmount() );
-		$testCase->assertEquals( self::CREDIT_CURRENCY, $fromXmlRequest->getAmount()->getCurrency() );
-		$testCase->assertEquals( self::CREDIT_PASREF, $fromXmlRequest->getPaymentsReference() );
-		$testCase->assertEquals( self::CREDIT_AUTH_CODE, $fromXmlRequest->getAuthCode() );
-		$testCase->assertEquals( self::CREDIT_REFUND_HASH, $fromXmlRequest->getRefundHash() );
+		$testCase->assertEquals( self::REFUND_ACCOUNT, $fromXmlRequest->getAccount() );
+		$testCase->assertEquals( self::REFUND_MERCHANT_ID, $fromXmlRequest->getMerchantId() );
+		$testCase->assertEquals( self::REFUND_TIMESTAMP, $fromXmlRequest->getTimeStamp() );
+		$testCase->assertEquals( self::REFUND_ORDER_ID, $fromXmlRequest->getOrderId() );
+		$testCase->assertEquals( self::REFUND_REQUEST_HASH, $fromXmlRequest->getHash() );
+		$testCase->assertEquals( self::REFUND_AMOUNT, $fromXmlRequest->getAmount()->getAmount() );
+		$testCase->assertEquals( self::REFUND_CURRENCY, $fromXmlRequest->getAmount()->getCurrency() );
+		$testCase->assertEquals( self::REFUND_PASREF, $fromXmlRequest->getPaymentsReference() );
+		$testCase->assertEquals( self::REFUND_AUTH_CODE, $fromXmlRequest->getAuthCode() );
+		$testCase->assertEquals( self::REFUND_REFUND_HASH, $fromXmlRequest->getRefundHash() );
 	}
 
 	/**
@@ -839,9 +853,28 @@ class SampleXmlValidationUtils {
 		$testCase->assertEquals( self::HOLD_TIMESTAMP, $fromXmlRequest->getTimestamp() );
 		$testCase->assertEquals( self::HOLD_ORDER_ID, $fromXmlRequest->getOrderId() );
 		$testCase->assertEquals( self::HOLD_REQUEST_HASH, $fromXmlRequest->getHash() );
-		$testCase->assertEquals( ReasonCode::HOLD, $fromXmlRequest->getReasonCode() );
 		$testCase->assertEquals( self::HOLD_PASREF, $fromXmlRequest->getPaymentsReference() );
-	}	
+	}
+
+	/**
+	 * Check all fields match expected values.
+	 *
+	 * @param PaymentRequest $fromXmlRequest
+	 * @param PHPUnit_Framework_TestCase $testCase
+	 */
+	public static function checkUnmarshalledHoldReasonFalsePositivePaymentRequest( PaymentRequest $fromXmlRequest, PHPUnit_Framework_TestCase $testCase ) {
+
+		$testCase->assertNotNull( $fromXmlRequest );
+		$testCase->assertEquals( PaymentType::HOLD, $fromXmlRequest->getType() );
+
+		$testCase->assertEquals( self::HOLD_ACCOUNT, $fromXmlRequest->getAccount() );
+		$testCase->assertEquals( self::HOLD_MERCHANT_ID, $fromXmlRequest->getMerchantId() );
+		$testCase->assertEquals( self::HOLD_TIMESTAMP, $fromXmlRequest->getTimestamp() );
+		$testCase->assertEquals( self::HOLD_ORDER_ID, $fromXmlRequest->getOrderId() );
+		$testCase->assertEquals( self::HOLD_REQUEST_HASH, $fromXmlRequest->getHash() );
+		$testCase->assertEquals( self::HOLD_PASREF, $fromXmlRequest->getPaymentsReference() );
+		$testCase->assertEquals( ReasonCode::FALSE_POSITIVE ,$fromXmlRequest->getReasonCode() );
+	}
 	
 	/**
 	 * Check all fields match expected values.
@@ -859,7 +892,6 @@ class SampleXmlValidationUtils {
 		$testCase->assertEquals( self::HOLD_TIMESTAMP, $fromXmlRequest->getTimestamp() );
 		$testCase->assertEquals( self::HOLD_ORDER_ID, $fromXmlRequest->getOrderId() );
 		$testCase->assertEquals( self::HOLD_REQUEST_HASH, $fromXmlRequest->getHash() );
-		$testCase->assertEquals( ReasonCode::RELEASE, $fromXmlRequest->getReasonCode() );
 		$testCase->assertEquals( self::HOLD_PASREF, $fromXmlRequest->getPaymentsReference() );
 	}
 
@@ -1166,7 +1198,6 @@ class SampleXmlValidationUtils {
 	public static function checkUnmarshalledDccAuthLookUpPaymentRequest( PaymentRequest $fromXmlRequest, PHPUnit_Framework_TestCase $testCase ) {
 		$testCase->assertNotNull( $fromXmlRequest );
 
-		$testCase->assertEquals( PaymentType::DCC_AUTH, $fromXmlRequest->getType() );
 		$testCase->assertEquals( self::DCC_AUTH_ACCOUNT, $fromXmlRequest->getAccount() );
 		$testCase->assertEquals( self::DCC_AUTH_MERCHANT_ID, $fromXmlRequest->getMerchantId() );
 		$testCase->assertEquals( self::DCC_AUTH_TIMESTAMP, $fromXmlRequest->getTimestamp() );
@@ -1530,26 +1561,26 @@ class SampleXmlValidationUtils {
 	 * @param PaymentRequest $fromXmlRequest
 	 * @param PHPUnit_Framework_TestCase $testCase
 	 */
-	public static function checkUnmarshalledDccRealVaultPaymentRequest( PaymentRequest $fromXmlRequest, PHPUnit_Framework_TestCase $testCase ) {
+	public static function checkUnmarshalledDccStoreCardPaymentRequest(PaymentRequest $fromXmlRequest, PHPUnit_Framework_TestCase $testCase ) {
 		$testCase->assertNotNull( $fromXmlRequest );
 
 		$testCase->assertEquals( self::STORED_CARD_DCC_RATE, $fromXmlRequest->getType() );
-		$testCase->assertEquals( self::DCC_REAL_VAULT_ACCOUNT, $fromXmlRequest->getAccount() );
-		$testCase->assertEquals( self::DCC_REAL_VAULT_MERCHANT_ID, $fromXmlRequest->getMerchantId() );
-		$testCase->assertEquals( self::DCC_REAL_VAULT_TIMESTAMP, $fromXmlRequest->getTimestamp() );
-		$testCase->assertEquals( self::DCC_REAL_VAULT_REQUEST_HASH, $fromXmlRequest->getHash() );
+		$testCase->assertEquals( self::STORED_CARD_DCC_RATE_ACCOUNT, $fromXmlRequest->getAccount() );
+		$testCase->assertEquals( self::STORED_CARD_DCC_RATE_MERCHANT_ID, $fromXmlRequest->getMerchantId() );
+		$testCase->assertEquals( self::STORED_CARD_DCC_RATE_TIMESTAMP, $fromXmlRequest->getTimestamp() );
+		$testCase->assertEquals( self::STORED_CARD_DCC_RATE_REQUEST_HASH, $fromXmlRequest->getHash() );
 
-		$testCase->assertEquals( self::DCC_REAL_VAULT_ORDER_ID, $fromXmlRequest->getOrderId() );
-		$testCase->assertEquals( self::DCC_REAL_VAULT_AMOUNT, $fromXmlRequest->getAmount()->getAmount() );
-		$testCase->assertEquals( self::DCC_REAL_VAULT_CURRENCY, $fromXmlRequest->getAmount()->getCurrency() );
-		$testCase->assertEquals( self::DCC_REAL_VAULT_DCC_CCP, $fromXmlRequest->getDccInfo()->getDccProcessor() );
-		$testCase->assertEquals( self::DCC_REAL_VAULT_DCC_TYPE, $fromXmlRequest->getDccInfo()->getType() );
+		$testCase->assertEquals( self::STORED_CARD_DCC_RATE_ORDER_ID, $fromXmlRequest->getOrderId() );
+		$testCase->assertEquals( self::STORED_CARD_DCC_RATE_AMOUNT, $fromXmlRequest->getAmount()->getAmount() );
+		$testCase->assertEquals( self::STORED_CARD_DCC_RATE_CURRENCY, $fromXmlRequest->getAmount()->getCurrency() );
+		$testCase->assertEquals( self::STORED_CARD_DCC_RATE_DCC_CCP, $fromXmlRequest->getDccInfo()->getDccProcessor() );
+		$testCase->assertEquals( self::STORED_CARD_DCC_RATE_DCC_TYPE, $fromXmlRequest->getDccInfo()->getType() );
 
-		$testCase->assertEquals( self::DCC_REAL_VAULT_COMMENT_1, $fromXmlRequest->getComments()->get(0)->getComment() );
-		$testCase->assertEquals( self::DCC_REAL_VAULT_COMMENT_2, $fromXmlRequest->getComments()->get(1)->getComment() );
+		$testCase->assertEquals( self::STORED_CARD_DCC_RATE_COMMENT_1, $fromXmlRequest->getComments()->get(0)->getComment() );
+		$testCase->assertEquals( self::STORED_CARD_DCC_RATE_COMMENT_2, $fromXmlRequest->getComments()->get(1)->getComment() );
 
-		$testCase->assertEquals( self::DCC_REAL_VAULT_PAYREF, $fromXmlRequest->getPayerRef() );
-		$testCase->assertEquals( self::DCC_REAL_VAULT_PAYMENT_METHOD, $fromXmlRequest->getPaymentMethod() );
+		$testCase->assertEquals( self::STORED_CARD_DCC_RATE_PAYREF, $fromXmlRequest->getPayerRef() );
+		$testCase->assertEquals( self::STORED_CARD_DCC_RATE_PAYMENT_METHOD, $fromXmlRequest->getPaymentMethod() );
 
 	}
 
@@ -1568,17 +1599,66 @@ class SampleXmlValidationUtils {
 		$testCase->assertEquals( self::FRAUD_FILTER_RESULT, $fraudFilter->getResult());
 		$testCase->assertEquals( self::FRAUD_FILTER_RULE_1_ID, $rules->get(0)->getId());
 		$testCase->assertEquals( self::FRAUD_FILTER_RULE_1_NAME, $rules->get(0)->getName());
-		$testCase->assertEquals( self::FRAUD_FILTER_RULE_1_VALUE, $rules->get(0)->getValue());
+		$testCase->assertEquals( self::FRAUD_FILTER_RULE_1_ACTION, $rules->get(0)->getAction());
 
 		$testCase->assertEquals( self::FRAUD_FILTER_RULE_2_ID, $rules->get(1)->getId());
 		$testCase->assertEquals( self::FRAUD_FILTER_RULE_2_NAME, $rules->get(1)->getName());
-		$testCase->assertEquals( self::FRAUD_FILTER_RULE_2_VALUE, $rules->get(1)->getValue());
+		$testCase->assertEquals( self::FRAUD_FILTER_RULE_2_ACTION, $rules->get(1)->getAction());
 
-		$testCase->assertEquals( self::FRAUD_FILTER_RULE_3_ID, $rules->get(2)->getId());
-		$testCase->assertEquals( self::FRAUD_FILTER_RULE_3_NAME, $rules->get(2)->getName());
-		$testCase->assertEquals( self::FRAUD_FILTER_RULE_3_VALUE, $rules->get(2)->getValue());
+
+		$testCase->assertEquals( self::FRAUD_FILTER_TIMESTAMP, $fromXmlResponse->getTimeStamp());
+		$testCase->assertEquals( self::FRAUD_FILTER_MERCHANT_ID, $fromXmlResponse->getMerchantId());
+		$testCase->assertEquals( self::FRAUD_FILTER_ACCOUNT, $fromXmlResponse->getAccount());
+		$testCase->assertEquals( self::FRAUD_FILTER_ORDER_ID, $fromXmlResponse->getOrderId());
+		$testCase->assertEquals( self::FRAUD_FILTER_AUTH_CODE, $fromXmlResponse->getAuthCode());
+		$testCase->assertEquals( self::FRAUD_FILTER_RESULTT, $fromXmlResponse->getResult());
+		$testCase->assertEquals( self::FRAUD_FILTER_CVN_RESULT, $fromXmlResponse->getCvnResult());
+		$testCase->assertEquals( self::FRAUD_FILTER_AVS_POST, $fromXmlResponse->getAvsPostcodeResponse());
+		$testCase->assertEquals( self::FRAUD_FILTER_AVS_ADD, $fromXmlResponse->getAvsAddressResponse());
+		$testCase->assertEquals( self::FRAUD_FILTER_BATCH_ID, $fromXmlResponse->getBatchId());
+		$testCase->assertEquals( self::FRAUD_FILTER_MESSAGE, $fromXmlResponse->getMessage());
+		$testCase->assertEquals( self::FRAUD_FILTER_PAS_REF, $fromXmlResponse->getPaymentsReference());
+		$testCase->assertEquals( self::FRAUD_FILTER_TIME_TAKEN, $fromXmlResponse->getTimeTaken());
+		$testCase->assertEquals( self::FRAUD_FILTER_AUTH_TIME, $fromXmlResponse->getAuthTimeTaken());
+		$testCase->assertEquals( self::FRAUD_FILTER_HASH, $fromXmlResponse->getHash());
+
+
 
 	}
+
+    /**
+     *  Check all fields match expected values.
+     *
+     * @param PaymentResponse $fromXmlResponse
+     * @param PHPUnit_Framework_TestCase $testCase
+     */
+    public static function checkUnmarshalledPaymentResponseWithFraudFilterNoRules( PaymentResponse $fromXmlResponse, PHPUnit_Framework_TestCase $testCase, $ignoreTssChecks = false ) {
+
+        $fraudFilter = $fromXmlResponse->getFraudFilter();
+
+
+        $testCase->assertEquals( FraudFilterMode::ACTIVE, $fraudFilter->getMode());
+        $testCase->assertEquals( FraudFilterResult::NOT_EXECUTED, $fraudFilter->getResult());
+        $testCase->assertEmpty($fraudFilter->getRules());
+
+        $testCase->assertEquals( self::FRAUD_FILTER_TIMESTAMP, $fromXmlResponse->getTimeStamp());
+        $testCase->assertEquals( self::FRAUD_FILTER_MERCHANT_ID, $fromXmlResponse->getMerchantId());
+        $testCase->assertEquals( self::FRAUD_FILTER_ACCOUNT, $fromXmlResponse->getAccount());
+        $testCase->assertEquals( self::FRAUD_FILTER_ORDER_ID, $fromXmlResponse->getOrderId());
+        $testCase->assertEquals( self::FRAUD_FILTER_AUTH_CODE, $fromXmlResponse->getAuthCode());
+        $testCase->assertEquals( self::FRAUD_FILTER_RESULTT, $fromXmlResponse->getResult());
+        $testCase->assertEquals( self::FRAUD_FILTER_CVN_RESULT, $fromXmlResponse->getCvnResult());
+        $testCase->assertEquals( self::FRAUD_FILTER_AVS_POST, $fromXmlResponse->getAvsPostcodeResponse());
+        $testCase->assertEquals( self::FRAUD_FILTER_AVS_ADD, $fromXmlResponse->getAvsAddressResponse());
+        $testCase->assertEquals( self::FRAUD_FILTER_BATCH_ID, $fromXmlResponse->getBatchId());
+        $testCase->assertEquals( self::FRAUD_FILTER_MESSAGE, $fromXmlResponse->getMessage());
+        $testCase->assertEquals( self::FRAUD_FILTER_PAS_REF, $fromXmlResponse->getPaymentsReference());
+        $testCase->assertEquals( self::FRAUD_FILTER_TIME_TAKEN, $fromXmlResponse->getTimeTaken());
+        $testCase->assertEquals( self::FRAUD_FILTER_AUTH_TIME, $fromXmlResponse->getAuthTimeTaken());
+        $testCase->assertEquals( self::FRAUD_FILTER_HASH, $fromXmlResponse->getHash());
+
+
+    }
 
 }
 

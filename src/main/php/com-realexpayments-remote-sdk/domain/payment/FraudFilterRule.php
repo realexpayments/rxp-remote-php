@@ -29,7 +29,7 @@ class FraudFilterRule {
 	 * @var string The value of the fraud filter rule
 	 *
 	 */
-	private $value;
+	private $action;
 
 	/**
 	 * Getter for id
@@ -54,17 +54,17 @@ class FraudFilterRule {
 	 *
 	 * @return string
 	 */
-	public function getValue() {
-		return $this->value;
+	public function getAction() {
+		return $this->action;
 	}
 
 	/**
 	 * Setter for value
 	 *
-	 * @param string $value
+	 * @param string $action
 	 */
-	public function setValue( $value ) {
-		$this->value = $value;
+	public function setAction($action ) {
+		$this->action = $action;
 	}
 
 	/**

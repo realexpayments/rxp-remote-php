@@ -63,10 +63,10 @@ class FraudFilterRuleCollection {
 	 * Set FraudFilterRule at index
 	 *
 	 * @param $index
-	 * @param FraudFilterRule $value
+	 * @param FraudFilterRule $action
 	 */
-	public function set( $index, FraudFilterRule $value ) {
-		$this->rules[ $index ] = $value;
+	public function set( $index, FraudFilterRule $action ) {
+		$this->rules[ $index ] = $action;
 	}
 
 	/**
