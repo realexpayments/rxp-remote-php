@@ -511,11 +511,11 @@ use com\realexpayments\remote\sdk\utils\XmlUtils;
  * $result = $response->getFraudFilter()->getResult();
  * //array of FraudFilterResultRule
  * $rules = $response->getFraudFilter()->getRules();
- * foreach($rules as $rule)
+ * foreach($rules->getRules() as $rule)
  * {
  *    echo $rule->getId();
  *    echo $rule->getName();
- *    echo $rule->getValue();
+ *    echo $rule->getAction();
  * }
  * //or
  * echo $rules->get(0)->getId();
