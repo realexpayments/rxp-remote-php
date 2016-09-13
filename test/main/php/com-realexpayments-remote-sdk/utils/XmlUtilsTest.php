@@ -558,10 +558,10 @@ class XmlUtilsTest extends \PHPUnit_Framework_TestCase {
 		$payer->addAddress( $address )
 		      ->addComment( SampleXmlValidationUtils::PAYER_NEW_PAYER_COMMENT_1 )
 		      ->addComment( SampleXmlValidationUtils::PAYER_NEW_PAYER_COMMENT_2 )
-		      ->addMobileNumber( SampleXmlValidationUtils::PAYER_NEW_PAYER_HOME_NUMBER )
+		      ->addHomePhoneNumber( SampleXmlValidationUtils::PAYER_NEW_PAYER_HOME_NUMBER )
 		      ->addWorkPhoneNumber( SampleXmlValidationUtils::PAYER_NEW_PAYER_WORK_NUMBER )
 		      ->addFaxPhoneNumber( SampleXmlValidationUtils::PAYER_NEW_PAYER_FAX_NUMBER )
-		      ->addMobileNumber( SampleXmlValidationUtils::PAYER_NEW_PAYER_MOBILE_NUMBER );
+		      ->addMobilePhoneNumber( SampleXmlValidationUtils::PAYER_NEW_PAYER_MOBILE_NUMBER );
 
 		$request->addPayer( $payer )
 		        ->addTimeStamp( SampleXmlValidationUtils::PAYER_NEW_TIMESTAMP )

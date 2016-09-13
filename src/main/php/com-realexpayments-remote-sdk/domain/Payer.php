@@ -430,7 +430,7 @@ class Payer {
 	 *
 	 * @return Payer
 	 */
-	public function addMobileNumber( $phoneNumber ) {
+	public function addMobilePhoneNumber( $phoneNumber ) {
 		if ( is_null( $this->phoneNumbers ) ) {
 			$this->phoneNumbers = new PhoneNumbers();
 		}
