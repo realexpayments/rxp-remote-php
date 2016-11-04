@@ -31,9 +31,9 @@ use com\realexpayments\remote\sdk\utils\XmlUtils;
  *      ->addType(CardType::VISA)
  *      ->addNumber("4242424242424242")
  *      ->addExpiryDate("0525")
- *    ->addCvn("123")
- *    ->addCvnPresenceIndicator(PresenceIndicator::CVN_PRESENT);
- *    ->addCardHolderName("Joe Bloggs");
+ *    	->addCvn("123")
+ *    	->addCvnPresenceIndicator(PresenceIndicator::CVN_PRESENT);
+ *    	->addCardHolderName("Joe Bloggs");
  *
  * $request = (new PaymentRequest())
  *      ->addMerchantId("yourMerchantId")

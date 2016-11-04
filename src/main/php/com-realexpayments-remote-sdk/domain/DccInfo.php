@@ -22,7 +22,7 @@ namespace com\realexpayments\remote\sdk\domain;
  * </pre></code></p>
  * <p/>
  * <p>
- * Example dcc rate lookup + auth:
+ * Example auth with dcc information:
  * </p>
  * <p><code><pre>
  *
@@ -31,6 +31,14 @@ namespace com\realexpayments\remote\sdk\domain;
  * ->addRate(0.6868)
  * ->addAmount(13049)
  * ->addCurrency("GBP");
+ * $request = ( new PaymentRequest() )
+ * ->addMerchantId( "Merchant ID" )
+ * ->addAccount( "internet" )
+ * ->addType( PaymentType::DCC_RATE_LOOKUP )
+ * ->addAmount(100)
+ * ->addCurrency( "EUR" )        
+ * ->addCard( $card )
+ * ->addDccInfo( $dccInfo );
  *
  * <p/>
  * </pre></code></p>
