@@ -2,7 +2,7 @@
 All notable changes to the SDK will be documented in this file.
 
 ## [1.2]
-- Added Card Storage: Receipt-in, Payment-out, Payer-New, Payer-Edit, Card-new, Card-update, Card-delete, Verify Enrolled Card, DCC Rate Lookup, DCC + Auth, Receipt in OTB
+- Added Card Storage: Receipt-in, Payment-out, Payer-New, Payer-Edit, Card-new, Card-update, Card-delete, Verify Enrolled Card, DCC Rate Lookup, DCC + Auth, Receipt in OTB, Updated default endpoint.
 
 ## [1.1]
 - Added mobile payment type (auth-mobile) and relevant fields (mobile, token) to payment request.
