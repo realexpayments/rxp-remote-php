@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<request timestamp="20160127175725" type="card-cancel-card">
+    <merchantid>thestore</merchantid>
+    <account>internet</account>
+    <card>
+        <ref>visa01</ref>
+        <payerref>smithj01</payerref>
+    </card>
+    <sha1hash>02ea36d7c32ad272aa275be2f4cae5dd4af18280</sha1hash>
+</request>

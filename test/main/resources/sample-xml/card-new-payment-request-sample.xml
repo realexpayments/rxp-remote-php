@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<request type="card-new" timestamp="20160125165725">
+    <merchantid>thestore</merchantid>
+    <account>internet</account>
+    <orderid>292af5fa-6cbc-43d5-b2f0-7fd134d78A99</orderid>
+    <card>
+        <ref>visa01</ref>
+        <payerref>smithj01</payerref>
+        <number>4988433008499991</number>
+        <expdate>0104</expdate>
+        <chname>John Smith</chname>
+        <type>visa</type>
+        <issueno>1</issueno>
+    </card>
+    <sha1hash>fb85da792353786fda1bf4ddeb665fedb728af20</sha1hash>
+</request>

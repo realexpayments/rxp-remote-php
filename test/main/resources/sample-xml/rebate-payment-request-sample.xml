@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<request timestamp="20151204145825" type="rebate">
+	<merchantid>thestore</merchantid>
+	<account>internet</account>
+	<orderid>6df026a7-15d6-4b92-86e1-9f7b2b1d97c5</orderid>
+	<pasref>13276780809852</pasref>
+	<authcode>AP12346</authcode>
+	<amount currency="EUR">3000</amount>
+	<refundhash>52ed08590ab0bb6c2e5e4c9584aca0f6e9635a3a</refundhash>
+	<sha1hash>c1319b2999608fcfa3e71d583627affaeb25d961</sha1hash>
+</request>

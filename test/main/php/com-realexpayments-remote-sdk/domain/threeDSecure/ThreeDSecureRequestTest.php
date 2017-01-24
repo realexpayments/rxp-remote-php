@@ -56,4 +56,23 @@ class ThreeDSecureRequestTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals( SampleXmlValidationUtils::REQUEST_HASH, $request->getHash() );
 	}
 
+	/**
+	 * Tests the hash calculation for a verify card transaction.
+	 */
+	public function testVerifyCardEnrolledHashGeneration() {
+
+		$request = new ThreeDSecureRequest();
+		$request->addType( ThreeDSecureType::VERIFY_STORED_CARD_ENROLLED )
+		        ->addTimeStamp( SampleXmlValidationUtils::CARD_VERIFY_TIMESTAMP )
+		        ->addMerchantId( SampleXmlValidationUtils::CARD_VERIFY_MERCHANT_ID )
+		        ->addOrderId( SampleXmlValidationUtils::CARD_VERIFY_ORDER_ID )
+		        ->addAmount( SampleXmlValidationUtils::CARD_VERIFY_AMOUNT )
+		        ->addCurrency( SampleXmlValidationUtils::CARD_VERIFY_CURRENCY )
+		        ->addPayerReference( SampleXmlValidationUtils::CARD_VERIFY_PAYER_REF );
+
+		$request->hash( SampleXmlValidationUtils::SECRET );
+
+		$this->assertEquals( SampleXmlValidationUtils::CARD_VERIFY_REQUEST_HASH, $request->getHash() );
+	}
+
 }

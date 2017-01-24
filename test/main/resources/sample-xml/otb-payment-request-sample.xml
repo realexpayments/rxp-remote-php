@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<request type="otb" timestamp="20151204152333">
+    <merchantid>thestore</merchantid>
+    <account>internet</account>
+    <orderid>3be87fe9-db95-470f-ab04-b82f965f5b17</orderid>
+    <card>
+        <number>420000000000000000</number>
+        <expdate>0119</expdate>
+        <chname>Joe Smith</chname>
+        <type>VISA</type>
+        <issueno>1</issueno>
+        <cvn>
+            <number>123</number>
+            <presind>1</presind>
+        </cvn>
+    </card>
+    <autosettle flag="1"/>
+    <sha1hash>c05460fa3d195c1ee6ac97d3594e8cace4449cb2</sha1hash> 
+</request>

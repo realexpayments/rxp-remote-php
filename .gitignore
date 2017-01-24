@@ -6,3 +6,4 @@ Vagrantfile
 vm-config/
 phpunit.phar
 composer.lock
+adhoc/

@@ -5,7 +5,10 @@ namespace com\realexpayments\remote\sdk\domain\payment;
 
 use com\realexpayments\remote\sdk\domain\Amount;
 use com\realexpayments\remote\sdk\domain\Card;
+use com\realexpayments\remote\sdk\domain\DccInfo;
 use com\realexpayments\remote\sdk\domain\iRequest;
+use com\realexpayments\remote\sdk\domain\Payer;
+use com\realexpayments\remote\sdk\domain\PaymentData;
 use com\realexpayments\remote\sdk\utils\GenerationUtils;
 use com\realexpayments\remote\sdk\utils\MessageType;
 use com\realexpayments\remote\sdk\utils\XmlUtils;
@@ -28,9 +31,9 @@ use com\realexpayments\remote\sdk\utils\XmlUtils;
  *      ->addType(CardType::VISA)
  *      ->addNumber("4242424242424242")
  *      ->addExpiryDate("0525")
- *    ->addCvn("123")
- *    ->addCvnPresenceIndicator(PresenceIndicator::CVN_PRESENT);
- *    ->addCardHolderName("Joe Bloggs");
+ *    	->addCvn("123")
+ *    	->addCvnPresenceIndicator(PresenceIndicator::CVN_PRESENT);
+ *    	->addCardHolderName("Joe Bloggs");
  *
  * $request = (new PaymentRequest())
  *      ->addMerchantId("yourMerchantId")
@@ -79,6 +82,445 @@ use com\realexpayments\remote\sdk\utils\XmlUtils;
  * </pre></code></p>
  *
  *
+ * <p>
+ * Example SETTLE
+ * <p>
+ * <p><code><pre>
+ * $request = ( new PaymentRequest() )
+ *    ->addAccount( "myAccount" )
+ *    ->addMerchantId( "myMerchantId" )
+ *    ->addType( PaymentType::SETTLE )
+ *    ->addOrderId("Order ID from original transaction")
+ *    ->addAmount( 1001 )
+ *    ->addCurrency( "EUR" )
+ *    ->addPaymentsReference("pasref from original transaction")
+ *    ->addAuthCode("Auth code from original transaction");
+ * </pre></code></p>
+ *
+ * <p>
+ * Example Void
+ * <p>
+ * <p><code><pre>
+ *
+ * $request = ( new PaymentRequest() )
+ *    ->addAccount( "myAccount" )
+ *    ->addMerchantId( "myMerchantId" )
+ *    ->addType( PaymentType::VOID )
+ *    ->addOrderId("Order ID from original transaction")
+ *    ->addPaymentsReference("pasref from original transaction")
+ *    ->addAuthCode("Auth code from original transaction");
+ *
+ * </pre></code></p>
+ *
+ * <p>
+ * Example REBATE
+ * <p>
+ * <p><code><pre>
+ * $request = ( new PaymentRequest() )
+ *    ->addAccount( "myAccount" )
+ *    ->addMerchantId( "myMerchantId" )
+ *    ->addType( PaymentType::REBATE )
+ *    ->addOrderId("Order ID from original transaction")
+ *    ->addAmount( 1001 )
+ *    ->addCurrency( "EUR" )
+ *    ->addPaymentsReference("pasref from original transaction")
+ *    ->addAuthCode("Auth code from original transaction")
+ *    ->addRefundHash("Hash of rebate password shared with Realex");
+ *
+ * </pre></code></p>
+ *
+ * <p>
+ * Example OTB
+ * <p>
+ * <p><code><pre>
+ *
+ * $card = ( new Card() )
+ *    ->addExpiryDate( "1220" )
+ *    ->addNumber( "4263971921001307" )
+ *    ->addType( CardType::VISA )
+ *    ->addCardHolderName( "Joe Smith" );
+ *    ->addCvn( "123" )
+ *    ->addCvnPresenceIndicator( PresenceIndicator::CVN_PRESENT )
+ *
+ * $request = ( new PaymentRequest() )
+ *    ->addAccount( "myAccount" )
+ *    ->addMerchantId( "myMerchantId" )
+ *    ->addType( PaymentType::OTB )
+ *    ->addCard( $card );
+ *
+ * </pre></code></p>
+ *
+ * <p>
+ * Example Credit
+ * <p>
+ * <p><code><pre>
+ *
+ * $request = ( new PaymentRequest() )
+ *    ->addAccount( "myAccount" )
+ *    ->addMerchantId( "myMerchantId" )
+ *    ->addType( PaymentType::REFUND )
+ *    ->addAmount( 1001 )
+ *    ->addCurrency( "EUR" )
+ *    ->addPaymentsReference("Pasref from original transaction")
+ *    ->addAuthCode("Auth code from original transaction")
+ *    ->addRefundHash("Hash of credit password shared with Realex");
+ *
+ * </pre></code></p>
+ *
+ * <p>
+ * Example Hold
+ * <p>
+ * <p><code><pre>
+ *
+ * $request = ( new PaymentRequest() )
+ *    ->addAccount( "myAccount" )
+ *    ->addMerchantId( "myMerchantId" )
+ *    ->addType( PaymentType::HOLD )
+ *    ->addOrderId("Order ID from original transaction")
+ *    ->addReasonCode( ReasonCode::FRAUD)
+ *    ->addPaymentsReference("Pasref from original transaction");
+ *
+ * </pre></code></p>
+ *
+ * <p>
+ * Example Release
+ * <p>
+ * <p><code><pre>
+ *
+ * $request = ( new PaymentRequest() )
+ *    ->addAccount( "myAccount" )
+ *    ->addMerchantId( "myMerchantId" )
+ *    ->addType( PaymentType::RELEASE )
+ *    ->addOrderId("Order ID from original transaction")
+ *    ->addReasonCode( ReasonCode::FRAUD)
+ *    ->addPaymentsReference("Pasref from original transaction");
+ *
+ * </pre></code></p>
+ * <p>
+ * Example Receipt-in:
+ * </p>
+ * <p><code><pre>
+ * $paymentData = ( new PaymentData())
+ *    ->addCvnNumber("123");
+ * <p/>
+ * $request =(  new PaymentRequest() )
+ *    ->addAccount("yourAccount")
+ *    ->addMerchantId("yourMerchantId")
+ *    ->addType(PaymentType::RECEIPT_IN)
+ *    ->addOrderId("Order ID from original transaction")
+ *    ->addAmount(100)
+ *    ->addCurrency("EUR")
+ *    ->addPayerReference("payer ref from customer")
+ *    ->addPaymentMethod("payment method ref from customer")
+ *    ->addPaymentData($paymentData);
+ * </pre></code></p>
+ * <p/>
+ * <p>
+ * Example Payment-out:
+ * </p>
+ * <p><code><pre>
+ * $request =(  new PaymentRequest() )
+ *  ->addAccount("yourAccount")
+ *  ->addMerchantId("yourMerchantId")
+ *  ->addType(PaymentType::PAYMENT_OUT)
+ *  ->addAmount(100)
+ *  ->addCurrency("EUR")
+ *  ->addPayerReference("payer ref from customer")
+ *  ->addPaymentMethod("payment method ref from customer")
+ *  ->addRefundHash("Hash of rebate password shared with Realex");
+ * <p/>
+ *  $client = new RealexClient("shared secret");
+ *  $response = client->send(request);
+ * </pre></code></p>
+ * <p/>
+ * <p>
+ * Example Payer-new:
+ * </p>
+ * <p><code><pre>
+ * <p/>
+ * $address = ( new PayerAddress() )
+ * ->addLine1("Apt 167 Block 10")
+ * ->addLine2("The Hills")
+ * ->addLine3("67-69 High St")
+ * ->addCity("Hytown")
+ * ->addCounty("Dunham")
+ * ->addPostCode("3")
+ * ->addCountryCode("IE")
+ * ->addCountryName("Ireland");
+ * <p/>
+ * $payer = ( new Payer() )
+ * ->addType("Business")
+ * ->addRef("smithj01")
+ * ->addTitle("Mr")
+ * ->addFirstName("John")
+ * ->addSurname("Smith")
+ * ->addCompany("Acme")
+ * ->addAddress($address)
+ * ->addHomePhoneNumber("+35317285355")
+ * ->addWorkPhoneNumber("+35317433923")
+ * ->addFaxPhoneNumber("+35317893248")
+ * ->addMobilePhoneNumber("+353873748392")
+ * ->addEmail("jsmith@acme->com")
+ * ->addComment("Comment1")
+ * ->addComment("Comment2");
+ * <p/>
+ * $request =(  new PaymentRequest() )
+ * ->addAccount("yourAccount")
+ * ->addMerchantId("yourMerchantId")
+ * ->addType(PaymentType::PAYER_NEW)
+ * ->addPayer(payer);
+ * <p/>
+ * </pre></code></p>
+ * <p/>
+ * <p>
+ * Example Payer-edit:
+ * </p>
+ * <p><code><pre>
+ * <p/>
+ * $address = ( new PayerAddress() )
+ * ->addLine1("Apt 167 Block 10")
+ * ->addLine2("The Hills")
+ * ->addLine3("67-69 High St")
+ * ->addCity("Hytown")
+ * ->addCounty("Dunham")
+ * ->addPostCode("3")
+ * ->addCountryCode("IE")
+ * ->addCountryName("Ireland");
+ * <p/>
+ * $payer = ( new Payer() )
+ * ->addType("Business")
+ * ->addRef("smithj01")
+ * ->addTitle("Mr")
+ * ->addFirstName("John")
+ * ->addSurname("Smith")
+ * ->addCompany("Acme")
+ * ->addAddress($address)
+ * ->addHomePhoneNumber("+35317285355")
+ * ->addWorkPhoneNumber("+35317433923")
+ * ->addFaxPhoneNumber("+35317893248")
+ * ->addMobilePhoneNumber("+353873748392")
+ * ->addEmail("jsmith@acme->com")
+ * ->addComment("Comment1")
+ * ->addComment("Comment2");
+ * <p/>
+ * $request =(  new PaymentRequest() )
+ * ->addAccount("yourAccount")
+ * ->addMerchantId("yourMerchantId")
+ * ->addType(PaymentType::PAYER_EDIT)
+ * ->addPayer(payer);
+ * <p/>
+ * </pre></code></p>
+ * <p/>
+ * <p>
+ * Example card add:
+ * </p>
+ * <p><code><pre>
+ * <p/>
+ * $card = ( new Card() )
+ * ->addReference("visa01")
+ * ->addPayerReference("smithj01")
+ * ->addNumber("420000000000000000")
+ * ->addExpiryDate("0119")
+ * ->addCardHolderName("Joe Smith")
+ * ->addType(CardType::VISA)
+ * ->addIssueNumber("1");
+ * <p/>
+ * $request =(  new PaymentRequest() )
+ * ->addAccount("yourAccount")
+ * ->addMerchantId("yourMerchantId")
+ * ->addType(PaymentType::CARD_NEW)
+ * ->addPayerReference( "smithj01" )
+ * ->addCard($card);
+ * <p/>
+ * </pre></code></p>
+ * <p/>
+ * <p>
+ * Example card update:
+ * </p>
+ * <p><code><pre>
+ * <p/>
+ * $card = ( new Card() )
+ * ->addReference("visa01")
+ * ->addPayerReference("smithj01")
+ * ->addNumber("420000000000000000")
+ * ->addExpiryDate("0119")
+ * ->addCardHolderName("Joe Smith")
+ * ->addType(CardType::VISA)
+ * ->addIssueNumber("1");
+ * <p/>
+ * $request =(  new PaymentRequest() )
+ * ->addAccount("yourAccount")
+ * ->addMerchantId("yourMerchantId")
+ * ->addType(PaymentType::CARD_UPDATE)
+ * ->addPayerReference( "smithj01" )
+ * ->addCard($card);
+ * <p/>
+ * </pre></code></p>
+ * <p/>
+ * <p>
+ * Example card delete:
+ * </p>
+ * <p><code><pre>
+ * <p/>
+ * $card = ( new Card() )
+ * ->addReference("visa01")
+ * ->addPayerReference("smithj01");
+ *
+ * $request =(  new PaymentRequest() )
+ * ->addAccount("yourAccount")
+ * ->addMerchantId("yourMerchantId")
+ * ->addType(PaymentType::CARD_CANCEL)
+ * ->addCard($card);
+ * <p/>
+ * </pre></code></p>
+ * <p/>
+ *
+ * <p>
+ * Example dcc rate lookup:
+ * </p>
+ * <p><code><pre>
+ * <p/>
+ * $card = ( new Card() )
+ * ->addNumber("420000000000000000")
+ * ->addExpiryDate("0119")
+ * ->addCardHolderName("Joe Smith")
+ * ->addType(CardType::VISA);
+ *
+ * $dccInfo = ( new DccInfo() )
+ * ->addDccProcessor("fexco");
+ *
+ * $request =(  new PaymentRequest() )
+ * ->addAccount("yourAccount")
+ * ->addMerchantId("yourMerchantId")
+ * ->addType(PaymentType::DCC_RATE_LOOKUP)
+ * ->addAmount(100)
+ * ->addCurrency("EUR")
+ * ->addCard($card)
+ * ->addDccInfo($dccInfo);
+ * <p/>
+ * </pre></code></p>
+ *
+ * <p>
+ * Example dcc auth:
+ * </p>
+ * <p><code><pre>
+ * <p/>
+ *
+ * $dccInfo = ( new DccInfo() )
+ * ->addDccProcessor("fexco")
+ * ->addRate(0->6868)
+ * ->addAmount(13049)
+ * ->addCurrency("GBP");
+ *
+ * $card = ( new Card() )
+ * ->addNumber("420000000000000000")
+ * ->addExpiryDate("0119")
+ * ->addCardHolderName("Joe Smith")
+ * ->addType(CardType::VISA);
+ *
+ * $request =(  new PaymentRequest() )
+ * ->addAccount("yourAccount")
+ * ->addMerchantId("yourMerchantId")
+ * ->addType(PaymentType::DCC_RATE_LOOKUP)
+ * ->addAmount(100)
+ * ->addCurrency("EUR")
+ * ->addCard($card)
+ * ->addDccInfo($dccInfo);
+ * <p/>
+ *
+ * <p>
+ * Example Receipt-in OTB:
+ * </p>
+ * <p><code><pre>
+ * $paymentData = ( new PaymentData())
+ *    ->addCvnNumber("123");
+ *
+ * $request =(  new PaymentRequest() )
+ *    ->addAccount("yourAccount")
+ *    ->addMerchantId("yourMerchantId")
+ *    ->addType(PaymentType::RECEIPT_IN_OTB)
+ *    ->addOrderId("Order ID from original transaction")
+ *    ->addAmount(100)
+ *    ->addCurrency("EUR")
+ *    ->addPayerReference("payer ref from customer")
+ *    ->addPaymentMethod("payment method ref from customer")
+ *    ->addPaymentData($paymentData);
+ * </pre></code></p>
+ *
+ * <p>
+ * Example Stored Card Dcc Rate:
+ * </p>
+ * <p><code><pre>
+ * $card = ( new Card() )
+ *    ->addNumber("420000000000000000")
+ *    ->addExpiryDate("0119")
+ *    ->addCardHolderName("Joe Smith")
+ *    ->addType(CardType::VISA);
+ *
+ * $dccInfo = ( new DccInfo() )
+ *    ->addDccProcessor("fexco")
+ *    ->addRate(0.6868)
+ *    ->addAmount(13049)
+ *    ->addCurrency("GBP");
+ *
+ * $request = ( new PaymentRequest() )
+ *    ->addAccount( "myAccount" )
+ *    ->addMerchantId( "myMerchantId" )
+ *    ->addType(PaymentType::STORED_CARD_DCC_RATE)
+ *    ->addAmount(19000)
+ *    ->addCurrency( "EUR" )
+ *    ->addCard($card)
+ *    ->addDccInfo($dccInfo);
+ * </pre></code></p>
+ *
+ * <p>
+ * Example Fraud Filter Request:
+ * </p>
+ * <p><code><pre>
+ * $fraudFilter = new FraudFilter();
+ * $fraudFilter->addMode(FraudFilterMode::ACTIVE);
+ *
+ * $card = ( new Card() )
+ *    ->addNumber("420000000000000000")
+ *    ->addExpiryDate("0119")
+ *    ->addCardHolderName("Joe Smith")
+ *    ->addType(CardType::VISA);
+ *
+ * $autoSettle = new AutoSettle();
+ * $autoSettle->addFlag(AutoSettleFlag::TRUE);
+ *
+ * $request = ( new PaymentRequest() )
+ *    ->addType( PaymentType::AUTH )
+ *    ->addCard( $card )
+ *    ->addAccount( "myAccount" )
+ *    ->addMerchantId( "myMerchantId" )
+ *    ->addAmount( 1000 )
+ *    ->addCurrency( "EUR" )
+ *    ->addOrderId("myOrderId")
+ *    ->addAutoSettle( $autoSettle)
+ *    ->addFraudFilter($fraudFilter);
+ * </pre></code></p>
+ *
+ * <p>
+ * Example Fraud Filter Response:
+ * </p>
+ * <p><code><pre>
+ * $response = $client->send( $request );
+ *
+ * $mode = $response->getFraudFilter()->getMode();
+ * $result = $response->getFraudFilter()->getResult();
+ * //array of FraudFilterResultRule
+ * $rules = $response->getFraudFilter()->getRules();
+ * foreach($rules->getRules() as $rule)
+ * {
+ *    echo $rule->getId();
+ *    echo $rule->getName();
+ *    echo $rule->getAction();
+ * }
+ * //or
+ * echo $rules->get(0)->getId();
+ * </pre></code></p>
+
  * @author vicpada
  * @package com\realexpayments\remote\sdk\domain\payment
  */
@@ -192,7 +634,7 @@ class PaymentRequest implements iRequest {
 	private $refundHash;
 
 	/**
-	 * @var string Fraud filter flag
+	 * @var FraudFilter Object Fraud filter mode
 	 *
 	 */
 	private $fraudFilter;
@@ -228,6 +670,41 @@ class PaymentRequest implements iRequest {
 	 *
 	 */
 	private $token;
+
+	/**
+	 * @var string The payer reference for this customer
+	 */
+	private $payerRef;
+
+	/**
+	 * @var string The payment reference
+	 */
+	private $paymentMethod;
+
+	/**
+	 * @var PaymentData Contains payment information to be used on Receipt-in transactions
+	 */
+	private $paymentData;
+
+	/**
+	 * @var Payer {@link Payer} information to be used on Card Storage transactions
+	 */
+	private $payer;
+
+	/**
+	 * @var DccInfo {@link DccInfo} information to be used DCC Rate look up transactions
+	 */
+	private $dccInfo;
+
+	/**
+	 * @var string This is a code used to identify the reason
+	 * for a transaction action. It is an optional
+	 * field but if populated it must contain a
+	 * value that is allowed for that transaction type.
+	 * If no value is supplied, the default reason
+	 * code NOTGIVEN will be applied to the holdrequest
+	 */
+	private $reasonCode;
 
 
 	/**
@@ -604,6 +1081,114 @@ class PaymentRequest implements iRequest {
 		$this->token = $token;
 	}
 
+	/**
+	 * Getter for payerRef
+	 *
+	 * @return string
+	 */
+	public function getPayerRef() {
+		return $this->payerRef;
+	}
+
+	/**
+	 * Setter for payerRef
+	 *
+	 * @param string $payerRef
+	 */
+	public function setPayerRef( $payerRef ) {
+		$this->payerRef = $payerRef;
+	}
+
+	/**
+	 * Getter for paymentMethod
+	 *
+	 * @return string
+	 */
+	public function getPaymentMethod() {
+		return $this->paymentMethod;
+	}
+
+	/**
+	 * Setter for paymentMethod
+	 *
+	 * @param string $paymentMethod
+	 */
+	public function setPaymentMethod( $paymentMethod ) {
+		$this->paymentMethod = $paymentMethod;
+	}
+
+	/**
+	 * Getter for paymentData
+	 *
+	 * @return PaymentData
+	 */
+	public function getPaymentData() {
+		return $this->paymentData;
+	}
+
+	/**
+	 * Setter for paymentData
+	 *
+	 * @param PaymentData $paymentData
+	 */
+	public function setPaymentData( $paymentData ) {
+		$this->paymentData = $paymentData;
+	}
+
+	/**
+	 * Getter for payer
+	 *
+	 * @return Payer
+	 */
+	public function getPayer() {
+		return $this->payer;
+	}
+
+	/**
+	 * Setter for payer
+	 *
+	 * @param Payer $payer
+	 */
+	public function setPayer( $payer ) {
+		$this->payer = $payer;
+	}
+
+	/**
+	 * Getter for dccInfo
+	 *
+	 * @return DccInfo
+	 */
+	public function getDccInfo() {
+		return $this->dccInfo;
+	}
+
+	/**
+	 * Setter for dccInfo
+	 *
+	 * @param DccInfo $dccInfo
+	 */
+	public function setDccInfo( $dccInfo ) {
+		$this->dccInfo = $dccInfo;
+	}
+
+	/**
+	 * Getter for reason code
+	 *
+	 * @return string
+	 */
+	public function getReasonCode() {
+		return $this->reasonCode;
+	}
+
+	/**
+	 * Setter for reason code
+	 *
+	 * @param string $reasonCode
+	 */
+	public function setReasonCode( $reasonCode ) {
+		$this->reasonCode = $reasonCode;
+	}
+
 
 	/**
 	 * Helper method for adding TSS info
@@ -846,11 +1431,11 @@ class PaymentRequest implements iRequest {
 	/**
 	 * Helper method for adding a fraudFilter
 	 *
-	 * @param string $fraudFilter
+	 * @param FraudFilter $fraudFilter
 	 *
 	 * @return PaymentRequest
 	 */
-	public function addFraudFilter( $fraudFilter ) {
+	public function addFraudFilter( FraudFilter $fraudFilter ) {
 		$this->fraudFilter = $fraudFilter;
 
 		return $this;
@@ -907,6 +1492,86 @@ class PaymentRequest implements iRequest {
 
 		return $this;
 	}
+
+	/**
+	 * Helper method for adding a payerRef
+	 *
+	 * @param string $payerRef
+	 *
+	 * @return PaymentRequest
+	 */
+	public function addPayerReference( $payerRef ) {
+		$this->payerRef = $payerRef;
+
+		return $this;
+	}
+
+	/**
+	 * Helper method for adding a paymentMethod
+	 *
+	 * @param string $paymentMethod
+	 *
+	 * @return PaymentRequest
+	 */
+	public function addPaymentMethod( $paymentMethod ) {
+		$this->paymentMethod = $paymentMethod;
+
+		return $this;
+	}
+
+	/**
+	 * Helper method for adding a paymentData
+	 *
+	 * @param PaymentData $paymentData
+	 *
+	 * @return PaymentRequest
+	 */
+	public function addPaymentData( $paymentData ) {
+		$this->paymentData = $paymentData;
+
+		return $this;
+	}
+
+	/**
+	 * Helper method for adding a payer
+	 *
+	 * @param Payer $payer
+	 *
+	 * @return PaymentRequest
+	 */
+	public function addPayer( $payer ) {
+		$this->payer = $payer;
+
+		return $this;
+	}
+
+	/**
+	 * Helper method for adding a dccInfo
+	 *
+	 * @param DccInfo $dccInfo
+	 *
+	 * @return PaymentRequest
+	 */
+	public function addDccInfo( $dccInfo ) {
+		$this->dccInfo = $dccInfo;
+
+		return $this;
+	}
+
+
+	/**
+	 * Helper method for adding a reason code
+	 *
+	 * @param string $reasonCode
+	 *
+	 * @return PaymentRequest
+	 */
+	public function addReasonCode( $reasonCode ) {
+		$this->reasonCode = $reasonCode;
+
+		return $this;
+	}
+
 
 	/**
 	 * {@inheritdoc}
@@ -972,6 +1637,7 @@ class PaymentRequest implements iRequest {
 		$amount     = "";
 		$currency   = "";
 		$token      = null == $this->token ? "" : $this->token;
+		$payerRef   = null == $this->payerRef ? "" : $this->payerRef;
 
 		if ( $this->amount != null ) {
 			$amount   = null == $this->amount->getAmount() ? "" : $this->amount->getAmount();
@@ -984,6 +1650,35 @@ class PaymentRequest implements iRequest {
 			$cardNumber = null == $this->card->getNumber() ? "" : $this->card->getNumber();
 		}
 
+		$payerNewRef = "";
+		if ( $this->payer != null ) {
+			$payerNewRef = null == $this->payer->getRef() ? "" : $this->payer->getRef();
+		}
+
+		$cardHolderName = "";
+
+		if ( $this->card != null ) {
+			$cardHolderName = null == $this->card->getCardHolderName() ? "" : $this->card->getCardHolderName();
+		}
+
+		$cardPayerRef = "";
+
+		if ( $this->card != null ) {
+			$cardPayerRef = null == $this->card->getPayerReference() ? "" : $this->card->getPayerReference();
+		}
+
+		$cardRef = "";
+
+		if ( $this->card != null ) {
+			$cardRef = null == $this->card->getReference() ? "" : $this->card->getReference();
+		}
+
+		$cardExpiryDate = "";
+
+		if ( $this->card != null ) {
+			$cardExpiryDate = null == $this->card->getExpiryDate() ? "" : $this->card->getExpiryDate();
+		}
+
 		//create String to hash
 		if ( $this->type == PaymentType::AUTH_MOBILE ) {
 			$toHash = $timeStamp
@@ -993,6 +1688,89 @@ class PaymentRequest implements iRequest {
 			          . $orderId
 			          . "..."
 			          . $token;
+		} elseif ( $this->type == PaymentType::OTB ) {
+			$toHash = $timeStamp
+			          . "."
+			          . $merchantId
+			          . "."
+			          . $orderId
+			          . "."
+			          . $cardNumber;
+
+		} elseif ( $this->type == PaymentType::RECEIPT_IN || $this->type == PaymentType::PAYMENT_OUT || $this->type == PaymentType::STORED_CARD_DCC_RATE ) {
+			$toHash = $timeStamp
+			          . "."
+			          . $merchantId
+			          . "."
+			          . $orderId
+			          . "."
+			          . $amount
+			          . "."
+			          . $currency
+			          . "."
+			          . $payerRef;
+
+		} elseif ( $this->type == PaymentType::PAYER_NEW || $this->type == PaymentType::PAYER_EDIT ) {
+			$toHash = $timeStamp
+			          . "."
+			          . $merchantId
+			          . "."
+			          . $orderId
+			          . "."
+			          . $amount
+			          . "."
+			          . $currency
+			          . "."
+			          . $payerNewRef;
+
+		} elseif ( $this->type == PaymentType::CARD_NEW ) {
+			$toHash = $timeStamp
+			          . "."
+			          . $merchantId
+			          . "."
+			          . $orderId
+			          . "."
+			          . $amount
+			          . "."
+			          . $currency
+			          . "."
+			          . $cardPayerRef
+			          . "."
+			          . $cardHolderName
+			          . "."
+			          . $cardNumber;
+
+		} elseif ( $this->type == PaymentType::CARD_UPDATE ) {
+			$toHash = $timeStamp
+			          . "."
+			          . $merchantId
+			          . "."
+			          . $cardPayerRef
+			          . "."
+			          . $cardRef
+			          . "."
+			          . $cardExpiryDate
+			          . "."
+			          . $cardNumber;
+
+		} elseif ( $this->type == PaymentType::CARD_CANCEL ) {
+			$toHash = $timeStamp
+			          . "."
+			          . $merchantId
+			          . "."
+			          . $cardPayerRef
+			          . "."
+			          . $cardRef;
+
+		} elseif ( $this->type == PaymentType::RECEIPT_IN_OTB ) {
+			$toHash = $timeStamp
+			          . "."
+			          . $merchantId
+			          . "."
+			          . $orderId
+			          . "."
+			          . $payerRef;
+
 		} else {
 			$toHash = $timeStamp
 			          . "."

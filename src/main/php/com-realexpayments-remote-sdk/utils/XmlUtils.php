@@ -6,10 +6,25 @@ namespace com\realexpayments\remote\sdk\utils;
 
 use com\realexpayments\remote\sdk\domain\iRequest;
 use com\realexpayments\remote\sdk\domain\payment\normaliser\AddressNormaliser;
+use com\realexpayments\remote\sdk\domain\payment\normaliser\AmountNormalizer;
+use com\realexpayments\remote\sdk\domain\payment\normaliser\AutoSettleNormalizer;
+use com\realexpayments\remote\sdk\domain\payment\normaliser\CardNormaliser;
 use com\realexpayments\remote\sdk\domain\payment\normaliser\CommentsNormalizer;
+use com\realexpayments\remote\sdk\domain\payment\normaliser\CountryNormalizer;
 use com\realexpayments\remote\sdk\domain\payment\normaliser\CustomStringXmlEncoder;
+use com\realexpayments\remote\sdk\domain\payment\normaliser\CvnNormaliser;
+use com\realexpayments\remote\sdk\domain\payment\normaliser\CvnNumberNormaliser;
+use com\realexpayments\remote\sdk\domain\payment\normaliser\DccInfoNormalizer;
+use com\realexpayments\remote\sdk\domain\payment\normaliser\DccInfoResultNormalizer;
+use com\realexpayments\remote\sdk\domain\payment\normaliser\FraudFilterNormalizer;
+use com\realexpayments\remote\sdk\domain\payment\normaliser\FraudFilterRuleCollectionNormalizer;
+use com\realexpayments\remote\sdk\domain\payment\normaliser\FraudFilterRuleNormalizer;
+use com\realexpayments\remote\sdk\domain\payment\normaliser\PayerAddressNormalizer;
+use com\realexpayments\remote\sdk\domain\payment\normaliser\PayerNormalizer;
+use com\realexpayments\remote\sdk\domain\payment\normaliser\PaymentDataNormalizer;
 use com\realexpayments\remote\sdk\domain\payment\normaliser\PaymentRequestNormalizer;
 use com\realexpayments\remote\sdk\domain\payment\normaliser\PaymentResponseNormalizer;
+use com\realexpayments\remote\sdk\domain\payment\normaliser\PhoneNumbersNormalizer;
 use com\realexpayments\remote\sdk\domain\payment\normaliser\TssCheckNormaliser;
 use com\realexpayments\remote\sdk\domain\payment\PaymentRequest;
 use com\realexpayments\remote\sdk\domain\payment\PaymentResponse;
@@ -124,23 +139,59 @@ class XmlUtils {
 
 		self::$marshallers = array();
 
-		$encoders                                  = array( new CustomStringXmlEncoder( 'response', array( 'timestamp' ) ) );
+		$encoders                                  = array(
+			new CustomStringXmlEncoder( 'response', array(
+				'timestamp',
+				'number'
+			) )
+		);
 		$normalizers                               = array(
 			new PaymentRequestNormalizer(),
 			new PaymentResponseNormalizer(),
 			new AddressNormaliser(),
 			new CommentsNormalizer(),
 			new TssCheckNormaliser(),
-			new ObjectNormalizer()
+			new CountryNormalizer(),
+			new DccInfoNormalizer(),
+			new AmountNormalizer(),
+			new CardNormaliser(),
+			new CvnNormaliser(),
+			new CvnNumberNormaliser(),
+			new PayerNormalizer(),
+			new PayerAddressNormalizer(),
+			new PaymentDataNormalizer(),
+			new PhoneNumbersNormalizer(),
+			new DccInfoResultNormalizer(),
+			new AutoSettleNormalizer(),
+			new FraudFilterNormalizer(),
+            new FraudFilterRuleCollectionNormalizer(),
+            new FraudFilterRuleNormalizer()
+			//new ObjectNormalizer()
 		);
 		self::$marshallers[ MessageType::PAYMENT ] = new Serializer( $normalizers, $encoders );
 
-		$encoders                                         = array( new CustomStringXmlEncoder( 'response', array( 'timestamp' ) ) );
+		$encoders                                         = array(
+			new CustomStringXmlEncoder( 'response', array(
+				'timestamp',
+				'number'
+			) )
+		);
 		$normalizers                                      = array(
 			new ThreeDSecureRequestNormalizer(),
 			new ThreeDSecureResponseNormalizer(),
 			new CommentsNormalizer(),
-			new  ObjectNormalizer()
+			new AmountNormalizer(),
+			new CardNormaliser(),
+			new CvnNormaliser(),
+			new PaymentDataNormalizer(),
+			new CvnNumberNormaliser(),
+			new AutoSettleNormalizer(),
+			new FraudFilterNormalizer(),
+            new FraudFilterRuleCollectionNormalizer(),
+            new FraudFilterRuleNormalizer()
+
+
+            //new  ObjectNormalizer()
 		);
 		self::$marshallers[ MessageType::THREE_D_SECURE ] = new Serializer( $normalizers, $encoders );
 

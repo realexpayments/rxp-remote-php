@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<response timestamp="20150224160453">
+    <merchantid>testMerchant</merchantid>
+    <account>internet</account>
+    <orderid>OrderOne</orderid>
+    <authcode>071757</authcode>
+    <result>00</result>
+    <cvnresult>M</cvnresult>
+    <avspostcoderesponse>U</avspostcoderesponse>
+    <avsaddressresponse>U</avsaddressresponse>
+    <batchid>3452232</batchid>
+    <message>(00)AUTH CODE 071757</message>
+    <pasref>14247938905185175</pasref>
+    <timetaken>2</timetaken>
+    <authtimetaken>2</authtimetaken>
+    <cardissuer>
+        <bank/>
+        <country/>
+        <countrycode/>
+        <region/>
+    </cardissuer>
+    <fraudresponse mode='PASSIVE'>
+        <result>PASS</result>
+        <rules>
+            <rule name='Customer IP List' id='478a55db-5430-4c2a-afca-7dde181eb9f4'>
+                <action>PASS</action>
+            </rule>
+            <rule name='Card Numbers' id='cf609cf9-9e5a-4700-ac69-8aa09c119305'>
+                <action>PASS</action>
+            </rule>
+        </rules>
+    </fraudresponse>
+    <sha1hash>bd5550299e4508873a2cf6e435ad74a5455ad648</sha1hash>
+</response>

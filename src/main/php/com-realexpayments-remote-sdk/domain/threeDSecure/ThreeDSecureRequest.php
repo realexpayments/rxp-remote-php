@@ -7,8 +7,10 @@ namespace com\realexpayments\remote\sdk\domain\threeDSecure;
 use com\realexpayments\remote\sdk\domain\Amount;
 use com\realexpayments\remote\sdk\domain\Card;
 use com\realexpayments\remote\sdk\domain\iRequest;
+use com\realexpayments\remote\sdk\domain\payment\AutoSettle;
 use com\realexpayments\remote\sdk\domain\payment\Comment;
 use com\realexpayments\remote\sdk\domain\payment\CommentCollection;
+use com\realexpayments\remote\sdk\domain\PaymentData;
 use com\realexpayments\remote\sdk\utils\GenerationUtils;
 use com\realexpayments\remote\sdk\utils\MessageType;
 use com\realexpayments\remote\sdk\utils\XmlUtils;
@@ -41,6 +43,20 @@ use com\realexpayments\remote\sdk\utils\XmlUtils;
  *    ->addCurrency("EUR")
  *    ->addCard($card);
  * </pre></code></p>
+ *
+ * <p>
+ * Example verify enrolled:
+ * </p>
+ * <p><code><pre>
+ * $request = new ( ThreeDSecureRequest() )
+ * ->addAccount("yourAccount")
+ * ->addMerchantId("yourMerchantId")
+ * ->addType(ThreeDSecureType::VERIFY_CARD_ENROLLED)
+ * ->addAmount(100)
+ * ->addCurrency("EUR")
+ * ->addPayerReference("payer ref from customer")
+ * ->addPaymentMethod("payment method ref from customer")
+ * ->addPaymentData($paymentData);
  *
  * @author vicpada
  * @package com\realexpayments\remote\sdk\domain\threeDSecure
@@ -111,6 +127,26 @@ class ThreeDSecureRequest implements iRequest {
 	 *
 	 */
 	private $comments;
+
+	/**
+	 * @var string The payer ref for this customer
+	 */
+	private $payerRef;
+
+	/**
+	 * @var string The payment reference
+	 */
+	private $paymentMethod;
+
+	/**
+	 * @var PaymentData Contains payment information to be used on Receipt-in transactions
+	 */
+	private $paymentData;
+
+	/**
+	 * @var AutoSettle {@link AutoSettle} object containing the auto settle flag.
+	 */
+	private $autoSettle;
 
 	/**
 	 * ThreeDSecureRequest constructor.
@@ -302,6 +338,78 @@ class ThreeDSecureRequest implements iRequest {
 		$this->comments = $comments;
 	}
 
+	/**
+	 * Getter for payerRef
+	 *
+	 * @return string
+	 */
+	public function getPayerRef() {
+		return $this->payerRef;
+	}
+
+	/**
+	 * Setter for payerRef
+	 *
+	 * @param string $payerRef
+	 */
+	public function setPayerRef( $payerRef ) {
+		$this->payerRef = $payerRef;
+	}
+
+	/**
+	 * Getter for paymentMethod
+	 *
+	 * @return string
+	 */
+	public function getPaymentMethod() {
+		return $this->paymentMethod;
+	}
+
+	/**
+	 * Setter for paymentMethod
+	 *
+	 * @param string $paymentMethod
+	 */
+	public function setPaymentMethod( $paymentMethod ) {
+		$this->paymentMethod = $paymentMethod;
+	}
+
+	/**
+	 * Getter for paymentData
+	 *
+	 * @return PaymentData
+	 */
+	public function getPaymentData() {
+		return $this->paymentData;
+	}
+
+	/**
+	 * Setter for paymentData
+	 *
+	 * @param PaymentData $paymentData
+	 */
+	public function setPaymentData( $paymentData ) {
+		$this->paymentData = $paymentData;
+	}
+
+	/**
+	 * Getter for autoSettle
+	 *
+	 * @return AutoSettle
+	 */
+	public function getAutoSettle() {
+		return $this->autoSettle;
+	}
+
+	/**
+	 * Setter for autoSettle
+	 *
+	 * @param AutoSettle $autoSettle
+	 */
+	public function setAutoSettle( $autoSettle ) {
+		$this->autoSettle = $autoSettle;
+	}
+
 
 	/**
 	 * Helper method for adding a timeStamp
@@ -481,6 +589,58 @@ class ThreeDSecureRequest implements iRequest {
 		return $this;
 	}
 
+	/**
+	 * Helper method for adding a payerRef
+	 *
+	 * @param string $payerRef
+	 *
+	 * @return ThreeDSecureRequest
+	 */
+	public function addPayerReference( $payerRef ) {
+		$this->payerRef = $payerRef;
+
+		return $this;
+	}
+
+	/**
+	 * Helper method for adding a paymentMethod
+	 *
+	 * @param string $paymentMethod
+	 *
+	 * @return ThreeDSecureRequest
+	 */
+	public function addPaymentMethod( $paymentMethod ) {
+		$this->paymentMethod = $paymentMethod;
+
+		return $this;
+	}
+
+	/**
+	 * Helper method for adding a paymentData
+	 *
+	 * @param string $paymentData
+	 *
+	 * @return ThreeDSecureRequest
+	 */
+	public function addPaymentData( $paymentData ) {
+		$this->paymentData = $paymentData;
+
+		return $this;
+	}
+
+	/**
+	 * Helper method for adding a autoSettle
+	 *
+	 * @param AutoSettle $autoSettle
+	 *
+	 * @return ThreeDSecureRequest
+	 */
+	public function addAutoSettle( $autoSettle ) {
+		$this->autoSettle = $autoSettle;
+
+		return $this;
+	}
+
 
 	/**
 	 * {@inheritDoc}
@@ -502,7 +662,7 @@ class ThreeDSecureRequest implements iRequest {
 	public function generateDefaults( $secret ) {
 
 		//generate timestamp if not set
-		if ( is_null( $this->timeStamp) ) {
+		if ( is_null( $this->timeStamp ) ) {
 			$this->timeStamp = GenerationUtils::generateTimestamp();
 		}
 
@@ -540,6 +700,7 @@ class ThreeDSecureRequest implements iRequest {
 		$timeStamp  = null == $this->timeStamp ? "" : $this->timeStamp;
 		$merchantId = null == $this->merchantId ? "" : $this->merchantId;
 		$orderId    = null == $this->orderId ? "" : $this->orderId;
+		$payerRef   = null == $this->payerRef ? "" : $this->payerRef;
 		$amount     = "";
 		$currency   = "";
 
@@ -555,17 +716,38 @@ class ThreeDSecureRequest implements iRequest {
 		}
 
 		//create String to hash
-		$toHash = $timeStamp
-		          . "."
-		          . $merchantId
-		          . "."
-		          . $orderId
-		          . "."
-		          . $amount
-		          . "."
-		          . $currency
-		          . "."
-		          . $cardNumber;
+		$toHash = "";
+
+
+		if ( $this->type == ThreeDSecureType::VERIFY_STORED_CARD_ENROLLED ) {
+			$toHash = $timeStamp
+			          . "."
+			          . $merchantId
+			          . "."
+			          . $orderId
+			          . "."
+			          . $amount
+			          . "."
+			          . $currency
+			          . "."
+			          . $payerRef;
+
+
+		} else {
+			$toHash = $timeStamp
+			          . "."
+			          . $merchantId
+			          . "."
+			          . $orderId
+			          . "."
+			          . $amount
+			          . "."
+			          . $currency
+			          . "."
+			          . $cardNumber;
+
+		}
+
 
 		$this->hash = GenerationUtils::generateHash( $toHash, $secret );
 

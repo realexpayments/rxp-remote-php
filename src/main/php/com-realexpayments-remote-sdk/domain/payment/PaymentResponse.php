@@ -3,6 +3,7 @@
 
 namespace com\realexpayments\remote\sdk\domain\payment;
 
+use com\realexpayments\remote\sdk\domain\DccInfoResult;
 use com\realexpayments\remote\sdk\domain\iResponse;
 use com\realexpayments\remote\sdk\utils\GenerationUtils;
 use com\realexpayments\remote\sdk\utils\MessageType;
@@ -168,6 +169,18 @@ class PaymentResponse implements iResponse {
 	 *
 	 */
 	private $avsAddressResponse;
+
+	/**
+	 * @var DccInfoResult The results of dcc rate lookup
+	 */
+	private $dccInfoResult;
+
+
+	/**
+	 * @var FraudFilter
+	 *
+	 */
+	private $fraudFilter;
 
 	/**
 	 * PaymentResponse constructor.
@@ -578,4 +591,42 @@ class PaymentResponse implements iResponse {
 	public function setAvsAddressResponse( $avsAddressResponse ) {
 		$this->avsAddressResponse = $avsAddressResponse;
 	}
+
+	/**
+	 * Getter for dccInfoResult
+	 *
+	 * @return DccInfoResult
+	 */
+	public function getDccInfoResult() {
+		return $this->dccInfoResult;
+	}
+
+	/**
+	 * Setter for dccInfoResult
+	 *
+	 * @param DccInfoResult $dccInfoResult
+	 */
+	public function setDccInfoResult( $dccInfoResult ) {
+		$this->dccInfoResult = $dccInfoResult;
+	}
+
+	/**
+	 * Getter for fraudFilter
+	 *
+	 * @return fraudFilter
+	 */
+	public function getFraudFilter() {
+		return $this->fraudFilter;
+	}
+
+	/**
+	 * Setter for fraudFilter
+	 *
+	 * @param FraudFilter $fraudFilter
+	 */
+	public function setFraudFilter( $fraudFilter ) {
+		$this->fraudFilter = $fraudFilter;
+	}
+
+
 }

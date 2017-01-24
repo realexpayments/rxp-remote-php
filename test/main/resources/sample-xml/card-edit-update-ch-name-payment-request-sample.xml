@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<request timestamp="20160125175725" type="card-update-card">
+    <merchantid>thestore</merchantid>
+    <account>internet</account>
+    <card>
+        <ref>visa01</ref>
+        <payerref>smithj01</payerref>
+        <expdate>0104</expdate>
+        <chname>John Smith</chname>
+        <type>visa</type>
+    </card>
+    <sha1hash>73ab20318d1977131eb41d7054c5549bce95228a</sha1hash>
+</request>
