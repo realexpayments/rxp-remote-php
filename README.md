@@ -453,7 +453,7 @@ $request = ( new ThreeDSecureRequest() )
  	
 
 $client   = new RealexClient( "Shared Secret" );
-$response = client.send(request);
+$response = $client->send($request);
 ```
 
 ### DCC Rate Lookup
