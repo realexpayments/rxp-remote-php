@@ -21,10 +21,10 @@
   "license": "MIT",
   "require": {
     "php": ">=5.3.9",
-    "hafriedlander/phockito": "1.0.0",
-    "apache/log4php": "2.3.0",
-    "symfony/serializer": "2.7.3",
-    "symfony/property-access": "2.7.3"
+    "hafriedlander/phockito": "1.0.*",
+    "apache/log4php": "2.3.*",
+    "symfony/serializer": "2.7.*",
+    "symfony/property-access": "2.7.*"
   },
   "autoload": {
     "psr-4": {
