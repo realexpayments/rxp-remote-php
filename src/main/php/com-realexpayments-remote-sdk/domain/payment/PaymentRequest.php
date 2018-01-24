@@ -1688,10 +1688,10 @@ class PaymentRequest implements iRequest {
 			          . $orderId
 			          . "."
 			          . $amount
-		              . "."
-	                  . $currency
-	                  . "."
-			          . $token;
+			             . "."
+			              . $currency
+			              . "."
+			                  . $token;
 		} elseif ( $this->type == PaymentType::OTB ) {
 			$toHash = $timeStamp
 			          . "."
