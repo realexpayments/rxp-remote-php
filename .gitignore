@@ -7,3 +7,4 @@ vm-config/
 phpunit.phar
 composer.lock
 adhoc/
+.project
