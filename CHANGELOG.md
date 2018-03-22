@@ -1,6 +1,9 @@
 # Change Log
 All notable changes to the SDK will be documented in this file.
 
+## [1.2.2]
+- Updated hash for Mobile-Auth to support Google Pay.
+
 ## [1.2.1]
 - Updated requirements.
 
